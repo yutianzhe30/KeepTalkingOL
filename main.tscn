@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bumy8q4j2k5m" path="res://Scenes/Modules/TimerModule.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" path="res://Scenes/Modules/WireModule.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/BalanceModule.tscn" id="3_h2yge"]
 
 [node name="Node2D" type="Node2D" unique_id=393326942]
 
@@ -32,3 +33,9 @@ offset_left = 13.0
 offset_top = 264.0
 offset_right = 213.0
 offset_bottom = 464.0
+
+[node name="BalanceModule" parent="." unique_id=2053615184 instance=ExtResource("3_h2yge")]
+offset_left = 343.0
+offset_top = 440.0
+offset_right = 543.0
+offset_bottom = 640.0
