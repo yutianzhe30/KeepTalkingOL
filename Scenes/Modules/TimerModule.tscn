@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bumy8q4j2k5m"]
+
+[ext_resource type="Script" uid="uid://35bfys70v34h" path="res://Scripts/Modules/TimerModule.gd" id="1_timer_script"]
+
+[node name="TimerModule" type="PanelContainer" unique_id=2101147815]
+offset_right = 200.0
+offset_bottom = 100.0
+script = ExtResource("1_timer_script")
+
+[node name="Label" type="Label" parent="." unique_id=1088650296]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "05:00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=43945249]

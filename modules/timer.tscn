@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bde05s7ims5nu"]
+
+[ext_resource type="Script" uid="uid://cb7crncb1kst0" path="res://modules/timer.gd" id="1_i8q7u"]
+
+[node name="Node2D" type="Node2D" unique_id=1449665621]
+
+[node name="Timer" type="Timer" parent="." unique_id=1078239435]
+one_shot = true
+
+[node name="Label" type="Label" parent="." unique_id=1450484940]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "asdf"
+script = ExtResource("1_i8q7u")

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dm0xsjs6w7jdg"]
+
+[ext_resource type="PackedScene" uid="uid://bumy8q4j2k5m" path="res://Scenes/Modules/TimerModule.tscn" id="2_0xm2m"]
+
+[node name="Node2D" type="Node2D" unique_id=393326942]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1453658095]
+layout_direction = 1
+offset_left = 230.0
+offset_top = 141.0
+offset_right = 330.0
+offset_bottom = 241.0
+
+[node name="TextEdit" type="TextEdit" parent="ColorRect" unique_id=1491220419]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 28.0
+offset_top = 18.0
+offset_right = 78.0
+offset_bottom = 68.0
+text = "asdf"
+placeholder_text = "asdfas"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=785851655]
+position = Vector2(577, 323)
+
+[node name="TimerModule" parent="." unique_id=2101147815 instance=ExtResource("2_0xm2m")]
