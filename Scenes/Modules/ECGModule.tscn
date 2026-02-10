@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://b-ecg-module"]
+
+[ext_resource type="Script" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
+
+[node name="ECGModule" type="PanelContainer"]
+offset_right = 220.0
+offset_bottom = 140.0
+script = ExtResource("1_ecg_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="WaveformSelector" type="OptionButton" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 3
+selected = 0
+popup_menu = null
+item_0/text = "Normal"
+item_0/id = 0
+item_1/text = "Tachycardia"
+item_1/id = 1
+item_2/text = "VFib"
+item_2/id = 2
+
+[node name="HeartRateLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "HR: --"
+horizontal_alignment = 2
+
+[node name="ECGDisplayRect" type="ColorRect" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 120)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ECGLine" type="Line2D" parent="PanelContainer/VBoxContainer/ECGDisplayRect"]
+position = Vector2(10, 10)
+z_index = 1
+points = PackedVector2Array(0, 0, 10, 0)
+width = 3.0
+default_color = Color(0, 1, 0, 1)
+antialiased = true
+joint_mode = 2 # LINE_JOINT_BEVEL
+begin_cap_mode = 2 # LINE_CAP_ROUND
+end_cap_mode = 2 # LINE_CAP_ROUND
+script = null
