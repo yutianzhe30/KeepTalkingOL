@@ -1,41 +1,79 @@
-[gd_scene format=3 uid="uid://dm0xsjs6w7jdg"]
+[gd_scene load_steps=6 format=3 uid="uid://dm0xsjs6w7jdg"]
 
-[ext_resource type="PackedScene" uid="uid://bumy8q4j2k5m" path="res://Scenes/Modules/TimerModule.tscn" id="2_0xm2m"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/WireModule.tscn" id="2_h2yge"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/BalanceModule.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://bumy8q4j2k5m" path="res://Scenes/Modules/TimerModule.tscn" id="1_timer"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/WireModule.tscn" id="2_wire"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/BalanceModule.tscn" id="3_balance"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/ECGModule.tscn" id="4_ecg"]
+[ext_resource type="PackedScene" uid="uid://dpsk0h3s01qne" path="res://Scenes/Modules/PlaceholderModule.tscn" id="5_placeholder"]
 
-[node name="Node2D" type="Node2D" unique_id=393326942]
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1453658095]
-layout_direction = 1
-offset_left = 230.0
-offset_top = 141.0
-offset_right = 330.0
-offset_bottom = 241.0
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="TextEdit" type="TextEdit" parent="ColorRect" unique_id=1491220419]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 0
-offset_left = 28.0
-offset_top = 18.0
-offset_right = 78.0
-offset_bottom = 68.0
-text = "asdf"
-placeholder_text = "asdfas"
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=785851655]
-position = Vector2(577, 323)
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+columns = 3
 
-[node name="TimerModule" parent="." unique_id=2101147815 instance=ExtResource("2_0xm2m")]
+[node name="TimerModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_timer")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="WireModule" parent="." unique_id=1330335668 instance=ExtResource("2_h2yge")]
-offset_left = 13.0
-offset_top = 264.0
-offset_right = 213.0
-offset_bottom = 464.0
+[node name="WireModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("2_wire")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="BalanceModule" parent="." unique_id=2053615184 instance=ExtResource("3_h2yge")]
-offset_left = 343.0
-offset_top = 440.0
-offset_right = 543.0
-offset_bottom = 640.0
+[node name="BalanceModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("3_balance")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ECGModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("4_ecg")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Placeholder1" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Placeholder2" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Placeholder3" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Placeholder4" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Placeholder5" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
