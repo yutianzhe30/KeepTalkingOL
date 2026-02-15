@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://Scenes/Modules/BalanceModule.tscn" id="3_balance"]
 [ext_resource type="PackedScene" path="res://Scenes/Modules/ECGModule.tscn" id="4_ecg"]
 [ext_resource type="PackedScene" uid="uid://dpsk0h3s01qne" path="res://Scenes/Modules/PlaceholderModule.tscn" id="5_placeholder"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/ButtonModule.tscn" id="7_button"]
 [ext_resource type="Script" path="res://Scripts/BombManager.gd" id="6_bomb_manager_script"]
 
 [node name="Main" type="Control"]
@@ -54,7 +55,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Placeholder1" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+[node name="ButtonModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("7_button")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

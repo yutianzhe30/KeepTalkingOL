@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://c6j7k8mam0n1"]
+
+[ext_resource type="Script" path="res://Scripts/Modules/ButtonModule.gd" id="1_button_module"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+
+[node name="ButtonModule" type="PanelContainer"]
+offset_right = 200.0
+offset_bottom = 200.0
+script = ExtResource("1_button_module")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Button1" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "?"
+
+[node name="Button2" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "?"
+
+[node name="Button3" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "?"
+
+[node name="Button4" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "?"
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
