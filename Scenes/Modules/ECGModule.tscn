@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://b-ecg-module"]
+[gd_scene load_steps=3 format=3 uid="uid://b-ecg-module"]
 
 [ext_resource type="Script" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="ECGModule" type="PanelContainer"]
-offset_right = 220.0
-offset_bottom = 140.0
+offset_right = 280.0
+offset_bottom = 200.0
 script = ExtResource("1_ecg_script")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -14,29 +14,8 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="WaveformSelector" type="OptionButton" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-item_count = 3
-selected = 0
-popup_menu = null
-item_0/text = "Normal"
-item_0/id = 0
-item_1/text = "Tachycardia"
-item_1/id = 1
-item_2/text = "VFib"
-item_2/id = 2
-
-[node name="HeartRateLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "HR: --"
-horizontal_alignment = 2
-
 [node name="ECGDisplayRect" type="ColorRect" parent="PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(250, 120)
+custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
 
@@ -44,12 +23,59 @@ color = Color(0, 0, 0, 1)
 position = Vector2(10, 10)
 z_index = 1
 points = PackedVector2Array(0, 0, 10, 0)
-width = 3.0
+width = 2.0
 default_color = Color(0, 1, 0, 1)
 antialiased = true
-joint_mode = 2 # LINE_JOINT_BEVEL
-begin_cap_mode = 2 # LINE_CAP_ROUND
-end_cap_mode = 2 # LINE_CAP_ROUND
-script = null
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HeartRateLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "HR: --"
+horizontal_alignment = 2
+
+[node name="EnergyContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EnergyContainer"]
+layout_mode = 2
+text = "Energy:"
+
+[node name="EnergySlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 360.0
+step = 10.0
+
+[node name="EnergyLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "0 J"
+horizontal_alignment = 1
+
+[node name="DosageContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/DosageContainer"]
+layout_mode = 2
+text = "Dosage:"
+
+[node name="DosageSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+step = 1.0
+
+[node name="DosageLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.183745, 0.70933, 0.947515, 1)
+text = "0 mg"
+horizontal_alignment = 1
+
+[node name="AdministerButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "ADMINISTER"
 
 [node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]

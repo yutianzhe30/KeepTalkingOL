@@ -1,68 +1,85 @@
 extends "res://Scripts/Modules/BaseModule.gd"
 
+# Medical ECG Module ("On-Call")
+# The user sees a patient's heart rhythm and must administer the correct treatment.
+
 @onready var ecg_line: Line2D = $PanelContainer/VBoxContainer/ECGDisplayRect/ECGLine
-@onready var waveform_selector: OptionButton = $PanelContainer/VBoxContainer/HBoxContainer/WaveformSelector
 @onready var heart_rate_label: Label = $PanelContainer/VBoxContainer/HBoxContainer/HeartRateLabel
 @onready var ecg_display_rect: ColorRect = $PanelContainer/VBoxContainer/ECGDisplayRect
 
-enum WaveformType { NORMAL, TACHYCARDIA, VENTRICULAR_FIBRILLATION }
+# Controls (To be linked in _ready or via scene references)
+@onready var energy_slider: HSlider = $PanelContainer/VBoxContainer/HBoxContainer/EnergySlider
+@onready var dosage_slider: HSlider = $PanelContainer/VBoxContainer/HBoxContainer/DosageSlider
+@onready var administer_btn: Button = $PanelContainer/VBoxContainer/HBoxContainer/AdministerButton
+@onready var energy_label: Label = $PanelContainer/VBoxContainer/HBoxContainer/EnergyLabel
+@onready var dosage_label: Label = $PanelContainer/VBoxContainer/HBoxContainer/DosageLabel
 
-var current_waveform_type: WaveformType = WaveformType.NORMAL
+enum RhythmType {
+	SINUS_TACH, # Normal but fast
+	VFIB, # Chaos
+	ASYSTOLE, # Flatline
+	STEMI, # Tombstone (Elevated ST)
+	FLUTTER # Sawtooth
+}
+
+var current_rhythm: RhythmType = RhythmType.SINUS_TACH
 var display_width: float
 var display_height: float
 var time_scale: float = 0.05
 var simulation_time: float = 0.0
-var cycle_duration: float = 2.0
+var cycle_duration: float = 2.0 # Seconds per screen width approx
 
 var points_buffer: Array[Vector2] = []
 var rng = RandomNumberGenerator.new()
 var vfib_last_y: float = 0.0
-
 
 func _ready():
 	display_width = ecg_display_rect.size.x - 20
 	display_height = ecg_display_rect.size.y - 20
 	rng.randomize()
 	
-	waveform_selector.add_item("Normal", WaveformType.NORMAL)
-	waveform_selector.add_item("Tachycardia", WaveformType.TACHYCARDIA)
-	waveform_selector.add_item("Ventricular Fibrillation", WaveformType.VENTRICULAR_FIBRILLATION)
-	waveform_selector.item_selected.connect(on_waveform_selected)
-	waveform_selector.select(WaveformType.NORMAL)
+	administer_btn.pressed.connect(_on_administer_pressed)
+	energy_slider.value_changed.connect(_on_energy_changed)
+	dosage_slider.value_changed.connect(_on_dosage_changed)
 	
-	set_waveform_type(current_waveform_type)
+	# Start with a random rhythm
+	_start_new_patient()
 	
-	ecg_line.clear_points()
+	set_process(true)
+
+func _start_new_patient():
+	current_rhythm = RhythmType.values().pick_random()
 	points_buffer.clear()
+	ecg_line.clear_points()
+	simulation_time = 0.0
+	
+	# Update Label Hint (for debug or until user learns)
+	# heart_rate_label.text = "Patient: " + RhythmType.keys()[current_rhythm]
+	print("New Patient Rhythm: ", RhythmType.keys()[current_rhythm])
+	
+	# Reset Sliders? No, keeps previous setting maybe? Or reset for fairness.
+	# energy_slider.value = 0
+	# dosage_slider.value = 0
 
 func _process(delta):
 	simulation_time += delta
-	update_ecg_waveform()
+	_update_ecg_waveform()
 	
 	if simulation_time >= cycle_duration:
 		simulation_time = 0.0
 		points_buffer.clear()
 		ecg_line.clear_points()
 
-func on_waveform_selected(index: int):
-	var selected_type = waveform_selector.get_item_id(index)
-	set_waveform_type(selected_type)
-
-func set_waveform_type(type: WaveformType):
-	current_waveform_type = type
-	points_buffer.clear()
-	ecg_line.clear_points()
-	simulation_time = 0.0
-	vfib_last_y = 0.0
-
-func update_ecg_waveform():
+func _update_ecg_waveform():
 	var new_point_raw_x = simulation_time / time_scale
 	var cycle_raw_x_end = cycle_duration / time_scale
 	
+	# Add points
 	if (points_buffer.is_empty() or points_buffer.back().x < new_point_raw_x) and new_point_raw_x <= cycle_raw_x_end:
-		var new_point_y = get_waveform_value(simulation_time)
+		var new_point_y = _get_waveform_value(simulation_time)
 		points_buffer.append(Vector2(new_point_raw_x, new_point_y))
 
+	# Scale for display
 	var scale_factor_x = display_width / cycle_raw_x_end if cycle_raw_x_end > 0 else 1.0
 
 	var display_points = []
@@ -71,75 +88,128 @@ func update_ecg_waveform():
 		display_points.append(Vector2(scaled_x, p.y))
 	
 	ecg_line.set_points(display_points)
+	_update_status_label()
+
+func _update_status_label():
+	# Display HR based on rhythm
+	match current_rhythm:
+		RhythmType.SINUS_TACH: heart_rate_label.text = "HR: 155"
+		RhythmType.VFIB: heart_rate_label.text = "HR: ??? (VFib)"
+		RhythmType.ASYSTOLE: heart_rate_label.text = "HR: 0"
+		RhythmType.STEMI: heart_rate_label.text = "HR: 88"
+		RhythmType.FLUTTER: heart_rate_label.text = "HR: 300 (A)" # Atrial rate high
+
+func _on_energy_changed(value):
+	energy_label.text = "%d J" % value
+
+func _on_dosage_changed(value):
+	dosage_label.text = "%d mg" % value
+
+func _on_administer_pressed():
+	var energy = energy_slider.value
+	var dosage = dosage_slider.value
 	
-	match current_waveform_type:
-		WaveformType.NORMAL:
-			heart_rate_label.text = "HR: ~75 bpm"
-		WaveformType.TACHYCARDIA:
-			heart_rate_label.text = "HR: ~160 bpm"
-		WaveformType.VENTRICULAR_FIBRILLATION:
-			heart_rate_label.text = "HR: VFib"
-
-# --- Main Waveform Value Calculation ---
-func get_waveform_value(time: float) -> float:
-	var value = 0.0 # Normalized value in [-1, 1] range
-	match current_waveform_type:
-		WaveformType.NORMAL:
-			value = _generate_normal_ecg_value(time)
-		WaveformType.TACHYCARDIA:
-			value = _generate_tachycardia_ecg_value(time)
-		WaveformType.VENTRICULAR_FIBRILLATION:
-			value = _generate_vfib_ecg_value(time)
+	print("Administering: Energy=", energy, " Dosage=", dosage, " for ", RhythmType.keys()[current_rhythm])
 	
-	# Scale normalized value to display height and center it.
-	# A negative value results in an UPWARD line direction.
-	return (value * display_height * 0.4) + (display_height * 0.5)
+	if _check_treatment(energy, dosage):
+		print("Treatment Effective!")
+		solve()
+	else:
+		print("Treatment Failed! Malpractice!")
+		strike()
+		_start_new_patient()
 
-# --- Waveform Generation Functions (Return Normalized Value) ---
+func _check_treatment(e: float, d: float) -> bool:
+	# Tolerance for sliders
+	var _e_tol = 10.0
+	var d_tol = 5.0
+	
+	match current_rhythm:
+		RhythmType.SINUS_TACH:
+			# Discharge -> 0, 0
+			return e == 0 and d == 0
+		RhythmType.VFIB:
+			# Shock -> Max Energy (assume 200 or 360, let's say >= 200)
+			return e >= 200 and d == 0
+		RhythmType.ASYSTOLE:
+			# Pray -> 0, 0
+			return e == 0 and d == 0
+		RhythmType.STEMI:
+			# Cath Lab -> Dosage 90 (Door-to-balloon)
+			return e == 0 and abs(d - 90) <= d_tol
+		RhythmType.FLUTTER:
+			# Adenosine -> Dosage 6
+			return e == 0 and abs(d - 6) <= d_tol
+			
+	return false
 
-func _generate_normal_ecg_value(time: float) -> float:
-	var bpm = 75.0
-	var beat_interval = 60.0 / bpm
-	var cycle_time = fmod(time, beat_interval)
+# --- Waveform Generation ---
+
+func _get_waveform_value(time: float) -> float:
+	var val = 0.0
+	match current_rhythm:
+		RhythmType.SINUS_TACH: val = _gen_sinus(time, 155.0)
+		RhythmType.VFIB: val = _gen_vfib(time)
+		RhythmType.ASYSTOLE: val = _gen_asystole(time)
+		RhythmType.STEMI: val = _gen_stemi(time)
+		RhythmType.FLUTTER: val = _gen_flutter(time)
+	
+	# Scale to screen height
+	return (val * display_height * 0.4) + (display_height * 0.5)
+
+func _gen_sinus(time: float, bpm: float) -> float:
+	var interval = 60.0 / bpm
+	var t = fmod(time, interval)
 	var y = 0.0
-
-	# P wave (atrial contraction)
-	if cycle_time > 0.1 and cycle_time < 0.2:
-		y = -5.0 * sin(PI * (cycle_time - 0.1) / 0.1)
-	# QRS complex (ventricular contraction)
-	elif cycle_time >= 0.2 and cycle_time < 0.25:
-		y = 40.0 * (cycle_time - 0.2) / 0.05
-	elif cycle_time >= 0.25 and cycle_time < 0.3:
-		y = 40.0 - 80.0 * (cycle_time - 0.25) / 0.05
-	elif cycle_time >= 0.3 and cycle_time < 0.35:
-		y = -40.0 + 40.0 * (cycle_time - 0.3) / 0.05
-	# T wave (ventricular repolarization)
-	elif cycle_time > 0.5 and cycle_time < 0.65:
-		y = -10.0 * sin(PI * (cycle_time - 0.5) / 0.15)
 	
-	return y / 40.0 # Normalize based on R-peak of 40
+	# Simple P-QRS-T approximation
+	if t < 0.1: y = -5.0 * sin(PI * t / 0.1) # P
+	elif t < 0.15: y = 40.0 * (t - 0.1) / 0.05 # QRS Up
+	elif t < 0.2: y = 40.0 - 80.0 * (t - 0.15) / 0.05 # QRS Down
+	elif t < 0.25: y = -40.0 + 40.0 * (t - 0.2) / 0.05 # QRS Back
+	elif t > 0.35 and t < 0.5: y = -10.0 * sin(PI * (t - 0.35) / 0.15) # T
+	
+	return y / 40.0
 
-func _generate_tachycardia_ecg_value(time: float) -> float:
-	var bpm = 160.0
-	var beat_interval = 60.0 / bpm
-	var cycle_time = fmod(time, beat_interval)
+func _gen_vfib(_time: float) -> float:
+	var noise = rng.randf_range(-1.0, 1.0)
+	vfib_last_y = lerp(vfib_last_y, noise, 0.2)
+	return vfib_last_y
+
+func _gen_asystole(_time: float) -> float:
+	return rng.randf_range(-0.05, 0.05) # Flatline with noise
+
+func _gen_stemi(time: float) -> float:
+	# Sinus but with elevated ST
+	var bpm = 80.0
+	var interval = 60.0 / bpm
+	var t = fmod(time, interval)
 	var y = 0.0
 	
-	if cycle_time < 0.1: 
-		y = -5.0 * sin(PI * cycle_time / 0.1) # P wave
-	elif cycle_time >= 0.1 and cycle_time < 0.2: # QRS complex
-		var t = (cycle_time - 0.1) / 0.1
-		y = 40.0 * sin(2 * PI * t - PI/2) # Simplified QRS as a sine wave
-	elif cycle_time > 0.25 and cycle_time < 0.35: 
-		y = -10.0 * sin(PI * (cycle_time-0.25)/0.1) # T wave
-
-	return y / 40.0 # Normalize based on R-peak of 40
-
-func _generate_vfib_ecg_value(_time: float) -> float:
-	# This logic is stateful and doesn't use the time parameter.
-	var noise = rng.randf_range(-15.0, 15.0)
-	# Lerp for smoothing, makes it look more organic than pure noise
-	var smooth_y = lerp(vfib_last_y, noise, 0.4)
-	vfib_last_y = smooth_y
+	if t < 0.1: y = -5.0 * sin(PI * t / 0.1) # P
+	elif t < 0.15: y = 40.0 * (t - 0.1) / 0.05 # QRS Up
+	elif t < 0.2: y = 40.0 - 60.0 * (t - 0.15) / 0.05 # QRS Down (Not all way down)
+	elif t >= 0.2 and t < 0.4:
+		# ST Elevation (Tombstone)
+		# Starts high (-20) and arches down
+		y = -20.0 + 10.0 * sin(PI * (t - 0.2) / 0.2)
 	
-	return smooth_y / 15.0 # Normalize to [-1, 1] range
+	return y / 40.0
+
+func _gen_flutter(time: float) -> float:
+	# Sawtooth waves between QRS
+	var bpm = 75.0 # Ventricular rate
+	var interval = 60.0 / bpm
+	var t = fmod(time, interval)
+	
+	# Base Sawtooth (Atrial Flutter) - fast constant wave
+	var flutter_freq = 5.0 # Hz (300 bpm)
+	var flutter_y = abs(fmod(time * flutter_freq, 1.0) - 0.5) * 2.0 - 0.5 # -0.5 to 0.5 triangle
+	flutter_y *= 10.0 # Amplitude
+	
+	var qrs_y = 0.0
+	if t < 0.05: qrs_y = 40.0 * t / 0.05
+	elif t < 0.1: qrs_y = 40.0 - 80.0 * (t - 0.05) / 0.05
+	elif t < 0.15: qrs_y = -40.0 + 40.0 * (t - 0.1) / 0.05
+	
+	return (flutter_y + qrs_y) / 40.0
