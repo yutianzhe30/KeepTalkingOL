@@ -12,9 +12,9 @@ var buttons: Array[Button] = []
 const LISTS = [
 	["Ϙ", "Ѧ", "ƛ", "Ϟ", "Ѭ", "ϗ", "Ͽ", ], # List 1
 	["Ӭ", "Ϙ", "Ͽ", "Ҩ", "☆", "ϗ", "¿"], # List 2
-	["©", "Ѽ", "Ҩ", "Ж", "ƛ", "ƛ", "☆"], # List 3
-	["б", "¶", "Ѣ", "Ѭ", "Ж", "¿", "☺"], # List 4
-	["Ψ", "☺", "Ѣ", "Ͼ", "¶", "Ѯ", "★"], # List 5
+	["©", "Ѽ", "Ҩ", "Ж", "ƛ", "ㄓ", "☆"], # List 3
+	["б", "¶", "Ѣ", "Ѭ", "Ж", "¿", "ツ"], # List 4
+	["Ψ", "ツ", "Ѣ", "Ͼ", "¶", "Ѯ", "★"], # List 5
 	["б", "Ӭ", "҂", "æ", "Ψ", "Ҋ", "Ω"] # List 6
 ]
 
@@ -23,6 +23,10 @@ var active_symbols: Array[String] = []
 var correct_sequence: Array[int] = [] # Indices of buttons in order of pressing
 var current_step: int = 0
 var button_configs: Array[Dictionary] = [] # Stores {index: int, symbol: String} for each button
+
+# Visual Configuration
+const BUTTON_MIN_SIZE = Vector2(85, 100)
+const BUTTON_FONT_SIZE = 40
 
 func _ready():
 	_setup_buttons()
@@ -33,6 +37,8 @@ func _setup_buttons():
 	for child in grid_container.get_children():
 		if child is Button:
 			buttons.append(child)
+			child.custom_minimum_size = BUTTON_MIN_SIZE
+			child.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
 			child.pressed.connect(_on_button_pressed.bind(buttons.size() - 1))
 
 func start_game():
@@ -114,16 +120,25 @@ func _update_button_visuals():
 	for config in button_configs:
 		var btn = buttons[config.button_index]
 		btn.text = config.symbol
+		# Reset state
+		btn.disabled = false
+		btn.modulate = Color(1, 1, 1, 1) # White
 
 func _on_button_pressed(btn_index: int):
-	if state == ModuleState.SOLVED or state == ModuleState.FAILED:
+	if state == ModuleState.SOLVED:
 		return
 		
 	if btn_index == correct_sequence[current_step]:
 		print("Button Module: Correct press ", current_step + 1, "/", 4)
-		current_step += 1
 		
-		# Animation / Feedback could go here (e.g. green light on button)
+		# Visual Logic: Show clicked (Green + Disabled)
+		# We need to find the button object that corresponds to this index
+		# Since 'buttons' array is indexed by 'btn_index', we can use it directly.
+		var btn = buttons[btn_index]
+		btn.modulate = Color(0, 1, 0, 1) # Green
+		btn.disabled = true
+		
+		current_step += 1
 		
 		if current_step >= 4:
 			solve()
@@ -131,3 +146,6 @@ func _on_button_pressed(btn_index: int):
 		print("Button Module: Wrong press! Expected button ", correct_sequence[current_step], " but got ", btn_index)
 		strike()
 		current_step = 0 # Reset progress on strike
+		
+		# Visual Logic: Reset all buttons
+		_update_button_visuals()
