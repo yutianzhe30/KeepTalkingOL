@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://f2m6n7o8qaq0"]
 
 [ext_resource type="Script" path="res://Scripts/Modules/BalanceModule.gd" id="1_balance_script"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="BalanceModule" type="PanelContainer"]
 custom_minimum_size = Vector2(200, 200)
@@ -19,3 +20,5 @@ layout_mode = 0
 offset_right = 20.0
 offset_bottom = 20.0
 color = Color(1, 0.4, 0.4, 1)
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]

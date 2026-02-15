@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/UI/ModuleLed.gd" id="1_module_led_script"]
+
+[node name="ModuleLED" type="ColorRect"]
+script = ExtResource("1_module_led_script")

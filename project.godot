@@ -15,12 +15,11 @@ run/main_scene="uid://dm0xsjs6w7jdg"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display/window]
+[display]
 
-size/viewport_width=1200
-size/viewport_height=900
-stretch/mode="canvas_items"
-stretch/aspect="keep"
+window/size/viewport_width=1200
+window/size/viewport_height=900
+window/stretch/mode="canvas_items"
 
 [input]
 

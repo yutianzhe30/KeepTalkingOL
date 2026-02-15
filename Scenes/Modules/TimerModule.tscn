@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bumy8q4j2k5m"]
 
 [ext_resource type="Script" uid="uid://35bfys70v34h" path="res://Scripts/Modules/TimerModule.gd" id="1_timer_script"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="TimerModule" type="PanelContainer" unique_id=2101147815]
 offset_right = 200.0
@@ -15,3 +16,5 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="." unique_id=43945249]
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]

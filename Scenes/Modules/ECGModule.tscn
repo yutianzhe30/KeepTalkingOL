@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b-ecg-module"]
 
 [ext_resource type="Script" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="ECGModule" type="PanelContainer"]
 offset_right = 220.0
@@ -50,3 +51,5 @@ joint_mode = 2 # LINE_JOINT_BEVEL
 begin_cap_mode = 2 # LINE_CAP_ROUND
 end_cap_mode = 2 # LINE_CAP_ROUND
 script = null
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]

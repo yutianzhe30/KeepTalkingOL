@@ -49,6 +49,12 @@ func start_timer():
 func stop_timer():
 	is_running = false
 
+func add_time_penalty(seconds: float) -> void:
+	time_remaining = max(0.0, time_remaining - seconds)
+	update_display()
+	if time_remaining <= 0.0:
+		explode()
+
 func explode():
 	stop_timer()
 	strike() # Or a dedicated GAME OVER signal
