@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b8lal0m1n2o3"]
+
+[ext_resource type="Script" path="res://Scripts/Modules/PressModule.gd" id="1_press_module"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+
+[node name="PressModule" type="PanelContainer"]
+offset_right = 200.0
+offset_bottom = 200.0
+script = ExtResource("1_press_module")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="MainButton" type="Button" parent="CenterContainer"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "PRESS"
+
+[node name="StripColor" type="ColorRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(20, 180)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
