@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://c7m2n3p4q5r6"]
+
+[ext_resource type="Script" path="res://Scripts/Modules/RadioModule.gd" id="1_radio_module"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+
+[node name="RadioModule" type="PanelContainer"]
+offset_right = 200.0
+offset_bottom = 200.0
+script = ExtResource("1_radio_module")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="OscilloscopeDisplay" type="ColorRect" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 100)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="WaveformLine" type="Line2D" parent="PanelContainer/VBoxContainer/OscilloscopeDisplay"]
+points = PackedVector2Array(0, 0, 20, -10, 40, 0, 60, 10, 80, 0)
+width = 2.0
+default_color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="ControlsContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FreqHeader" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ControlsContainer/FreqHeader"]
+layout_mode = 2
+text = "Frequency:"
+
+[node name="TunerSlider" type="HSlider" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+min_value = 88.0
+max_value = 108.0
+step = 0.1
+value = 88.0
+
+[node name="FrequencyLabel" type="Label" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "88.0 MHz"
+horizontal_alignment = 1
+
+[node name="AmpHeader" type="HBoxContainer" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ControlsContainer/AmpHeader"]
+layout_mode = 2
+text = "Amplitude:"
+
+[node name="AmpSlider" type="HSlider" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+max_value = 100.0
+step = 10.0
+
+[node name="AmpLabel" type="Label" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.71, 0.95, 1)
+text = "AMP: 0"
+horizontal_alignment = 1
+
+[node name="TransmitButton" type="Button" parent="PanelContainer/VBoxContainer/ControlsContainer"]
+layout_mode = 2
+text = "TRANSMIT"
+
+[node name="StaticPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Master"
+
+[node name="SignalPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Master"
+
+[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]

@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dpsk0h3s01qne" path="res://Scenes/Modules/PlaceholderModule.tscn" id="5_placeholder"]
 [ext_resource type="PackedScene" path="res://Scenes/Modules/ButtonModule.tscn" id="7_button"]
 [ext_resource type="PackedScene" path="res://Scenes/Modules/PressModule.tscn" id="8_press"]
+[ext_resource type="PackedScene" path="res://Scenes/Modules/RadioModule.tscn" id="9_radio"]
 [ext_resource type="Script" path="res://Scripts/BombManager.gd" id="6_bomb_manager_script"]
 
 [node name="Main" type="Control"]
@@ -66,7 +67,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Placeholder3" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+[node name="RadioModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("9_radio")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -29,7 +29,7 @@ func update_display():
 	var millis = floor(fmod(time_remaining, 1) * 100)
 	
 	# %02d used for padding with zeros
-	label.text = "%02d:%02d:%02d" % [minutes, seconds, millis]
+	label.text = "%02d:%02d" % [minutes, seconds]
 
 func check_sound_tick():
 	# Trigger sound every second
