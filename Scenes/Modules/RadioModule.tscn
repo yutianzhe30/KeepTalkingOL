@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://c7m2n3p4q5r6"]
 
 [ext_resource type="Script" path="res://Scripts/Modules/RadioModule.gd" id="1_radio_module"]
+[ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="2_metal_style"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="RadioModule" type="PanelContainer"]
 offset_right = 200.0
 offset_bottom = 200.0
+theme_override_styles/panel = ExtResource("2_metal_style")
 script = ExtResource("1_radio_module")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]

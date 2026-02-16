@@ -1,11 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://b-ecg-module"]
 
 [ext_resource type="Script" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
+[ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="2_metal_style"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [node name="ECGModule" type="PanelContainer"]
 offset_right = 280.0
 offset_bottom = 200.0
+theme_override_styles/panel = ExtResource("2_metal_style")
 script = ExtResource("1_ecg_script")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
