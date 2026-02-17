@@ -38,6 +38,10 @@ func _ready():
 	display_height = ecg_display_rect.size.y - 20
 	rng.randomize()
 	
+	# Apply Global Colors
+	ecg_line.default_color = GlobalColors.COLOR_GREEN
+	ecg_display_rect.color = GlobalColors.COLOR_BLACK
+	
 	administer_btn.pressed.connect(_on_administer_pressed)
 	energy_slider.value_changed.connect(_on_energy_changed)
 	dosage_slider.value_changed.connect(_on_dosage_changed)

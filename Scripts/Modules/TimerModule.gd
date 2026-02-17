@@ -10,6 +10,13 @@ var last_tick_second: int = -1
 var strike_count: int = 0
 
 func _ready():
+	# Apply Global Colors
+	label.add_theme_color_override("font_color", GlobalColors.COLOR_RED)
+	strike_label.add_theme_color_override("font_color", GlobalColors.COLOR_RED)
+	
+	$VBoxContainer/TimerContainer/BackgroundLabel.add_theme_color_override("font_color", GlobalColors.COLOR_TRANSPARENT_RED)
+	$VBoxContainer/StrikeContainer/BackgroundLabel.add_theme_color_override("font_color", GlobalColors.COLOR_TRANSPARENT_RED)
+
 	update_display()
 	update_strike_display()
 	# Optional: Start automatically for testing

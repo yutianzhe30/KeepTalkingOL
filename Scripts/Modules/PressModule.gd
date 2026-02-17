@@ -11,10 +11,10 @@ extends "res://Scripts/Modules/BaseModule.gd"
 
 # Config
 const COLORS = {
-	"Red": Color(0.8, 0.1, 0.1),
-	"Blue": Color(0.1, 0.1, 0.8),
-	"Yellow": Color(0.8, 0.8, 0.1),
-	"White": Color(0.9, 0.9, 0.9)
+	"Red": GlobalColors.COLOR_RED,
+	"Blue": GlobalColors.COLOR_BLUE,
+	"Yellow": GlobalColors.COLOR_YELLOW,
+	"White": GlobalColors.COLOR_WHITE
 }
 
 const TEXTS = ["PRESS", "HOLD", "ABORT", "DETONATE"]

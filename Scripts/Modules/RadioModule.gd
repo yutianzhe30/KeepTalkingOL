@@ -178,7 +178,7 @@ func _update_waveform():
 		points.append(Vector2(x, y))
 		
 	waveform_line.points = points
-	waveform_line.default_color = Color(0.2, 0.8, 0.2).lerp(Color(0.2, 1.0, 0.2), signal_strength)
+	waveform_line.default_color = GlobalColors.COLOR_GREEN
 
 func _on_transmit_pressed():
 	if state == ModuleState.SOLVED: return

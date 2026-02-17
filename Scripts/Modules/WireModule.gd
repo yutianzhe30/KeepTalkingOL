@@ -31,7 +31,14 @@ func generate_puzzle(wire_count: int):
 	setup_rules()
 
 func get_random_color() -> Color:
-	var colors = [Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.WHITE, Color.BLACK]
+	var colors = [
+		GlobalColors.COLOR_RED,
+		GlobalColors.COLOR_BLUE,
+		GlobalColors.COLOR_YELLOW,
+		GlobalColors.COLOR_GREEN,
+		GlobalColors.COLOR_WHITE,
+		GlobalColors.COLOR_BLACK
+	]
 	return colors.pick_random()
 
 func setup_rules():
