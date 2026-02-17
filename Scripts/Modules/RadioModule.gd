@@ -129,7 +129,7 @@ func _fill_audio_buffers():
 		var buffer = PackedVector2Array()
 		buffer.resize(frames)
 		for i in range(frames):
-			var s = randf_range(-1.0, 1.0) * 0.5
+			var s = randf_range(-1.0, 1.0) * 0.25
 			buffer.set(i, Vector2(s, s))
 		static_stream.push_buffer(buffer)
 		
@@ -138,11 +138,11 @@ func _fill_audio_buffers():
 	if frames > 0:
 		var buffer = PackedVector2Array()
 		buffer.resize(frames)
-		var phase_inc = 440.0 / sample_hz
+		var phase_inc = 300.0 / sample_hz
 		
 		# Morse 'dots' modulation could happen here, keeping it constant tone for now
 		for i in range(frames):
-			var s = sin(current_phase * TAU) * 0.5
+			var s = sin(current_phase * TAU) * 0.3
 			current_phase = fmod(current_phase + phase_inc, 1.0)
 			buffer.set(i, Vector2(s, s))
 		signal_stream.push_buffer(buffer)

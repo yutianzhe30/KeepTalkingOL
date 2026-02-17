@@ -1,14 +1,17 @@
 extends "res://Scripts/Modules/BaseModule.gd"
 
-@onready var label = $Label
+@onready var label = $VBoxContainer/TimerContainer/Label
+@onready var strike_label = $VBoxContainer/StrikeContainer/StrikeLabel
 @onready var timer_node = $Timer
 
 var time_remaining: float = 300.0 # 5 minutes default
 var is_running: bool = false
 var last_tick_second: int = -1
+var strike_count: int = 0
 
 func _ready():
 	update_display()
+	update_strike_display()
 	# Optional: Start automatically for testing
 	start_timer()
 
@@ -23,13 +26,19 @@ func _process(delta):
 		check_sound_tick()
 
 func update_display():
-	# Format: MM:SS:MS
+	# Format: MM:SS
 	var minutes = floor(time_remaining / 60)
 	var seconds = floor(fmod(time_remaining, 60))
-	var millis = floor(fmod(time_remaining, 1) * 100)
+	# var millis = floor(fmod(time_remaining, 1) * 100) # Removed millis for 7-segment look if preferred, or keep
 	
 	# %02d used for padding with zeros
 	label.text = "%02d:%02d" % [minutes, seconds]
+
+func update_strike_display():
+	var strike_text = ""
+	for i in range(strike_count):
+		strike_text += "-"
+	strike_label.text = strike_text
 
 func check_sound_tick():
 	# Trigger sound every second
@@ -54,6 +63,10 @@ func add_time_penalty(seconds: float) -> void:
 	update_display()
 	if time_remaining <= 0.0:
 		explode()
+
+func add_strike() -> void:
+	strike_count += 1
+	update_strike_display()
 
 func explode():
 	stop_timer()

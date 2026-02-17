@@ -24,8 +24,11 @@ func _on_module_struck(module: BaseModule) -> void:
 	print("BombManager strike from: ", module.name)
 	if module == _timer_module:
 		return
-	if _timer_module != null and _timer_module.has_method("add_time_penalty"):
-		_timer_module.add_time_penalty(strike_penalty_seconds)
+	if _timer_module != null:
+		if _timer_module.has_method("add_time_penalty"):
+			_timer_module.add_time_penalty(strike_penalty_seconds)
+		if _timer_module.has_method("add_strike"):
+			_timer_module.add_strike()
 
 func _on_module_solved(module: BaseModule) -> void:
 	print("BombManager solved: ", module.name)

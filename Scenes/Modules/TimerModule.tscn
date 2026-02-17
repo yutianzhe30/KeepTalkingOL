@@ -7,17 +7,54 @@
 
 [node name="TimerModule" type="PanelContainer"]
 offset_right = 200.0
-offset_bottom = 100.0
+offset_bottom = 200.0
 theme_override_styles/panel = ExtResource("3_metal_style")
 script = ExtResource("1_timer_module")
 
-[node name="Label" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="TimerContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackgroundLabel" type="Label" parent="VBoxContainer/TimerContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0, 0, 0.2)
+theme_override_fonts/font = ExtResource("2_timer_font")
+theme_override_font_sizes/font_size = 48
+text = "88:88"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/TimerContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_timer_font")
+theme_override_font_sizes/font_size = 48
+text = "05:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StrikeContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="BackgroundLabel" type="Label" parent="VBoxContainer/StrikeContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0, 0, 0.2)
+theme_override_fonts/font = ExtResource("2_timer_font")
+theme_override_font_sizes/font_size = 32
+text = "---"
+vertical_alignment = 1
+
+[node name="StrikeLabel" type="Label" parent="VBoxContainer/StrikeContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_timer_font")
 theme_override_font_sizes/font_size = 32
-text = "05:00"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]

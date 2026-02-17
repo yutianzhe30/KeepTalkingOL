@@ -1,16 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://dm0xsjs6w7jdg"]
+[gd_scene format=3 uid="uid://dm0xsjs6w7jdg"]
 
 [ext_resource type="PackedScene" uid="uid://bumy8q4j2k5m" path="res://Scenes/Modules/TimerModule.tscn" id="1_timer"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/WireModule.tscn" id="2_wire"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/BalanceModule.tscn" id="3_balance"]
+[ext_resource type="PackedScene" uid="uid://eak3l4m5n6o7" path="res://Scenes/Modules/WireModule.tscn" id="2_wire"]
+[ext_resource type="PackedScene" uid="uid://f2m6n7o8qaq0" path="res://Scenes/Modules/BalanceModule.tscn" id="3_balance"]
 [ext_resource type="PackedScene" path="res://Scenes/Modules/ECGModule.tscn" id="4_ecg"]
 [ext_resource type="PackedScene" uid="uid://dpsk0h3s01qne" path="res://Scenes/Modules/PlaceholderModule.tscn" id="5_placeholder"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/ButtonModule.tscn" id="7_button"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/PressModule.tscn" id="8_press"]
-[ext_resource type="PackedScene" path="res://Scenes/Modules/RadioModule.tscn" id="9_radio"]
-[ext_resource type="Script" path="res://Scripts/BombManager.gd" id="6_bomb_manager_script"]
+[ext_resource type="Script" uid="uid://5yxtnnk881kf" path="res://Scripts/BombManager.gd" id="6_bomb_manager_script"]
+[ext_resource type="PackedScene" uid="uid://c6j7k8mam0n1" path="res://Scenes/Modules/ButtonModule.tscn" id="7_button"]
+[ext_resource type="PackedScene" uid="uid://b8lal0m1n2o3" path="res://Scenes/Modules/PressModule.tscn" id="8_press"]
+[ext_resource type="PackedScene" uid="uid://c7m2n3p4q5r6" path="res://Scenes/Modules/RadioModule.tscn" id="9_radio"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=225597339]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=643146508]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,61 +26,57 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1924966465]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer" unique_id=1358660708]
 layout_mode = 2
 columns = 3
 
-[node name="TimerModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("1_timer")]
+[node name="WireModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2068743518 instance=ExtResource("2_wire")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WireModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("2_wire")]
+[node name="BalanceModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=621648373 instance=ExtResource("3_balance")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BalanceModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("3_balance")]
+[node name="ECGModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=646423082 instance=ExtResource("4_ecg")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ECGModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("4_ecg")]
+[node name="ButtonModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2024393945 instance=ExtResource("7_button")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ButtonModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("7_button")]
+[node name="TimerModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=1079965074 instance=ExtResource("1_timer")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PressModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("8_press")]
+[node name="PressModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=580149733 instance=ExtResource("8_press")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RadioModule" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("9_radio")]
+[node name="RadioModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=894442140 instance=ExtResource("9_radio")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Placeholder4" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+[node name="Placeholder4" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2077727111 instance=ExtResource("5_placeholder")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="Placeholder5" parent="PanelContainer/MarginContainer/GridContainer" instance=ExtResource("5_placeholder")]
+[node name="Placeholder5" parent="PanelContainer/MarginContainer/GridContainer" unique_id=1881491480 instance=ExtResource("5_placeholder")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="BombManager" type="Node" parent="."]
+[node name="BombManager" type="Node" parent="." unique_id=1564836808]
 script = ExtResource("6_bomb_manager_script")
