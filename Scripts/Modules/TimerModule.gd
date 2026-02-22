@@ -81,4 +81,7 @@ func explode():
 	print("BOOM: Time ran out!")
 
 func get_debug_info() -> String:
-	return "Timer Module: %s, Strikes: %d" % [label.text, strike_count]
+	var time_text = "00:00"
+	if label != null:
+		time_text = label.text
+	return "Timer Module: %s, Strikes: %d" % [time_text, strike_count]

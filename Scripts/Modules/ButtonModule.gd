@@ -73,37 +73,14 @@ func _pick_puzzle():
 	
 	# Map these symbols to random buttons
 	var button_indices = [0, 1, 2, 3]
-	#button_indices.shuffle()
+	button_indices.shuffle()
 	
 	# Assign symbols to buttons
-	# temp_symbols is in correct order.
-	# We need to know which BUTTON corresponds to which step in the sequence.
-	
-	# Example:
-	# Solution: [A, B, C, d]
-	# Buttons (randomized): [2:A, 0:B, 3:C, 1:d]
-	# Correct Sequence (Button Indices): [2, 0, 3, 1]
-	
-	# Let's verify the logic:
-	# chosen_list = [A, B, C, D, E, F]
-	# chosen_indices = [0, 1, 3, 5] -> [A, B, D, F] (Correct Order)
-	
-	# We have 4 buttons.
-	# We assign the 4 symbols to the 4 buttons randomly.
-	
 	var symbol_to_button_map = {}
 	
 	for i in range(4):
 		var btn_idx = button_indices[i]
-		var symbol = temp_symbols[i] # This is the i-th symbol in the CORRECT sequence
-		
-		# Wait, shuffling button_indices implies:
-		# i=0 (First in seq) -> goes to button `button_indices[0]`
-		# i=1 (Second in seq) -> goes to button `button_indices[1]`
-		
-		# So `correct_sequence` should simply be `button_indices`!
-		# Because button_indices[0] HAS the first symbol.
-		# button_indices[1] HAS the second symbol.
+		var symbol = temp_symbols[i] # temp_symbols is the correct chronological order
 		
 		button_configs.append({
 			"button_index": btn_idx,
