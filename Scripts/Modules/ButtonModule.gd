@@ -112,9 +112,15 @@ func _pick_puzzle():
 		
 		symbol_to_button_map[symbol] = btn_idx
 		
-	# Re-construct correct_sequence based on the sorted symbols
 	for sym in temp_symbols:
 		correct_sequence.append(symbol_to_button_map[sym])
+
+func get_debug_info() -> String:
+	var sequence_symbols = []
+	for idx in correct_sequence:
+		var btn = buttons[idx]
+		sequence_symbols.append(btn.text)
+	return "Button Sequence: press " + str(sequence_symbols)
 
 func _update_button_visuals():
 	for config in button_configs:

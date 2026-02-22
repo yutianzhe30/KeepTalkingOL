@@ -19,6 +19,23 @@ func _ready() -> void:
 			var module := child as BaseModule
 			module.module_struck.connect(_on_module_struck.bind(module))
 			module.module_solved.connect(_on_module_solved.bind(module))
+		elif child.has_method("get_debug_info"):
+			# For modules that might not inherit BaseModule but still have the method
+			pass
+
+	# Print all debug information
+	call_deferred("_print_all_debug_info")
+
+func _print_all_debug_info() -> void:
+	print("========================================")
+	print("BOMB DEBUG INFO (PUZZLES & SOLUTIONS)")
+	print("========================================")
+	var modules_root = get_node_or_null(modules_root_path)
+	if modules_root:
+		for child in modules_root.get_children():
+			if child.has_method("get_debug_info"):
+				print(child.get_debug_info())
+	print("========================================")
 
 func _on_module_struck(module: BaseModule) -> void:
 	print("BombManager strike from: ", module.name)

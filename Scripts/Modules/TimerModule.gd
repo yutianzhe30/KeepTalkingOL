@@ -79,3 +79,6 @@ func explode():
 	stop_timer()
 	strike() # Or a dedicated GAME OVER signal
 	print("BOOM: Time ran out!")
+
+func get_debug_info() -> String:
+	return "Timer Module: %s, Strikes: %d" % [label.text, strike_count]

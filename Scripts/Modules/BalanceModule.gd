@@ -65,6 +65,9 @@ func check_boundary():
 	if abs(position_offset.x) > bounds_x or abs(position_offset.y) > bounds_y:
 		strike_module()
 
+func get_debug_info() -> String:
+	return "Balance Module: Keep the ball centered!"
+
 func strike_module():
 	if !is_active: return
 	print("Balance Module Failed!")

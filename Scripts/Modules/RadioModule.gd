@@ -85,6 +85,9 @@ func _determine_target():
 		
 	print("RadioModule Target: Freq=", target_frequency, " Amp=", target_amplitude)
 
+func get_debug_info() -> String:
+	return "Radio Module: Tune to Freq %.1f MHz, Amp %.0f" % [target_frequency, target_amplitude]
+
 func _process(delta):
 	if state == ModuleState.SOLVED:
 		static_player.volume_db = -80.0

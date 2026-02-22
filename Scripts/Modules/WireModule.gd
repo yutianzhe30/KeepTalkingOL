@@ -48,6 +48,9 @@ func setup_rules():
 	solution_index = wires.size() - 1
 	print("DEBUG: Cut wire index ", solution_index)
 
+func get_debug_info() -> String:
+	return "Wire Module: Cut wire index %d (the LAST wire)" % solution_index
+
 func _on_wire_cut(wire_instance):
 	var index = wires.find(wire_instance)
 	

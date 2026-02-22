@@ -28,6 +28,10 @@ func _notification(what: int) -> void:
 		NOTIFICATION_RESIZED, NOTIFICATION_TRANSFORM_CHANGED:
 			_update_led_position()
 
+# Virtual method for printing debug information about the puzzle and solution
+func get_debug_info() -> String:
+	return "No debug info available for this module."
+
 # Backward-compatible wrappers for existing modules.
 func solve() -> void:
 	mark_solved()

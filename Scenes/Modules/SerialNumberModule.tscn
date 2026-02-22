@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c8m1l4b6kah2k"]
+
+[ext_resource type="Script" path="res://Scripts/Modules/SerialNumberModule.gd" id="1_sn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.9, 0.9, 0.9, 1.0)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.7, 0.7, 0.7, 1.0)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="SerialNumberModule" type="PanelContainer"]
+custom_minimum_size = Vector2(250, 150)
+offset_right = 250.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+script = ExtResource("1_sn")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1.0)
+theme_override_font_sizes/font_size = 14
+text = "SERIAL NUMBER"
+horizontal_alignment = 1
+
+[node name="SerialLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1.0)
+theme_override_font_sizes/font_size = 40
+text = "A1B2C3"
+horizontal_alignment = 1

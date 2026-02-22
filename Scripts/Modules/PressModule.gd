@@ -94,6 +94,12 @@ func _determine_rules():
 		
 	print("PressModule: ", button_color_name, " ", button_text, " -> ", required_action)
 
+func get_debug_info() -> String:
+	if required_action == "TAP":
+		return "Press Module: TAP the %s button." % button_text
+	else:
+		return "Press Module: HOLD the %s button. (Release depends on strip color)" % button_text
+
 func _start_hold_phase():
 	# Show Strip Logic
 	# Random strip color

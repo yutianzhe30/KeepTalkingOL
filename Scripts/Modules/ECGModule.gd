@@ -147,6 +147,15 @@ func _check_treatment(e: float, d: float) -> bool:
 			
 	return false
 
+func get_debug_info() -> String:
+	match current_rhythm:
+		RhythmType.SINUS_TACH: return "ECG Module (Sinus): 0 J, 0 mg"
+		RhythmType.VFIB: return "ECG Module (VFib): >= 200 J, 0 mg"
+		RhythmType.ASYSTOLE: return "ECG Module (Asystole): 0 J, 0 mg"
+		RhythmType.STEMI: return "ECG Module (STEMI): 0 J, 90 mg"
+		RhythmType.FLUTTER: return "ECG Module (Flutter): 0 J, 6 mg"
+	return "ECG Module: Unknown"
+
 # --- Waveform Generation ---
 
 func _get_waveform_value(time: float) -> float:
