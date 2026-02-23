@@ -38,6 +38,10 @@ func _ready():
 	display_height = ecg_display_rect.size.y - 20
 	rng.randomize()
 	
+	if dosage_slider:
+		dosage_slider.max_value = 100.0
+	
+	
 	# Apply Global Colors
 	ecg_line.default_color = GlobalColors.COLOR_GREEN
 	ecg_display_rect.color = GlobalColors.COLOR_BLACK
@@ -128,7 +132,7 @@ func _on_administer_pressed():
 func _check_treatment(e: float, d: float) -> bool:
 	# Tolerance for sliders
 	var _e_tol = 10.0
-	var d_tol = 5.0
+	var d_tol = 2.0
 	
 	match current_rhythm:
 		RhythmType.SINUS_TACH:

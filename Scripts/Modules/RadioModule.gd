@@ -17,7 +17,7 @@ extends "res://Scripts/Modules/BaseModule.gd"
 
 # Config
 const MIN_FREQ = 88.0
-const MAX_FREQ = 108.0
+const MAX_FREQ = 130.0
 const TOLERANCE_FREQ = 0.5
 const TOLERANCE_AMP = 5.0
 
@@ -39,6 +39,7 @@ var signal_stream: AudioStreamGeneratorPlayback
 
 func _ready():
 	#super._ready() # BaseModule might handle some state
+	tuner_slider.max_value = 130.0
 	tuner_slider.value_changed.connect(_on_frequency_changed)
 	amp_slider.value_changed.connect(_on_amplitude_changed)
 	transmit_btn.pressed.connect(_on_transmit_pressed)
@@ -81,17 +82,29 @@ func get_serial_number() -> String:
 				return child.get_serial_number()
 	return "000000"
 
-func get_first_digit_from_serial(serial: String) -> int:
-	for i in range(serial.length()):
-		if serial[i].is_valid_int():
-			return serial[i].to_int()
+func get_first_char_value(serial: String) -> int:
+	if serial.length() == 0: return 1
+	var first_char = serial[0].to_upper()
+	if first_char.is_valid_int():
+		return first_char.to_int()
+	else:
+		var val = first_char.unicode_at(0) - 64
+		if val >= 1 and val <= 26:
+			return val
+		return 1
+
+func get_last_digit_from_serial(serial: String) -> int:
+	if serial.length() == 0: return 1
+	var last_char = serial[serial.length() - 1]
+	if last_char.is_valid_int():
+		return last_char.to_int()
 	return 1
 
 func _determine_target():
-	# Rule: First Digit of Serial (1-9) + 90.0
 	var serial = get_serial_number()
-	var first_digit = get_first_digit_from_serial(serial)
-	target_frequency = 90.0 + float(first_digit)
+	var first_val = get_first_char_value(serial)
+	var last_val = get_last_digit_from_serial(serial)
+	target_frequency = 90.0 + float(first_val) + float(last_val)
 	
 	# Amplitude Rule:
 	# If Freq < 95.0 -> Amp 20
