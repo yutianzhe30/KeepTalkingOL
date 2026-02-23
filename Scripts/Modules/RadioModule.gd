@@ -73,9 +73,27 @@ func _setup_audio_streams():
 	
 	sample_hz = static_gen.mix_rate
 
+func get_serial_number() -> String:
+	# Attempt to find the SerialNumberModule in the tree to read its value.
+	var parent = get_parent()
+	if parent:
+		for child in parent.get_children():
+			if child.has_method("get_debug_info"):
+				var debug_info = child.get_debug_info()
+				if debug_info.begins_with("Serial Number: "):
+					return debug_info.replace("Serial Number: ", "").strip_edges()
+	return "000000"
+
+func get_first_digit_from_serial(serial: String) -> int:
+	for i in range(serial.length()):
+		if serial[i].is_valid_int():
+			return serial[i].to_int()
+	return 1
+
 func _determine_target():
 	# Rule: First Digit of Serial (1-9) + 90.0
-	var first_digit = randi_range(1, 9)
+	var serial = get_serial_number()
+	var first_digit = get_first_digit_from_serial(serial)
 	target_frequency = 90.0 + float(first_digit)
 	
 	# Amplitude Rule:

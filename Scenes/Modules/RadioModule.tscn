@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Modules/RadioModule.gd" id="1_radio_module"]
 [ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="2_metal_style"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+[ext_resource type="Material" uid="uid://crt_shader_material" path="res://Shaders/CRT_Material.tres" id="3_crt_material"]
 
 [node name="RadioModule" type="PanelContainer"]
 offset_right = 200.0
@@ -21,6 +22,17 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
+
+[node name="CRTOverlay" type="ColorRect" parent="PanelContainer/VBoxContainer/OscilloscopeDisplay"]
+material = ExtResource("3_crt_material")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 2
+mouse_filter = 2
 
 [node name="WaveformLine" type="Line2D" parent="PanelContainer/VBoxContainer/OscilloscopeDisplay"]
 points = PackedVector2Array(0, 0, 20, -10, 40, 0, 60, 10, 80, 0)
