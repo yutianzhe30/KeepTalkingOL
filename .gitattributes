@@ -1,2 +1,9 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Treat font and pdf files as binary to avoid diffs
+*.ttf binary
+*.otf binary
+*.pdf binary
+*.wasm binary
+*.pck binary

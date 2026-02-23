@@ -19,3 +19,6 @@ func _on_manual_button_pressed() -> void:
 		var exec_dir = OS.get_executable_path().get_base_dir()
 		var pdf_path = exec_dir.path_join(pdf_filename)
 		OS.shell_open(pdf_path)
+
+func _on_debug_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/UI/FontDebug.tscn")

@@ -53,5 +53,13 @@ theme_override_font_sizes/font_size = 18
 text = "Download Bomb Defusal Manual (PDF)"
 underline = 1
 
+[node name="DebugButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "Font Rendering Debug"
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ManualButton" to="." method="_on_manual_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/DebugButton" to="." method="_on_debug_button_pressed"]
