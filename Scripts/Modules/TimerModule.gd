@@ -11,6 +11,9 @@ var is_running: bool = false
 var last_tick_second: int = -1
 var strike_count: int = 0
 
+func _init() -> void:
+	is_solvable = false
+
 func _ready():
 	# Apply Global Colors
 	label.add_theme_color_override("font_color", GlobalColors.COLOR_RED)

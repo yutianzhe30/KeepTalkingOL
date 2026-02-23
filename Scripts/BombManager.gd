@@ -22,7 +22,7 @@ func _ready() -> void:
 			var module := child as BaseModule
 			
 			# Filter out modules that are not puzzles
-			if not module.name in ["BalanceModule", "TimerModule", "SerialNumberModule", "PlaceholderModule", "Placeholder5", "Placeholder6"]:
+			if module.is_solvable:
 				total_solvable += 1
 				
 			module.module_struck.connect(_on_module_struck.bind(module))
@@ -63,7 +63,7 @@ func _on_module_struck(module: BaseModule) -> void:
 
 func _on_module_solved(module: BaseModule) -> void:
 	if game_ended: return
-	if module.name in ["BalanceModule", "TimerModule", "SerialNumberModule"]: return
+	if not module.is_solvable: return
 	
 	current_solved += 1
 	print("BombManager solved: ", module.name, " (", current_solved, "/", total_solvable, ")")

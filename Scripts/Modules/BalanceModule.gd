@@ -3,6 +3,9 @@ extends "res://Scripts/Modules/BaseModule.gd"
 @onready var ball = $ReferenceRect/Ball
 @onready var boundary = $ReferenceRect
 
+func _init() -> void:
+	is_solvable = false
+
 var velocity: Vector2 = Vector2.ZERO
 var position_offset: Vector2 = Vector2.ZERO # Position relative to center
 var is_active: bool = true

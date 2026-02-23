@@ -41,6 +41,8 @@ func _ready():
 	# Apply Global Colors
 	ecg_line.default_color = GlobalColors.COLOR_GREEN
 	ecg_display_rect.color = GlobalColors.COLOR_BLACK
+	energy_label.add_theme_color_override("font_color", GlobalColors.COLOR_YELLOW)
+	dosage_label.add_theme_color_override("font_color", GlobalColors.COLOR_BLUE)
 	
 	administer_btn.pressed.connect(_on_administer_pressed)
 	energy_slider.value_changed.connect(_on_energy_changed)

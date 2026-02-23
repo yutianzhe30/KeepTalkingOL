@@ -43,6 +43,12 @@ func _ready():
 	amp_slider.value_changed.connect(_on_amplitude_changed)
 	transmit_btn.pressed.connect(_on_transmit_pressed)
 	
+	# Apply Global Colors
+	oscilloscope_bg.color = GlobalColors.COLOR_BLACK
+	waveform_line.default_color = GlobalColors.COLOR_GREEN
+	frequency_label.add_theme_color_override("font_color", GlobalColors.COLOR_YELLOW)
+	amp_label.add_theme_color_override("font_color", GlobalColors.COLOR_BLUE)
+	
 	_setup_audio_streams()
 	_determine_target()
 	

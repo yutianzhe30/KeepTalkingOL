@@ -1,6 +1,8 @@
 class_name BaseModule
 extends Control
 
+@export var is_solvable: bool = true
+
 signal module_solved
 signal module_struck
 signal state_changed(new_state: int)
