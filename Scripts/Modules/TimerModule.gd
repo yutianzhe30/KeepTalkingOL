@@ -1,5 +1,7 @@
 extends "res://Scripts/Modules/BaseModule.gd"
 
+signal timer_exploded
+
 @onready var label = $VBoxContainer/TimerContainer/Label
 @onready var strike_label = $VBoxContainer/StrikeContainer/StrikeLabel
 @onready var timer_node = $Timer
@@ -74,11 +76,14 @@ func add_time_penalty(seconds: float) -> void:
 func add_strike() -> void:
 	strike_count += 1
 	update_strike_display()
+	if strike_count >= 3:
+		explode()
 
 func explode():
+	if not is_running: return
 	stop_timer()
-	strike() # Or a dedicated GAME OVER signal
-	print("BOOM: Time ran out!")
+	emit_signal("timer_exploded")
+	print("BOOM: Bomb Exploded!")
 
 func get_debug_info() -> String:
 	var time_text = "00:00"

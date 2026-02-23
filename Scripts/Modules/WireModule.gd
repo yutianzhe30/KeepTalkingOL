@@ -85,7 +85,7 @@ func setup_rules():
 	if w_count == 3:
 		if count_red == 0:
 			solution_index = 1 # Second wire
-		elif wires.back().color == GlobalColors.COLOR_WHITE:
+		elif wires.back().wire_color == GlobalColors.COLOR_WHITE:
 			solution_index = 2 # Last wire
 		elif count_blue > 1:
 			solution_index = _get_last_wire_of_color(GlobalColors.COLOR_BLUE)
@@ -94,7 +94,7 @@ func setup_rules():
 	elif w_count == 4:
 		if count_red > 1 and last_digit_odd:
 			solution_index = last_red_index
-		elif wires.back().color == GlobalColors.COLOR_YELLOW and count_red == 0:
+		elif wires.back().wire_color == GlobalColors.COLOR_YELLOW and count_red == 0:
 			solution_index = 0 # First wire
 		elif count_blue == 1:
 			solution_index = 0 # First wire
@@ -103,7 +103,7 @@ func setup_rules():
 		else:
 			solution_index = 1 # Second wire
 	elif w_count == 5:
-		if wires.back().color == GlobalColors.COLOR_BLACK and last_digit_odd:
+		if wires.back().wire_color == GlobalColors.COLOR_BLACK and last_digit_odd:
 			solution_index = 3 # Fourth wire
 		elif count_red == 1 and count_yellow > 1:
 			solution_index = 0 # First wire

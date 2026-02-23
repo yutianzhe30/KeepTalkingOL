@@ -5,6 +5,9 @@ extends Node
 @export var timer_module_path: NodePath = NodePath("../PanelContainer/MarginContainer/GridContainer/TimerModule")
 
 var _timer_module: Node
+var total_solvable: int = 0
+var current_solved: int = 0
+var game_ended: bool = false
 
 func _ready() -> void:
 	var modules_root = get_node_or_null(modules_root_path)
@@ -17,11 +20,21 @@ func _ready() -> void:
 	for child in modules_root.get_children():
 		if child is BaseModule:
 			var module := child as BaseModule
+			
+			# Filter out modules that are not puzzles
+			if not module.name in ["BalanceModule", "TimerModule", "SerialNumberModule", "PlaceholderModule", "Placeholder5", "Placeholder6"]:
+				total_solvable += 1
+				
 			module.module_struck.connect(_on_module_struck.bind(module))
 			module.module_solved.connect(_on_module_solved.bind(module))
 		elif child.has_method("get_debug_info"):
 			# For modules that might not inherit BaseModule but still have the method
 			pass
+
+	if _timer_module != null and _timer_module.has_signal("timer_exploded"):
+		_timer_module.timer_exploded.connect(_on_timer_exploded)
+
+	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
 	# Print all debug information
 	call_deferred("_print_all_debug_info")
@@ -38,6 +51,7 @@ func _print_all_debug_info() -> void:
 	print("========================================")
 
 func _on_module_struck(module: BaseModule) -> void:
+	if game_ended: return
 	print("BombManager strike from: ", module.name)
 	if module == _timer_module:
 		return
@@ -48,4 +62,38 @@ func _on_module_struck(module: BaseModule) -> void:
 			_timer_module.add_strike()
 
 func _on_module_solved(module: BaseModule) -> void:
-	print("BombManager solved: ", module.name)
+	if game_ended: return
+	if module.name in ["BalanceModule", "TimerModule", "SerialNumberModule"]: return
+	
+	current_solved += 1
+	print("BombManager solved: ", module.name, " (", current_solved, "/", total_solvable, ")")
+	
+	if current_solved >= total_solvable:
+		_trigger_game_over(true)
+
+func _on_timer_exploded() -> void:
+	if game_ended: return
+	_trigger_game_over(false)
+
+func _trigger_game_over(is_win: bool) -> void:
+	game_ended = true
+	
+	if _timer_module and _timer_module.has_method("stop_timer"):
+		_timer_module.stop_timer()
+		
+	var time_str = "00:00"
+	var strikes = 0
+	if _timer_module:
+		if _timer_module.get("label") != null:
+			time_str = _timer_module.label.text
+		if _timer_module.get("strike_count") != null:
+			strikes = _timer_module.strike_count
+			
+	var result_scene = load("res://Scenes/UI/ResultScreen.tscn").instantiate()
+	result_scene.setup(is_win, time_str, strikes)
+	
+	# Show result screen on the highest layer
+	var canvaslayer = CanvasLayer.new()
+	canvaslayer.layer = 100
+	canvaslayer.add_child(result_scene)
+	get_tree().root.add_child(canvaslayer)

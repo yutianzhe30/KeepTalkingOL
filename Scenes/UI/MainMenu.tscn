@@ -45,4 +45,13 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Start Game"
 
+[node name="ManualButton" type="LinkButton" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Download Bomb Defusal Manual (PDF)"
+underline = 1
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ManualButton" to="." method="_on_manual_button_pressed"]
