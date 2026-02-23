@@ -53,6 +53,10 @@ func _print_all_debug_info() -> void:
 func _on_module_struck(module: BaseModule) -> void:
 	if game_ended: return
 	print("BombManager strike from: ", module.name)
+	
+	if AudioManager:
+		AudioManager.play_strike()
+		
 	if module == _timer_module:
 		return
 	if _timer_module != null:
@@ -65,6 +69,9 @@ func _on_module_solved(module: BaseModule) -> void:
 	if game_ended: return
 	if not module.is_solvable: return
 	
+	if AudioManager:
+		AudioManager.play_solve()
+		
 	current_solved += 1
 	print("BombManager solved: ", module.name, " (", current_solved, "/", total_solvable, ")")
 	

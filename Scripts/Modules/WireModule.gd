@@ -42,15 +42,12 @@ func get_random_color() -> Color:
 	return colors.pick_random()
 
 func get_serial_number() -> String:
-	# Attempt to find the SerialNumberModule in the tree to read its value.
 	var parent = get_parent()
 	if parent:
 		for child in parent.get_children():
-			if child.has_method("get_debug_info"):
-				var debug_info = child.get_debug_info()
-				if debug_info.begins_with("Serial Number: "):
-					return debug_info.replace("Serial Number: ", "").strip_edges()
-	return "000000" # Fallback if no serial number module exists
+			if child is SerialNumberModule:
+				return child.get_serial_number()
+	return "000000"
 
 func is_last_digit_odd(serial: String) -> bool:
 	if serial.length() == 0: return false

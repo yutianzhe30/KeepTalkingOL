@@ -9,13 +9,22 @@ func _ready() -> void:
 	if label:
 		label.text = serial_number
 
+func get_serial_number() -> String:
+	var label = get_node_or_null("CenterContainer/VBoxContainer/SerialLabel")
+	if label and label.text != "":
+		return label.text
+	if serial_number == "":
+		_generate_serial_number()
+	return serial_number
+
 func _generate_serial_number() -> void:
+	if (serial_number != ""):
+		return
 	# 推荐长度: 6位 (5位随机混合 + 1位数字结尾)
 	var chars = "ABCDEFGHJKLMNPQRSTUVWXZ" # 排除 O, I 以免和视觉上的 0, 1 混淆
 	var nums = "0123456789"
 	var all_chars = chars + nums
 	
-	serial_number = ""
 	for i in range(5):
 		serial_number += all_chars[randi() % all_chars.length()]
 		

@@ -14,6 +14,8 @@ var strike_count: int = 0
 func _init() -> void:
 	is_solvable = false
 
+var tick_audio_player: AudioStreamPlayer
+
 func _ready():
 	# Apply Global Colors
 	label.add_theme_color_override("font_color", GlobalColors.COLOR_RED)
@@ -21,6 +23,15 @@ func _ready():
 	
 	$VBoxContainer/TimerContainer/BackgroundLabel.add_theme_color_override("font_color", GlobalColors.COLOR_TRANSPARENT_RED)
 	$VBoxContainer/StrikeContainer/BackgroundLabel.add_theme_color_override("font_color", GlobalColors.COLOR_TRANSPARENT_RED)
+
+	# Audio Setup
+	tick_audio_player = AudioStreamPlayer.new()
+	var stream = load("res://Assets/Sound/tick.wav")
+	if stream:
+		tick_audio_player.stream = stream
+		add_child(tick_audio_player)
+	else:
+		push_warning("TimerModule: Could not load tick.wav")
 
 	update_display()
 	update_strike_display()
@@ -60,9 +71,8 @@ func check_sound_tick():
 		play_tick_sound()
 
 func play_tick_sound():
-	# TODO: Connect this to an AudioStreamPlayer
-	# print("Tick") 
-	pass
+	if tick_audio_player and tick_audio_player.stream:
+		tick_audio_player.play()
 
 func start_timer():
 	is_running = true

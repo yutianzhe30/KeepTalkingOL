@@ -74,14 +74,11 @@ func _setup_audio_streams():
 	sample_hz = static_gen.mix_rate
 
 func get_serial_number() -> String:
-	# Attempt to find the SerialNumberModule in the tree to read its value.
 	var parent = get_parent()
 	if parent:
 		for child in parent.get_children():
-			if child.has_method("get_debug_info"):
-				var debug_info = child.get_debug_info()
-				if debug_info.begins_with("Serial Number: "):
-					return debug_info.replace("Serial Number: ", "").strip_edges()
+			if child is SerialNumberModule:
+				return child.get_serial_number()
 	return "000000"
 
 func get_first_digit_from_serial(serial: String) -> int:
