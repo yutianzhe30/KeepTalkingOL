@@ -13,8 +13,8 @@ const LISTS = [
 	["Ϙ", "Ѧ", "ƛ", "Ϟ", "Ѭ", "ϗ", "Ͽ", ], # List 1
 	["Ӭ", "Ϙ", "Ͽ", "Ҩ", "☆", "ϗ", "¿"], # List 2
 	["©", "Ѽ", "Ҩ", "Ж", "ƛ", "ㄓ", "☆"], # List 3
-	["б", "¶", "Ѣ", "Ѭ", "Ж", "¿", "ツ"], # List 4
-	["Ψ", "ツ", "Ѣ", "Ͼ", "¶", "Ѯ", "★"], # List 5
+	["б", "¶", "Ѣ", "Ѭ", "Ж", "¿", "Δ"], # List 4
+	["Ψ", "Δ", "Ѣ", "Ͼ", "¶", "Ѯ", "★"], # List 5
 	["б", "Ӭ", "҂", "æ", "Ψ", "Ҋ", "Ω"] # List 6
 ]
 
@@ -28,6 +28,8 @@ var button_configs: Array[Dictionary] = [] # Stores {index: int, symbol: String}
 const BUTTON_MIN_SIZE = Vector2(85, 100)
 const BUTTON_FONT_SIZE = 40
 
+var BUTTON_FONT = load("res://Assets/Font/DejaVuSans.ttf")
+
 func _ready():
 	_setup_buttons()
 	start_game()
@@ -39,6 +41,8 @@ func _setup_buttons():
 			buttons.append(child)
 			child.custom_minimum_size = BUTTON_MIN_SIZE
 			child.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
+			if BUTTON_FONT:
+				child.add_theme_font_override("font", BUTTON_FONT)
 			child.pressed.connect(_on_button_pressed.bind(buttons.size() - 1))
 
 func start_game():
