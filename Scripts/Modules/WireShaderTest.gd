@@ -26,9 +26,8 @@ func _ready():
 func _create_wire_rect(tex: Texture2D, color: Color) -> TextureRect:
 	var rect = TextureRect.new()
 	rect.texture = tex
-	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	rect.custom_minimum_size = Vector2(400, 50)
+	rect.custom_minimum_size = Vector2(100, 30)
 	
 	var mat = ShaderMaterial.new()
 	mat.shader = shader

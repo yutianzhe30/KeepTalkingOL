@@ -142,7 +142,7 @@ func get_debug_info() -> String:
 	return "Wire Module: Puz=%s -> Cut wire index %d (1-indexed: %d)" % [str(wire_colors), solution_index, solution_index + 1]
 
 func _on_wire_cut(wire_instance):
-	if state == ModuleState.SOLVED or state == ModuleState.FAILED:
+	if state == ModuleState.SOLVED:
 		return
 		
 	var index = wires.find(wire_instance)
@@ -153,6 +153,11 @@ func _on_wire_cut(wire_instance):
 	if index == solution_index:
 		print("Correct wire cut!")
 		solve()
+		_disable_all_wires()
 	else:
 		print("Wrong wire! Strike!")
 		strike()
+
+func _disable_all_wires():
+	for w in wires:
+		w.set_interactable(false)

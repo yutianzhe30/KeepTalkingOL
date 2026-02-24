@@ -33,3 +33,6 @@
 - 当前使用debug mode完全是按顺序按就行
 ## TODO
 -  add a led on each module if correctly sovled, show green, if wrong flash red
+
+## GODOT 安装
+"C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe"
