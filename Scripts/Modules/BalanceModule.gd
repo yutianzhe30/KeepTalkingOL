@@ -9,6 +9,7 @@ func _init() -> void:
 var velocity: Vector2 = Vector2.ZERO
 var position_offset: Vector2 = Vector2.ZERO # Position relative to center
 var is_active: bool = true
+var has_started: bool = false
 
 # Physics Constants
 const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
@@ -19,11 +20,13 @@ const MAX_SPEED: float = 150.0 # Cap speed to give user a chance
 
 func _ready():
 	# Wait 1 second before starting the chaos
-	await get_tree().create_timer(1.0).timeout
-	
+	await get_tree().create_timer(5).timeout
+	if AudioManager:
+		AudioManager.play_strike()
 	# Give a random initial nudge
 	var random_angle = randf() * TAU
 	velocity = Vector2.from_angle(random_angle) * 50.0
+	has_started = true
 
 func _process(delta):
 	if !is_active:
@@ -59,6 +62,14 @@ func _process(delta):
 	
 	# 4. Check Collision (Fail Condition)
 	check_boundary()
+	
+	# 5. Check Balanced (Win Condition)
+	if has_started and state != ModuleState.SOLVED:
+		# Check if ball is near center and nearly stopped
+		if position_offset.length() < 15.0 and velocity.length() < 10.0:
+			print("Balance Module Balanced! Solving.")
+			is_active = false
+			solve()
 
 func check_boundary():
 	var half_size = boundary.size / 2.0
