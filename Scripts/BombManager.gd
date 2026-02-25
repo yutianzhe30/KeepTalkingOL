@@ -2,7 +2,16 @@ extends Node
 
 @export var strike_penalty_seconds: float = 30.0
 @export var modules_root_path: NodePath = NodePath("../PanelContainer/MarginContainer/GridContainer")
-@export var timer_module_path: NodePath = NodePath("../PanelContainer/MarginContainer/GridContainer/TimerModule")
+
+@export var timer_scene: PackedScene
+@export var wire_scene: PackedScene
+@export var button_scene: PackedScene
+@export var serial_scene: PackedScene
+@export var ecg_scene: PackedScene
+@export var balance_scene: PackedScene
+@export var radio_scene: PackedScene
+@export var press_scene: PackedScene
+@export var placeholder_scene: PackedScene
 
 var _timer_module: Node
 var total_solvable: int = 0
@@ -11,15 +20,19 @@ var game_ended: bool = false
 
 func _ready() -> void:
 	var modules_root = get_node_or_null(modules_root_path)
-	_timer_module = get_node_or_null(timer_module_path)
 
 	if modules_root == null:
 		push_warning("BombManager: modules_root_path is invalid")
 		return
+		
+	_generate_modules(modules_root)
 
 	for child in modules_root.get_children():
 		if child is BaseModule:
 			var module := child as BaseModule
+			
+			if child.has_signal("timer_exploded"):
+				_timer_module = child
 			
 			# Filter out modules that are not puzzles
 			if module.is_solvable:
@@ -35,6 +48,31 @@ func _ready() -> void:
 		_timer_module.timer_exploded.connect(_on_timer_exploded)
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
+
+func _generate_modules(root: Node) -> void:
+	var sequence: Array[PackedScene] = [
+		wire_scene,
+		balance_scene,
+		ecg_scene,
+		button_scene,
+		timer_scene,
+		press_scene,
+		radio_scene,
+		serial_scene,
+		placeholder_scene
+	]
+	
+	if GameState.simple_mode:
+		for i in range(sequence.size()):
+			if sequence[i] not in [wire_scene, timer_scene, button_scene, serial_scene]:
+				sequence[i] = placeholder_scene
+			
+	for scene in sequence:
+		if scene:
+			var instance = scene.instantiate()
+			instance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			instance.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			root.add_child(instance)
 
 	# Print all debug information
 	call_deferred("_print_all_debug_info")

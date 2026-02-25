@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="KeepTalking"
-run/main_scene="res://Scenes/UI/MainMenu.tscn"
+run/main_scene="res://Scenes/UI/TitleScreen.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 AudioManager="*res://Scripts/Singleton/AudioManager.gd"
+GameState="*res://Scripts/Singleton/GameState.gd"
 
 [display]
 

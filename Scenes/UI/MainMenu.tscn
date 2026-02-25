@@ -38,20 +38,28 @@ theme_override_font_sizes/font_size = 64
 text = "KEEP TALKING OL"
 horizontal_alignment = 1
 
-[node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="SimpleModeCheck" type="CheckBox" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Simple Mode"
+
+
+[node name="DefuserButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "you are the defuser and will defuse the bomb with the help of Bomb Specialist"
 theme_override_font_sizes/font_size = 24
-text = "Start Game"
+text = "Start as Defuser"
 
-[node name="ManualButton" type="LinkButton" parent="CenterContainer/VBoxContainer"]
+[node name="SpecialistButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
-theme_override_font_sizes/font_size = 18
-text = "Download Bomb Defusal Manual (PDF)"
-underline = 1
+tooltip_text = "you are bomb specialist and will handle a defuse_manual"
+theme_override_font_sizes/font_size = 24
+text = "Start as Specialist"
 
 [node name="DebugButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(250, 40)
@@ -60,6 +68,48 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = "Font Rendering Debug"
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/ManualButton" to="." method="_on_manual_button_pressed"]
+[node name="WarningPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -150.0
+offset_right = 300.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="WarningPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WarningPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Label" type="Label" parent="WarningPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "For best game experience, do not show your monitor to the specialist"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ContinueButton" type="Button" parent="WarningPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Continue"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/DefuserButton" to="." method="_on_start_as_defuser_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/SpecialistButton" to="." method="_on_start_as_specialist_pressed"]
+[connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DebugButton" to="." method="_on_debug_button_pressed"]

@@ -38,48 +38,15 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 columns = 3
 
-[node name="WireModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2068743518 instance=ExtResource("2_wire")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="BalanceModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=621648373 instance=ExtResource("3_balance")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ECGModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=646423082 instance=ExtResource("4_ecg")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ButtonModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2024393945 instance=ExtResource("7_button")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TimerModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=1079965074 instance=ExtResource("1_timer")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="PressModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=580149733 instance=ExtResource("8_press")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RadioModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=894442140 instance=ExtResource("9_radio")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="SerialNumberModule" parent="PanelContainer/MarginContainer/GridContainer" unique_id=2077727111 instance=ExtResource("10_sn")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Placeholder5" parent="PanelContainer/MarginContainer/GridContainer" unique_id=1881491480 instance=ExtResource("5_placeholder")]
-layout_mode = 2
 
 [node name="BombManager" type="Node" parent="." unique_id=1564836808]
 script = ExtResource("6_bomb_manager_script")
+timer_scene = ExtResource("1_timer")
+wire_scene = ExtResource("2_wire")
+button_scene = ExtResource("7_button")
+serial_scene = ExtResource("10_sn")
+ecg_scene = ExtResource("4_ecg")
+balance_scene = ExtResource("3_balance")
+radio_scene = ExtResource("9_radio")
+press_scene = ExtResource("8_press")
+placeholder_scene = ExtResource("5_placeholder")
