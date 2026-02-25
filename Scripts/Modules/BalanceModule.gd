@@ -13,7 +13,7 @@ var has_started: bool = false
 
 # Physics Constants
 const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
-const INPUT_FORCE: float = 300.0 # Player control strength
+const INPUT_FORCE: float = 400.0 # Player control strength
 const DRAG: float = 1.0 # Air resistance
 const RADIUS: float = 10.0 # Ball radius (half size)
 const MAX_SPEED: float = 150.0 # Cap speed to give user a chance
@@ -86,6 +86,7 @@ func strike_module():
 	if !is_active: return
 	print("Balance Module Failed!")
 	strike()
+	has_started = false
 	# Reset or keep failing? For now, reset to center to give a chance to recover
 	position_offset = Vector2.ZERO
 	velocity = Vector2.ZERO

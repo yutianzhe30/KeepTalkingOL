@@ -154,8 +154,8 @@ func _update_signal_strength():
 	var static_vol = linear_to_db(max(0.01, 1.0 - signal_strength))
 	var signal_vol = linear_to_db(max(0.01, signal_strength))
 	
-	static_player.volume_db = static_vol - 10.0
-	signal_player.volume_db = signal_vol - 5.0
+	static_player.volume_db = static_vol - 25.0
+	signal_player.volume_db = signal_vol - 20.0
 
 func _fill_audio_buffers():
 	if not static_stream or not signal_stream: return

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://vyfjuem162nf"]
 
-[ext_resource type="Script" path="res://Scripts/Modules/WireShaderTest.gd" id="1_test"]
+[ext_resource type="Script" uid="uid://c1mncmv4k8lys" path="res://Scripts/Modules/WireShaderTest.gd" id="1_test"]
 
-[node name="WireShaderTest" type="Control"]
+[node name="WireShaderTest" type="Control" unique_id=1294507605]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_test")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1538132624]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,39 +26,39 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1852610191]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Wire Shader Test"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1032158605]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="UncutBox" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="UncutBox" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=715005303]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/UncutBox"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/UncutBox" unique_id=2040232628]
 layout_mode = 2
 text = "Uncut Wires"
 horizontal_alignment = 1
 
-[node name="WiresContainer1" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/UncutBox"]
+[node name="WiresContainer1" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/UncutBox" unique_id=603169212]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="CutBox" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="CutBox" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=180840549]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/CutBox"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/CutBox" unique_id=2096542380]
 layout_mode = 2
 text = "Cut Wires"
 horizontal_alignment = 1
 
-[node name="WiresContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/CutBox"]
+[node name="WiresContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/CutBox" unique_id=2018411200]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10

@@ -3,7 +3,7 @@ extends Control
 @onready var wires_container_1 = %WiresContainer1
 @onready var wires_container_2 = %WiresContainer2
 
-var shader = preload("res://Assets/Shaders/WireColor.gdshader")
+var shader = preload("res://Shaders/WireColor.gdshader")
 var tex_wire = preload("res://Assets/Pic/Wire.png")
 var tex_wire_cut = preload("res://Assets/Pic/Wire_Cut.png")
 
