@@ -3,6 +3,14 @@
 [ext_resource type="Script" path="res://Scripts/Modules/BalanceModule.gd" id="1_balance_script"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ball"]
+bg_color = Color(1, 0.4, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 16
+
 [node name="BalanceModule" type="PanelContainer"]
 custom_minimum_size = Vector2(200, 200)
 offset_right = 200.0
@@ -15,10 +23,40 @@ border_color = Color(1, 0, 0, 1)
 border_width = 2.0
 editor_only = false
 
-[node name="Ball" type="ColorRect" parent="ReferenceRect"]
+[node name="TargetArea" type="ReferenceRect" parent="ReferenceRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -15.0
+offset_right = 15.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+border_color = Color(0, 1, 0, 0.5)
+border_width = 1.0
+editor_only = false
+
+[node name="Ball" type="Panel" parent="ReferenceRect"]
 layout_mode = 0
 offset_right = 20.0
 offset_bottom = 20.0
-color = Color(1, 0.4, 0.4, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ball")
+
+[node name="PromptLabel" type="Label" parent="ReferenceRect"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "arrow keys to keep balance"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
