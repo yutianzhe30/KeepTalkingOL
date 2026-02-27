@@ -74,7 +74,7 @@ func _pick_puzzle():
 		temp_symbols.append(chosen_list[idx])
 	
 	print("Button Module Debug: Correct Order -> ", temp_symbols)
-	
+
 	# Map these symbols to random buttons
 	var button_indices = [0, 1, 2, 3]
 	button_indices.shuffle()
@@ -117,7 +117,7 @@ func _on_button_pressed(btn_index: int):
 		
 	if btn_index == correct_sequence[current_step]:
 		print("Button Module: Correct press ", current_step + 1, "/", 4)
-		
+
 		# Visual Logic: Show clicked (Green + Disabled)
 		# We need to find the button object that corresponds to this index
 		# Since 'buttons' array is indexed by 'btn_index', we can use it directly.

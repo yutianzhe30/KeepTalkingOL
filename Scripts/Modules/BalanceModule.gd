@@ -45,7 +45,6 @@ func _start_sequence():
 func _on_other_module_solved():
 	if state == ModuleState.SOLVED:
 		if randf() <= 0.33:
-			print("Balance Module reactivating!")
 			_set_state(ModuleState.IDLE)
 			_update_led_for_state()
 			_start_sequence()
