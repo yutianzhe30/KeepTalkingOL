@@ -28,7 +28,10 @@ func _on_start_as_specialist_pressed() -> void:
 		# For exported PC builds (Windows/Mac/Linux), find it next to the .exe
 		var exec_dir = OS.get_executable_path().get_base_dir()
 		var pdf_path = exec_dir.path_join(pdf_filename)
-		OS.shell_open(pdf_path)
+		if FileAccess.file_exists(pdf_path):
+			OS.shell_open(pdf_path)
+		else:
+			push_error("Manual PDF not found at: " + pdf_path)
 
 func _on_debug_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/UI/FontDebug.tscn")
