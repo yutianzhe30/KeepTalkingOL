@@ -47,7 +47,12 @@ func _ready():
 	main_button.button_down.connect(_on_button_down)
 	main_button.button_up.connect(_on_button_up)
 	
+	_find_timer_module()
+
 	_setup_puzzle()
+
+func set_timer_reference(ref):
+	timer_module = ref
 
 func _setup_puzzle():
 	# Randomize Button
@@ -145,10 +150,6 @@ func _on_button_down():
 	interaction_active = true
 	hold_time = 0.0
 	is_holding = false
-	
-	# Find timer if not found yet
-	if not timer_module:
-		_find_timer_module()
 	
 	_animate_button_press(true)
 
