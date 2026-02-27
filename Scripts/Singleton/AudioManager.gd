@@ -1,15 +1,15 @@
 extends Node
 
 var audio_players: Dictionary = {}
-var sound_files = {
-	"solve": "res://Assets/Sound/right.wav",
-	"strike": "res://Assets/Sound/wrong.wav",
-	"click": "res://Assets/Sound/click.wav"
+const SOUND_FILES = {
+	"solve": preload("res://Assets/Sound/right.wav"),
+	"strike": preload("res://Assets/Sound/wrong.wav"),
+	"click": preload("res://Assets/Sound/click.wav")
 }
 
 func _ready() -> void:
-	for key in sound_files:
-		var stream = load(sound_files[key])
+	for key in SOUND_FILES:
+		var stream = SOUND_FILES[key]
 		if stream:
 			var player = AudioStreamPlayer.new()
 			player.stream = stream
@@ -17,7 +17,7 @@ func _ready() -> void:
 			add_child(player)
 			audio_players[key] = player
 		else:
-			push_warning("AudioManager: Could not load sound file " + sound_files[key])
+			push_warning("AudioManager: Could not load sound stream for " + key)
 			
 	# Connect to node added signal to inject click sound into all buttons
 	get_tree().node_added.connect(_on_node_added)
