@@ -14,6 +14,11 @@ func setup(is_win: bool, time_text: String, strikes: int):
 	_strikes = strikes
 
 func _ready():
+	var fallback_font = load("res://Assets/Font/NotoSansSC-Regular.ttf")
+	
+	title_label.add_theme_font_override("font", fallback_font)
+	desc_label.add_theme_font_override("font", fallback_font)
+	
 	if _is_win:
 		title_label.text = "BOMB DEFUSED!"
 		title_label.add_theme_color_override("font_color", Color(0.2, 0.8, 0.2)) # Green
