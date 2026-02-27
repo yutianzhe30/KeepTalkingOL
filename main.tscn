@@ -34,13 +34,19 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer" unique_id=1358660708]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
-columns = 3
+horizontal_scroll_mode = 0
 
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/ScrollContainer" unique_id=1358660708]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
 
 [node name="BombManager" type="Node" parent="." unique_id=1564836808]
 script = ExtResource("6_bomb_manager_script")
+modules_root_path = NodePath("../PanelContainer/MarginContainer/ScrollContainer/GridContainer")
 timer_scene = ExtResource("1_timer")
 wire_scene = ExtResource("2_wire")
 button_scene = ExtResource("7_button")

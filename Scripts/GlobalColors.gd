@@ -1,3 +1,4 @@
+extends Node
 class_name GlobalColors
 
 const COLOR_RED = Color("E74C3C") # Alizarin
