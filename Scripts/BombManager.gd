@@ -25,10 +25,6 @@ func _ready() -> void:
 		push_warning("BombManager: modules_root_path is invalid")
 		return
 		
-	# Connect to viewport size changed signal for responsiveness
-	get_tree().root.size_changed.connect(_on_viewport_size_changed)
-	_update_layout()
-
 	_generate_modules(modules_root)
 
 	for child in modules_root.get_children():
@@ -52,20 +48,6 @@ func _ready() -> void:
 		_timer_module.timer_exploded.connect(_on_timer_exploded)
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
-
-func _on_viewport_size_changed():
-	_update_layout()
-
-func _update_layout():
-	var modules_root = get_node_or_null(modules_root_path)
-	if modules_root and modules_root is GridContainer:
-		var viewport_size = get_viewport().size
-		if viewport_size.x < viewport_size.y:
-			# Portrait
-			modules_root.columns = 1
-		else:
-			# Landscape
-			modules_root.columns = 3
 
 func _generate_modules(root: Node) -> void:
 	var sequence: Array[PackedScene] = [

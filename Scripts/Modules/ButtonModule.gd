@@ -109,7 +109,7 @@ func _update_button_visuals():
 		btn.text = config.symbol
 		# Reset state
 		btn.disabled = false
-		btn.modulate = GlobalColors.COLOR_WHITE
+		btn.modulate = Color(1, 1, 1, 1) # White
 
 func _on_button_pressed(btn_index: int):
 	if state == ModuleState.SOLVED:
@@ -122,7 +122,7 @@ func _on_button_pressed(btn_index: int):
 		# We need to find the button object that corresponds to this index
 		# Since 'buttons' array is indexed by 'btn_index', we can use it directly.
 		var btn = buttons[btn_index]
-		btn.modulate = GlobalColors.COLOR_GREEN
+		btn.modulate = Color(0, 1, 0, 1) # Green
 		btn.disabled = true
 		
 		current_step += 1

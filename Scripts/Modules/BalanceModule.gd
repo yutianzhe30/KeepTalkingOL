@@ -4,12 +4,6 @@ extends "res://Scripts/Modules/BaseModule.gd"
 @onready var boundary = $ReferenceRect
 @onready var prompt_label = $ReferenceRect/PromptLabel
 
-# Touch controls
-@onready var btn_up = $ReferenceRect/ControlsOverlay/UpButton
-@onready var btn_down = $ReferenceRect/ControlsOverlay/DownButton
-@onready var btn_left = $ReferenceRect/ControlsOverlay/LeftButton
-@onready var btn_right = $ReferenceRect/ControlsOverlay/RightButton
-
 func _init() -> void:
 	is_solvable = false
 
@@ -46,7 +40,7 @@ func _start_sequence():
 	position_offset = Vector2.ZERO
 	
 	prompt_label.visible = true
-	boundary.border_color = GlobalColors.COLOR_RED
+	boundary.border_color = Color(1, 0, 0, 1)
 
 func _on_other_module_solved():
 	if state == ModuleState.SOLVED:
@@ -66,13 +60,13 @@ func _process(delta):
 		# Flash border
 		var time_msec = Time.get_ticks_msec()
 		if sin(time_msec / 100.0) > 0:
-			boundary.border_color = GlobalColors.COLOR_RED
+			boundary.border_color = Color(1, 0, 0, 1)
 		else:
-			boundary.border_color = GlobalColors.COLOR_RED_DARK
+			boundary.border_color = Color(0.3, 0, 0, 1)
 			
 		if time_to_start <= 0:
 			prompt_label.visible = false
-			boundary.border_color = GlobalColors.COLOR_RED_DARK
+			boundary.border_color = Color(0.3, 0, 0, 1)
 			
 			if AudioManager:
 				AudioManager.play_strike()
@@ -103,22 +97,9 @@ func _process(delta):
 		force += position_offset.normalized() * (position_offset.length() * 2.0)
 		
 	# Input (Counter-force)
+	# Input (Counter-force)
 	var input = Input.get_vector("left", "right", "up", "down")
-
-	# Poll touch buttons for safety
-	var touch_input_vector = Vector2.ZERO
-	if btn_up and btn_up.button_pressed: touch_input_vector.y -= 1
-	if btn_down and btn_down.button_pressed: touch_input_vector.y += 1
-	if btn_left and btn_left.button_pressed: touch_input_vector.x -= 1
-	if btn_right and btn_right.button_pressed: touch_input_vector.x += 1
-
-	# Combine keyboard and touch input
-	var total_input = input + touch_input_vector
-	# Clamp length to 1.0 to prevent double speed
-	if total_input.length() > 1.0:
-		total_input = total_input.normalized()
-
-	force += total_input * INPUT_FORCE
+	force += input * INPUT_FORCE
 	
 	# 2. Integrate Physics
 	velocity += force * delta
@@ -143,7 +124,7 @@ func _process(delta):
 				velocity = Vector2.ZERO
 				position_offset = Vector2.ZERO
 				prompt_label.visible = false
-				boundary.border_color = GlobalColors.COLOR_GREEN # Green border
+				boundary.border_color = Color(0, 1, 0, 1) # Green border
 				solve()
 		else:
 			balance_time = 0.0
