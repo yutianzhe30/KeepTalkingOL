@@ -118,6 +118,7 @@ func _process(delta):
 		if position_offset.length() < TARGET_RADIUS:
 			balance_time += delta
 			if balance_time >= 2.0:
+				print("Balance Module Balanced! Solving.")
 				is_active = false
 				velocity = Vector2.ZERO
 				position_offset = Vector2.ZERO
@@ -140,6 +141,7 @@ func get_debug_info() -> String:
 
 func strike_module():
 	if !is_active: return
+	print("Balance Module Failed!")
 	strike()
 	has_started = false
 	# Reset or keep failing? For now, reset to center to give a chance to recover
