@@ -46,8 +46,14 @@ func _ready() -> void:
 			# For modules that might not inherit BaseModule but still have the method
 			pass
 
-	if _timer_module != null and _timer_module.has_signal("timer_exploded"):
-		_timer_module.timer_exploded.connect(_on_timer_exploded)
+	if _timer_module != null:
+		if _timer_module.has_signal("timer_exploded"):
+			_timer_module.timer_exploded.connect(_on_timer_exploded)
+
+		# Inject timer reference to all modules that need it
+		for child in modules_root.get_children():
+			if child.has_method("set_timer_reference"):
+				child.set_timer_reference(_timer_module)
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 

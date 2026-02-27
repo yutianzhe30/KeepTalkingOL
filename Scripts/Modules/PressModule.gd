@@ -49,6 +49,9 @@ func _ready():
 	
 	_setup_puzzle()
 
+func set_timer_reference(ref):
+	timer_module = ref
+
 func _setup_puzzle():
 	# Randomize Button
 	button_color_name = COLORS.keys().pick_random()
@@ -126,18 +129,6 @@ func _process(delta):
 			# We are now in "Hold" territory
 			_start_hold_phase()
 
-func _find_timer_module():
-	# Look for sibling TimerModule
-	# This is a bit hacky, normally BombManager handles references
-	if timer_module: return timer_module
-	
-	var parent = get_parent()
-	if parent:
-		for child in parent.get_children():
-			if child.name.contains("Timer"): # Simple heuristic
-				timer_module = child
-				break
-
 func _on_button_down():
 	if state == ModuleState.SOLVED:
 		return
@@ -145,10 +136,6 @@ func _on_button_down():
 	interaction_active = true
 	hold_time = 0.0
 	is_holding = false
-	
-	# Find timer if not found yet
-	if not timer_module:
-		_find_timer_module()
 	
 	_animate_button_press(true)
 
