@@ -120,7 +120,7 @@ func _on_administer_pressed():
 	var dosage = dosage_slider.value
 	
 	print("Administering: Energy=", energy, " Dosage=", dosage, " for ", RhythmType.keys()[current_rhythm])
-	
+
 	if _check_treatment(energy, dosage):
 		print("Treatment Effective!")
 		solve()
