@@ -3,6 +3,7 @@ extends "res://Scripts/Modules/BaseModule.gd"
 @onready var ball = $ReferenceRect/Ball
 @onready var boundary = $ReferenceRect
 @onready var prompt_label = $ReferenceRect/PromptLabel
+@onready var target_area = $ReferenceRect/TargetArea
 
 func _init() -> void:
 	is_solvable = false
@@ -23,6 +24,10 @@ const MAX_SPEED: float = 150.0 # Cap speed to give user a chance
 const TARGET_RADIUS: float = 20.0 # Size of the balance target area
 
 func _ready():
+	if target_area:
+		target_area.custom_minimum_size = Vector2(TARGET_RADIUS * 2, TARGET_RADIUS * 2)
+		target_area.size = Vector2(TARGET_RADIUS * 2, TARGET_RADIUS * 2)
+
 	# Connect to all other modules to listen for solves
 	if get_parent():
 		for module in get_parent().get_children():
@@ -78,10 +83,7 @@ func _process(delta):
 	center = boundary.size / 2.0
 	ball.position = center + position_offset - (ball.size / 2.0)
 	
-	var target_area = get_node_or_null("ReferenceRect/TargetArea")
 	if target_area:
-		target_area.custom_minimum_size = Vector2(TARGET_RADIUS * 2, TARGET_RADIUS * 2)
-		target_area.size = Vector2(TARGET_RADIUS * 2, TARGET_RADIUS * 2)
 		target_area.position = center - (target_area.size / 2.0)
 	
 	if !is_active:
