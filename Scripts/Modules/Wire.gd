@@ -22,6 +22,10 @@ func setup(color: Color):
 	
 	wire_visual.texture = tex_wire
 	
+	# Make the wire thinner via scale instead, while maintaining the same width
+	wire_visual.pivot_offset = Vector2(0, 25.0)
+	wire_visual.scale = Vector2(1.0, 0.75)
+	
 	var mat = ShaderMaterial.new()
 	mat.shader = shader
 	mat.set_shader_parameter("paint_color", color)
@@ -41,6 +45,7 @@ func cut_wire():
 	var scale_factor = 169.0 / 147.0
 	wire_visual.offset_top = -25.0 * scale_factor
 	wire_visual.offset_bottom = 25.0 * scale_factor
+	wire_visual.pivot_offset = Vector2(0, 25.0 * scale_factor)
 	
 	wire_visual.texture = tex_wire_cut
-	emit_signal("wire_cut", self)
+	emit_signal("wire_cut", self )
