@@ -118,8 +118,6 @@ func setup_rules():
 		else:
 			solution_index = 3 # Fourth wire
 
-	print("DEBUG: Wire Module Rule Setup Complete. Expected index to cut: ", solution_index)
-
 func _get_last_wire_of_color(target_color: Color) -> int:
 	for i in range(wires.size() - 1, -1, -1):
 		if wires[i].wire_color == target_color:
@@ -151,11 +149,9 @@ func _on_wire_cut(wire_instance):
 		return # Should not happen
 		
 	if index == solution_index:
-		print("Correct wire cut!")
 		solve()
 		_disable_all_wires()
 	else:
-		print("Wrong wire! Strike!")
 		strike()
 
 func _disable_all_wires():
