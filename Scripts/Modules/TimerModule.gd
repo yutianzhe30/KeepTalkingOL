@@ -11,6 +11,8 @@ var is_running: bool = false
 var last_tick_second: int = -1
 var strike_count: int = 0
 
+var last_display_minutes: int = -1
+var last_display_seconds: int = -1
 const TICK_SOUND = preload("res://Assets/Sound/tick.wav")
 
 func _init() -> void:
@@ -53,6 +55,13 @@ func update_display():
 	# Format: MM:SS
 	var minutes = floor(time_remaining / 60)
 	var seconds = floor(fmod(time_remaining, 60))
+
+	if minutes == last_display_minutes and seconds == last_display_seconds:
+		return
+
+	last_display_minutes = minutes
+	last_display_seconds = seconds
+
 	# var millis = floor(fmod(time_remaining, 1) * 100) # Removed millis for 7-segment look if preferred, or keep
 	
 	# %02d used for padding with zeros
