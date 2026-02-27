@@ -1,5 +1,7 @@
 extends Control
 
+const FALLBACK_FONT = preload("res://Assets/Font/NotoSansSC-Regular.ttf")
+
 @onready var title_label = $CenterContainer/VBoxContainer/TitleLabel
 @onready var desc_label = $CenterContainer/VBoxContainer/DescLabel
 @onready var btn = $CenterContainer/VBoxContainer/Button
@@ -14,10 +16,8 @@ func setup(is_win: bool, time_text: String, strikes: int):
 	_strikes = strikes
 
 func _ready():
-	var fallback_font = load("res://Assets/Font/NotoSansSC-Regular.ttf")
-	
-	title_label.add_theme_font_override("font", fallback_font)
-	desc_label.add_theme_font_override("font", fallback_font)
+	title_label.add_theme_font_override("font", FALLBACK_FONT)
+	desc_label.add_theme_font_override("font", FALLBACK_FONT)
 	
 	if _is_win:
 		title_label.text = "BOMB DEFUSED!"

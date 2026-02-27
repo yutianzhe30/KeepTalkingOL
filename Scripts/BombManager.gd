@@ -13,6 +13,8 @@ extends Node
 @export var press_scene: PackedScene
 @export var placeholder_scene: PackedScene
 
+const RESULT_SCREEN_SCENE = preload("res://Scenes/UI/ResultScreen.tscn")
+
 var _timer_module: Node
 var total_solvable: int = 0
 var current_solved: int = 0
@@ -134,7 +136,7 @@ func _trigger_game_over(is_win: bool) -> void:
 		if _timer_module.get("strike_count") != null:
 			strikes = _timer_module.strike_count
 			
-	var result_scene = load("res://Scenes/UI/ResultScreen.tscn").instantiate()
+	var result_scene = RESULT_SCREEN_SCENE.instantiate()
 	result_scene.setup(is_win, time_str, strikes)
 	
 	# Show result screen on the highest layer

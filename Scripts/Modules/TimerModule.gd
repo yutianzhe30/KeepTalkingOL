@@ -13,6 +13,7 @@ var strike_count: int = 0
 
 var last_display_minutes: int = -1
 var last_display_seconds: int = -1
+const TICK_SOUND = preload("res://Assets/Sound/tick.wav")
 
 func _init() -> void:
 	is_solvable = false
@@ -29,9 +30,8 @@ func _ready():
 
 	# Audio Setup
 	tick_audio_player = AudioStreamPlayer.new()
-	var stream = load("res://Assets/Sound/tick.wav")
-	if stream:
-		tick_audio_player.stream = stream
+	if TICK_SOUND:
+		tick_audio_player.stream = TICK_SOUND
 		add_child(tick_audio_player)
 	else:
 		push_warning("TimerModule: Could not load tick.wav")
