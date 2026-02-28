@@ -15,6 +15,10 @@ var has_started: bool = false
 var time_to_start: float = 3.0
 var balance_time: float = 0.0
 
+# Mobile controls
+var base_accelerometer: Vector3 = Vector3.ZERO
+var is_accelerometer_available: bool = false
+
 # Physics Constants
 const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
 const INPUT_FORCE: float = 400.0 # Player control strength
@@ -44,6 +48,12 @@ func _start_sequence():
 	velocity = Vector2.ZERO
 	position_offset = Vector2.ZERO
 	
+	# Calibrate the accelerometer when the module starts
+	var accel = Input.get_accelerometer()
+	if accel != Vector3.ZERO:
+		base_accelerometer = accel
+		is_accelerometer_available = true
+
 	prompt_label.visible = true
 	boundary.border_color = Color(1, 0, 0, 1)
 
@@ -100,6 +110,23 @@ func _process(delta):
 	# Input (Counter-force)
 	# Input (Counter-force)
 	var input = Input.get_vector("left", "right", "up", "down")
+
+	if is_accelerometer_available:
+		var current_accel = Input.get_accelerometer()
+		var accel_diff = current_accel - base_accelerometer
+
+		# In Godot, for landscape orientation, we usually map accelerometer X and Y.
+		# A phone tilted forward/back maps to Y, left/right maps to X.
+		# A multiplier is needed to match the feel of the keyboard.
+		var accel_input = Vector2(accel_diff.x, -accel_diff.y) / 5.0
+
+		# Combine keyboard and accelerometer
+		input += accel_input
+
+		# Clamp input length so we don't go super fast
+		if input.length() > 1.0:
+			input = input.normalized()
+
 	force += input * INPUT_FORCE
 	
 	# 2. Integrate Physics
