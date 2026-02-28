@@ -1,4 +1,3 @@
-class_name WebInput
 extends Node
 
 ## A singleton for accessing device sensor APIs from the web
@@ -49,16 +48,15 @@ static func get_gyroscope() -> Vector3:
 
 	return v
 
-static func _browser_to_godot_coordinates(v : Vector3) -> Vector3:
+static func _browser_to_godot_coordinates(v: Vector3) -> Vector3:
 	#if OS.has_feature("web_ios") || true:
 	#	v = Vector3(-v.x, v.z, v.y)
-
 	var orientation := _screen_get_orientation()
 	v = _reorient_sensor_vector(v, orientation)
 
 	return v
 
-static func _reorient_sensor_vector(v : Vector3, i : DisplayServer.ScreenOrientation = 0) -> Vector3:
+static func _reorient_sensor_vector(v: Vector3, i: DisplayServer.ScreenOrientation = 0) -> Vector3:
 	match i:
 		DisplayServer.SCREEN_LANDSCAPE:
 			v = Vector3(-v.y, v.x, v.z)
@@ -88,15 +86,15 @@ static func _screen_get_orientation() -> DisplayServer.ScreenOrientation:
 	return DisplayServer.SCREEN_PORTRAIT
 
 static var _cached_js_objects := {}
-static func _get_js_vector(name:String) -> Vector3:
+static func _get_js_vector(name: String) -> Vector3:
 	if _cached_js_objects.get(name) == null:
 		_cached_js_objects[name] = JavaScriptBridge.get_interface(name)
 
-	var js_object : JavaScriptObject = _cached_js_objects[name]
+	var js_object: JavaScriptObject = _cached_js_objects[name]
 	return Vector3(js_object.x, js_object.y, js_object.z)
 
 static var _is_initialized := false
-static var _js_callback : JavaScriptObject
+static var _js_callback: JavaScriptObject
 static func _init_sensors() -> Error:
 	if !OS.has_feature("web"): return ERR_UNAVAILABLE
 
@@ -105,14 +103,14 @@ static func _init_sensors() -> Error:
 
 	_cached_orientation = JavaScriptBridge.eval("screen_orientation", true)
 
-	var js_screen : JavaScriptObject = JavaScriptBridge.get_interface("screen")
+	var js_screen: JavaScriptObject = JavaScriptBridge.get_interface("screen")
 
 	_js_callback = JavaScriptBridge.create_callback(_on_orientation_changed)
 	js_screen.orientation.onchange = _js_callback
 
 	return OK
 
-static func _on_orientation_changed(args:Array):
+static func _on_orientation_changed(args: Array):
 	_cached_orientation = args[0].target.type
 
 const _js_code := '''
@@ -140,9 +138,13 @@ function is_platform_iOS() {
 }
 
 function registerMotionListener() {
+	console.log("registerMotionListener() initialized");
 	window.ondevicemotion = function(event) {
-		if (event.acceleration.x === null) return;
-
+		if (!event.acceleration || event.acceleration.x === null) {
+			console.log("ondevicemotion fired, but acceleration is null!");
+			return;
+		}
+		console.log("ondevicemotion fired, acceleration.x: " + event.acceleration.x);
 		acceleration.x = event.accelerationIncludingGravity.x;
 		acceleration.y = event.accelerationIncludingGravity.y;
 		acceleration.z = event.accelerationIncludingGravity.z;
@@ -164,6 +166,7 @@ function registerMotionListener() {
 	}
 
 	window.ondeviceorientation = function(event) {
+		console.log("ondeviceorientation fired! alpha: " + event.alpha + ", beta: " + event.beta + ", gamma: " + event.gamma);
 		rotation.x = event.beta;
 		rotation.y = event.gamma;
 		rotation.z = event.alpha;
@@ -171,21 +174,24 @@ function registerMotionListener() {
 }
 
 // Request permission for iOS 13+ devices
-console.log("Requesting sensors");
+console.log("Requesting sensors script loaded");
   function onClick() {
+	console.log("onClick() called for sensor request");
 	screen_orientation = screen.orientation.type;
 
 	// feature detect
-	if (typeof DeviceMotionEvent.requestPermission === 'function') {
+	if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+	  console.log("DeviceMotionEvent.requestPermission IS available. Requesting...");
 	  DeviceMotionEvent.requestPermission()
 		.then(permissionState => {
+		  console.log("Permission state: " + permissionState);
 		  if (permissionState === 'granted') {
-			//window.addEventListener('devicemotion', () => {});
 			registerMotionListener();
 		  }
 		})
 		.catch(console.error);
 	} else {
+		console.log("DeviceMotionEvent.requestPermission IS NOT available. Executing listener directly...");
 		// handle regular non iOS 13+ devices
 		registerMotionListener();
 	}
