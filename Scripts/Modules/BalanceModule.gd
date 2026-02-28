@@ -49,10 +49,14 @@ func _start_sequence():
 	position_offset = Vector2.ZERO
 	
 	# Calibrate the accelerometer when the module starts
-	var accel = Input.get_accelerometer()
+	# Use WebInput to support mobile browsers alongside native platforms
+	var accel = WebInput.get_accelerometer() if WebInput else Input.get_accelerometer()
 	if accel != Vector3.ZERO:
 		base_accelerometer = accel
 		is_accelerometer_available = true
+		print("BalanceModule: Accelerometer calibrated to: ", accel)
+	else:
+		print("BalanceModule: Accelerometer not detected or zero.")
 
 	prompt_label.visible = true
 	boundary.border_color = Color(1, 0, 0, 1)
@@ -112,7 +116,7 @@ func _process(delta):
 	var input = Input.get_vector("left", "right", "up", "down")
 
 	if is_accelerometer_available:
-		var current_accel = Input.get_accelerometer()
+		var current_accel = WebInput.get_accelerometer() if WebInput else Input.get_accelerometer()
 		var accel_diff = current_accel - base_accelerometer
 
 		# In Godot, for landscape orientation, we usually map accelerometer X and Y.
