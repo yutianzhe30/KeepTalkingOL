@@ -15,6 +15,8 @@
 
 ---
 
+<div style="page-break-before:always;"></div>
+
 ## 1. 基础电线模块 (Wires)
 
 炸弹上可能会出现一个包含 3 到 6 根电线的模块。这些电线的颜色可能是：红、蓝、黄、绿、白或黑。
@@ -54,21 +56,26 @@
 4. 否则，剪断**第四根**电线。
 
 ---
+<div style="page-break-before:always;"></div>
+
 ## 2. 平衡模块 (Balance Module)
 
 此模块中心有一个红色的小球，它会不断试图逃离中心区域。
 
-**解题目标**：不要让小球碰到边缘。
+**解题目标**：将小球稳定在中心区域，并留意它随时可能重新启动的特性。
 
 **解题步骤**：
 > [!CAUTION]
-> 倒计时开始后 1 秒，小球会随机向一个方向飞出！
+> 倒计时开始后 3 秒，小球会随机向一个方向飞出！
 
-1. 拆弹者需要使用键盘上的 `方向键` 或 `W A S D` 来施加反向力。
+1. 拆弹者需要使用键盘上的 `方向键` 或 `W A S D`（移动端推荐使用重力感应倾斜设备）来施加反向力。
 2. 只要小球碰到了黑色的边框边界，模块就会立即记一次 Strike（失误）。
-3. 专家由于看不到小球的位置，无法在这个模块上提供实质性帮助。拆弹者必须自己稳住它，直到炸弹被拆除。
+3. **解除方法**：将小球控制在中心区域范围，当边框变绿后保持平稳 **1 秒钟**，模块即可（暂时）解除。
+4. **⚠️高能注意**：当炸弹上的**其他任意模块**被解除时，此平衡模块将有 **33%** 的概率**重新启动**并进入倒计时！拆弹者必须全程提防它反复发作。
 
 ---
+
+<div style="page-break-before:always;"></div>
 
 ## 3. 大按钮模块 (Press Module)
 
@@ -99,6 +106,8 @@
 
 ---
 
+<div style="page-break-before:always;"></div>
+
 ## 4. 符号键盘模块 (Keypad Module)
 
 **解题步骤**：
@@ -108,19 +117,21 @@
 
 **注意**：如果按错，模块会重置，你需要重新开始。
 
-### 符号列表 (Symbol Lists)
+## 符号列表 (Symbol Lists)
 
-| 列 1 | 列 2 | 列 3 | 列 4 | 列 5 | 列 6 |
-| :---: | :---: | :---: | :---: | :---: | :---: |
-| Ϙ | Ӭ | © | б | Ψ | б |
-| Ѧ | Ϙ | Ѽ | ¶ | Δ | Ӭ |
-| ƛ | Ͽ | Ҩ | Ѣ | Ѣ | ҂ |
-| Ϟ | Ҩ | Ж | Ѭ | Ͼ | æ |
-| Ѭ | ☆ | ƛ | Ж | ¶ | Ψ |
-| ϗ | ϗ | Λ | ¿ | Ѯ | Ҋ |
-| Ͽ | ¿ | ☆ | Δ | ★ | Ω |
+|                   列 1                   |                   列 2                   |                   列 3                   |                   列 4                   |                   列 5                   |                   列 6                   |
+| :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: |
+| <span style="font-size: 2.0em;">Ϙ</span> | <span style="font-size: 2.0em;">Ӭ</span> | <span style="font-size: 2.0em;">©</span> | <span style="font-size: 2.0em;">б</span> | <span style="font-size: 2.0em;">Ψ</span> | <span style="font-size: 2.0em;">б</span> |
+| <span style="font-size: 2.0em;">Ѧ</span> | <span style="font-size: 2.0em;">Ϙ</span> | <span style="font-size: 2.0em;">Ѽ</span> | <span style="font-size: 2.0em;">¶</span> | <span style="font-size: 2.0em;">Δ</span> | <span style="font-size: 2.0em;">Ӭ</span> |
+| <span style="font-size: 2.0em;">ƛ</span> | <span style="font-size: 2.0em;">Ͽ</span> | <span style="font-size: 2.0em;">Ҩ</span> | <span style="font-size: 2.0em;">Ѣ</span> | <span style="font-size: 2.0em;">Ѣ</span> | <span style="font-size: 2.0em;">҂</span> |
+| <span style="font-size: 2.0em;">Ϟ</span> | <span style="font-size: 2.0em;">Ҩ</span> | <span style="font-size: 2.0em;">Ж</span> | <span style="font-size: 2.0em;">Ѭ</span> | <span style="font-size: 2.0em;">Ͼ</span> | <span style="font-size: 2.0em;">æ</span> |
+| <span style="font-size: 2.0em;">Ѭ</span> | <span style="font-size: 2.0em;">☆</span> | <span style="font-size: 2.0em;">ƛ</span> | <span style="font-size: 2.0em;">Ж</span> | <span style="font-size: 2.0em;">¶</span> | <span style="font-size: 2.0em;">Ψ</span> |
+| <span style="font-size: 2.0em;">ϗ</span> | <span style="font-size: 2.0em;">ϗ</span> | <span style="font-size: 2.0em;">Λ</span> | <span style="font-size: 2.0em;">¿</span> | <span style="font-size: 2.0em;">Ѯ</span> | <span style="font-size: 2.0em;">Ҋ</span> |
+| <span style="font-size: 2.0em;">Ͽ</span> | <span style="font-size: 2.0em;">¿</span> | <span style="font-size: 2.0em;">☆</span> | <span style="font-size: 2.0em;">Δ</span> | <span style="font-size: 2.0em;">★</span> | <span style="font-size: 2.0em;">Ω</span> |
 
 ---
+
+<div style="page-break-before:always;"></div>
 
 ## 5. 无线电对讲机 (Radio Module)
 
@@ -149,6 +160,8 @@
 
 ---
 
+<div style="page-break-before:always;"></div>
+
 ## 6. 医疗模块 (On-Call Module)
 
 本模块模拟医院值班场景。通过心电图 (ECG) 判断病情并给予治疗。
@@ -161,42 +174,24 @@
 
 ### 值班手册 (On-Call Handbook)
 
-| 波形 (Rhythm) | 描述 (Description) | 经典台词 (Treatment Logic) | 治疗方案 (Settings) |
-| :--- | :--- | :--- | :--- |
-| **室颤 (V-Fib)** | 混乱的波浪线，无规律。<br>Chaotic squiggles. | "室颤了！全村吃饭！除颤！"<br>(It's a party! SHOCK IT!) | **Energy: ≥ 200 J**<br>**Dosage: 0 mg** |
-| **停搏 (Asystole)** | 一条直线 (可能微动)。<br>Flat line. | "人没了，祈祷吧。"<br>(Do NOT shock. Pray.) | **Energy: 0 J**<br>**Dosage: 0 mg** |
-| **STEMI** | 正常的波，但像墓碑一样高耸。<br>Tombstone ST-Elevation. | "寡妇制造者！送导管室！"<br>(To Cath Lab!) | **Energy: 0 J**<br>**Dosage: 90 mg**<br>*(Door-to-Balloon Time)* |
-| **房扑 (Flutter)** | 锯齿状波形。<br>Sawtooth patter. | "教科书般的锯齿。给那个药！"<br>(Adenosine.) | **Energy: 0 J**<br>**Dosage: 6 mg** |
-| **窦性心动过速** | 正常但很快 (>150)。<br>Fast regular beat. | "紧张而已，出院。" | **Energy: 0 J**<br>**Dosage: 0 mg** |
+| 波形 (Rhythm)       | 描述 (Description)                                      | 经典台词 (Treatment Logic)                              | 治疗方案 (Settings)                                              |
+| :------------------ | :------------------------------------------------------ | :------------------------------------------------------ | :--------------------------------------------------------------- |
+| **室颤 (V-Fib)**    | 混乱的波浪线，无规律。<br>Chaotic squiggles.            | "室颤了！全村吃饭！除颤！"<br>(It's a party! SHOCK IT!) | **Energy: ≥ 200 J**<br>**Dosage: 0 mg**                          |
+| **停搏 (Asystole)** | 一条直线 (可能微动)。<br>Flat line.                     | "人没了，祈祷吧。"<br>(Do NOT shock. Pray.)             | **Energy: 0 J**<br>**Dosage: 0 mg**                              |
+| **STEMI**           | 正常的波，但像墓碑一样高耸。<br>Tombstone ST-Elevation. | "寡妇制造者！送导管室！"<br>(To Cath Lab!)              | **Energy: 0 J**<br>**Dosage: 90 mg**<br>*(Door-to-Balloon Time)* |
+| **房扑 (Flutter)**  | 锯齿状波形。<br>Sawtooth patter.                        | "教科书般的锯齿。给那个药！"<br>(Adenosine.)            | **Energy: 0 J**<br>**Dosage: 6 mg**                              |
+| **窦性心动过速**    | 正常但很快 (>150)。<br>Fast regular beat.               | "紧张而已，出院。"                                      | **Energy: 0 J**<br>**Dosage: 0 mg**                              |
 
 ### 波形图鉴 (Waveform Reference)
 
 #### 室颤 (V-Fib) 
 *(混乱无序 Chaos)*
-```mermaid
-xychart-beta
-    title "V-Fib (Chaos)"
-    x-axis [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    y-axis "Voltage" -10 --> 10
-    line [0, 5, -3, 8, -7, 2, 9, -5, 4, -2, 6]
-```
+![V-Fib](../Assets/Pic/vfib.png)
 
 #### STEMI (墓碑 Tombstone)
 *(高耸的ST段 High Arch)*
-```mermaid
-xychart-beta
-    title "STEMI (Tombstone)"
-    x-axis [P, Q, R, S, ST, T]
-    y-axis "Voltage" -5 --> 10
-    line [0, -1, 10, -5, 5, 2]
-```
+![STEMI](../Assets/Pic/stemi.png)
 
 #### 房扑 (Flutter)
 *(锯齿状 Sawtooth)*
-```mermaid
-xychart-beta
-    title "Flutter (Sawtooth)"
-    x-axis [F, F, F, QRS, F, F]
-    y-axis "Voltage" -5 --> 10
-    line [2, -2, 2, 8, 2, -2]
-```
+![Flutter](../Assets/Pic/flutter.png)

@@ -126,11 +126,11 @@ var screen_orientation = ""
 // https://stackoverflow.com/a/9039885
 function is_platform_iOS() {
   return [
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
+	'iPad Simulator',
+	'iPhone Simulator',
+	'iPod Simulator',
+	'iPad',
+	'iPhone',
     'iPod'
   ].includes(navigator.platform)
   // iPad on iOS 13 detection

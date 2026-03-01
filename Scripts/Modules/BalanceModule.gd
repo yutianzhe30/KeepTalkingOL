@@ -61,7 +61,7 @@ func _start_sequence():
 	boundary.border_color = Color(1, 0, 0, 1)
 
 func _on_other_module_solved():
-	if state == ModuleState.SOLVED:
+	if state == ModuleState.SOLVED and false == is_active:
 		if randf() <= 0.33:
 			_set_state(ModuleState.IDLE)
 			_update_led_for_state()
@@ -89,7 +89,8 @@ func _process(delta):
 			
 			if AudioManager:
 				AudioManager.play_strike()
-			
+			if is_accelerometer_available:
+				base_accelerometer = WebInput.get_rotation()
 			var random_angle = randf() * TAU
 			velocity = Vector2.from_angle(random_angle) * 50.0
 			is_active = true
@@ -131,13 +132,12 @@ func _process(delta):
 		# 	debug_text += "Cur Y: %.3f, X: %.3f\n" % [current_rot.y, current_rot.x]
 		# 	debug_text += "Diff Y: %.3f, X: %.3f" % [rot_diff.y, rot_diff.x]
 		# 	debug_label.text = debug_text
-
 		# Combine keyboard and accelerometer
 		input += accel_input
 
-		# Clamp input length so we don't go super fast
-		if input.length() > 1.0:
-			input = input.normalized()
+	# Clamp input length so we don't go super fast
+	if input.length() > 1.0:
+		input = input.normalized()
 	force += input * INPUT_FORCE
 	
 	# 2. Integrate Physics
@@ -183,3 +183,4 @@ func strike_module():
 	print("Balance Module Failed!")
 	strike()
 	has_started = false
+	time_to_start = 3.0
