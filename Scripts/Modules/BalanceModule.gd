@@ -24,7 +24,7 @@ const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
 const INPUT_FORCE: float = 400.0 # Player control strength
 const DRAG: float = 1.0 # Air resistance
 const RADIUS: float = 10.0 # Ball radius (half size)
-const MAX_SPEED: float = 150.0 # Cap speed to give user a chance
+const MAX_SPEED: float = 140.0 # Cap speed to give user a chance
 const TARGET_RADIUS: float = 20.0 # Size of the balance target area
 
 func _ready():
@@ -37,7 +37,6 @@ func _ready():
 		for module in get_parent().get_children():
 			if module is BaseModule and module != self:
 				module.module_solved.connect(_on_other_module_solved)
-	
 	_start_sequence()
 
 func _start_sequence():
@@ -50,13 +49,13 @@ func _start_sequence():
 	
 	# Calibrate the accelerometer when the module starts
 	# Use WebInput to support mobile browsers alongside native platforms
-	var accel = WebInput.get_accelerometer() if WebInput else Input.get_accelerometer()
-	if accel != Vector3.ZERO:
-		base_accelerometer = accel
+	var rot = WebInput.get_rotation() if WebInput else Vector3.ZERO
+	if rot != Vector3.ZERO:
+		base_accelerometer = rot
 		is_accelerometer_available = true
-		print("BalanceModule: Accelerometer calibrated to: ", accel)
+		print("BalanceModule: Rotation calibrated to: ", rot)
 	else:
-		print("BalanceModule: Accelerometer not detected or zero.")
+		print("BalanceModule: Rotation not detected or zero.")
 
 	prompt_label.visible = true
 	boundary.border_color = Color(1, 0, 0, 1)
@@ -73,6 +72,8 @@ func _process(delta):
 		return
 	var center = boundary.size / 2.0
 	if not has_started:
+		velocity = Vector2.ZERO
+		position_offset = Vector2.ZERO
 		ball.position = center - (ball.size / 2.0)
 		time_to_start -= delta
 		# Flash border
@@ -116,13 +117,20 @@ func _process(delta):
 	var input = Input.get_vector("left", "right", "up", "down")
 
 	if is_accelerometer_available:
-		var current_accel = WebInput.get_accelerometer() if WebInput else Input.get_accelerometer()
-		var accel_diff = current_accel - base_accelerometer
+		var current_rot = WebInput.get_rotation() if WebInput else Vector3.ZERO
+		var rot_diff = current_rot - base_accelerometer
 
-		# In Godot, for landscape orientation, we usually map accelerometer X and Y.
-		# A phone tilted forward/back maps to Y, left/right maps to X.
-		# A multiplier is needed to match the feel of the keyboard.
-		var accel_input = Vector2(accel_diff.x, -accel_diff.y) / 5.0
+		# Rotation (alpha, beta, gamma converted from 0-360 degrees to radians).
+		# By testing, beta maps to pitching forward/back, gamma maps to rolling left/right.
+		# WebInput already did deg_to_rad()
+		# Multiplication factors might need tweaking based on how sensitive you want it
+		var accel_input = Vector2(rot_diff.y, rot_diff.x) * 4.0
+		
+		# if debug_label:
+		# 	var debug_text = "Base Y: %.3f, X: %.3f\n" % [base_accelerometer.y, base_accelerometer.x]
+		# 	debug_text += "Cur Y: %.3f, X: %.3f\n" % [current_rot.y, current_rot.x]
+		# 	debug_text += "Diff Y: %.3f, X: %.3f" % [rot_diff.y, rot_diff.x]
+		# 	debug_label.text = debug_text
 
 		# Combine keyboard and accelerometer
 		input += accel_input
@@ -130,7 +138,6 @@ func _process(delta):
 		# Clamp input length so we don't go super fast
 		if input.length() > 1.0:
 			input = input.normalized()
-
 	force += input * INPUT_FORCE
 	
 	# 2. Integrate Physics
@@ -150,7 +157,7 @@ func _process(delta):
 	if has_started and state != ModuleState.SOLVED:
 		if position_offset.length() < TARGET_RADIUS:
 			balance_time += delta
-			if balance_time >= 2.0:
+			if balance_time >= 1.0:
 				print("Balance Module Balanced! Solving.")
 				is_active = false
 				velocity = Vector2.ZERO
@@ -168,7 +175,6 @@ func check_boundary():
 	
 	if abs(position_offset.x) > bounds_x or abs(position_offset.y) > bounds_y:
 		strike_module()
-
 func get_debug_info() -> String:
 	return "Balance Module: Keep the ball centered!"
 
@@ -177,6 +183,3 @@ func strike_module():
 	print("Balance Module Failed!")
 	strike()
 	has_started = false
-	# Reset or keep failing? For now, reset to center to give a chance to recover
-	position_offset = Vector2.ZERO
-	velocity = Vector2.ZERO

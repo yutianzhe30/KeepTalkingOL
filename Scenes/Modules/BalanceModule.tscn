@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://f2m6n7o8qaq0"]
 
-[ext_resource type="Script" path="res://Scripts/Modules/BalanceModule.gd" id="1_balance_script"]
+[ext_resource type="Script" uid="uid://cokc77m3u24r" path="res://Scripts/Modules/BalanceModule.gd" id="1_balance_script"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ball"]
@@ -11,19 +11,18 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 16
 
-[node name="BalanceModule" type="PanelContainer"]
+[node name="BalanceModule" type="PanelContainer" unique_id=1402347041]
 custom_minimum_size = Vector2(200, 200)
 offset_right = 200.0
 offset_bottom = 200.0
 script = ExtResource("1_balance_script")
 
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=307731450]
 layout_mode = 2
-border_color = Color(1, 0, 0, 1)
 border_width = 2.0
 editor_only = false
 
-[node name="TargetArea" type="ReferenceRect" parent="ReferenceRect"]
+[node name="TargetArea" type="ReferenceRect" parent="ReferenceRect" unique_id=1681987104]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -37,16 +36,15 @@ offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 border_color = Color(0, 1, 0, 0.5)
-border_width = 1.0
 editor_only = false
 
-[node name="Ball" type="Panel" parent="ReferenceRect"]
+[node name="Ball" type="Panel" parent="ReferenceRect" unique_id=1207604015]
 layout_mode = 0
 offset_right = 20.0
 offset_bottom = 20.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ball")
 
-[node name="PromptLabel" type="Label" parent="ReferenceRect"]
+[node name="PromptLabel" type="Label" parent="ReferenceRect" unique_id=238151756]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -54,9 +52,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "arrow keys to keep balance"
+text = "arrow keys or tilt your phone to keep balance"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
+[node name="ModuleLED" parent="." unique_id=1891701863 instance=ExtResource("2_module_led")]
+layout_mode = 2
