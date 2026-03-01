@@ -1,7 +1,7 @@
 extends Control
 
 const FALLBACK_FONT = preload("res://Assets/Font/NotoSansSC-Regular.ttf")
-
+const BUTTON_FONT = preload("res://Assets/Font/DejaVuSans.ttf")
 @onready var title_label = $CenterContainer/VBoxContainer/TitleLabel
 @onready var desc_label = $CenterContainer/VBoxContainer/DescLabel
 @onready var btn = $CenterContainer/VBoxContainer/Button
@@ -34,7 +34,7 @@ func _ready():
 	if _debug_info != "":
 		var debug_label = Label.new()
 		debug_label.text = _debug_info
-		debug_label.add_theme_font_override("font", FALLBACK_FONT)
+		debug_label.add_theme_font_override("font", BUTTON_FONT)
 		debug_label.add_theme_font_size_override("font_size", 12)
 		debug_label.modulate = Color(0.7, 0.7, 0.7, 0.8) # Slightly dimmed
 		debug_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
