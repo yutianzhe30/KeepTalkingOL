@@ -51,11 +51,14 @@ func _ready():
 	amp_label.add_theme_color_override("font_color", GlobalColors.COLOR_BLUE)
 	
 	_setup_audio_streams()
-	_determine_target()
 	
 	# Initial UI update
 	_on_frequency_changed(tuner_slider.value)
 	_on_amplitude_changed(amp_slider.value)
+
+func set_serial_number(serial: String) -> void:
+	# This is called by BombManager AFTER all modules are instantiated
+	_determine_target(serial)
 
 func _setup_audio_streams():
 	var static_gen = AudioStreamGenerator.new()
@@ -73,14 +76,6 @@ func _setup_audio_streams():
 	signal_stream = signal_player.get_stream_playback()
 	
 	sample_hz = static_gen.mix_rate
-
-func get_serial_number() -> String:
-	var parent = get_parent()
-	if parent:
-		for child in parent.get_children():
-			if child is SerialNumberModule:
-				return child.get_serial_number()
-	return "000000"
 
 func get_first_char_value(serial: String) -> int:
 	if serial.length() == 0: return 1
@@ -100,8 +95,7 @@ func get_last_digit_from_serial(serial: String) -> int:
 		return last_char.to_int()
 	return 1
 
-func _determine_target():
-	var serial = get_serial_number()
+func _determine_target(serial: String):
 	var first_val = get_first_char_value(serial)
 	var last_val = get_last_digit_from_serial(serial)
 	target_frequency = 90.0 + float(first_val) + float(last_val)
@@ -117,7 +111,7 @@ func _determine_target():
 	else:
 		target_amplitude = 50.0
 		
-	print("RadioModule Target: Freq=", target_frequency, " Amp=", target_amplitude)
+	print("RadioModule Target: Freq=", target_frequency, " Amp=", target_amplitude, "Serial=", serial)
 
 func get_debug_info() -> String:
 	return "Radio Module: Tune to Freq %.1f MHz, Amp %.0f" % [target_frequency, target_amplitude]

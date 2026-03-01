@@ -19,6 +19,7 @@ var _timer_module: Node
 var total_solvable: int = 0
 var current_solved: int = 0
 var game_ended: bool = false
+var debug_info: String = ""
 
 func _ready() -> void:
 	var modules_root = get_node_or_null(modules_root_path)
@@ -54,9 +55,27 @@ func _ready() -> void:
 		for child in modules_root.get_children():
 			if child.has_method("set_timer_reference"):
 				child.set_timer_reference(_timer_module)
+	
+	_set_serial(modules_root)
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
-
+	
+func _set_serial(modules_root: Node) -> void:
+	# Inject serial number to all modules that need it
+	var serial_string = "000000"
+	var _serial_module: Node
+	for child in modules_root.get_children():
+		if child is SerialNumberModule:
+			_serial_module = child
+			break
+			
+	if _serial_module != null and _serial_module.has_method("get_serial_number"):
+		serial_string = _serial_module.get_serial_number()
+		
+	for child in modules_root.get_children():
+		if child.has_method("set_serial_number"):
+			child.set_serial_number(serial_string)
+			
 func _generate_modules(root: Node) -> void:
 	var sequence: Array[PackedScene] = [
 		wire_scene,
@@ -83,18 +102,21 @@ func _generate_modules(root: Node) -> void:
 			root.add_child(instance)
 
 	# Print all debug information
-	call_deferred("_print_all_debug_info")
+	call_deferred("_get_all_debug_info")
 
-func _print_all_debug_info() -> void:
-	print("========================================")
-	print("BOMB DEBUG INFO (PUZZLES & SOLUTIONS)")
-	print("========================================")
+func _get_all_debug_info() -> String:
+	var debug_str = "========================================\n"
+	debug_str += "BOMB DEBUG INFO (PUZZLES & SOLUTIONS)\n"
+	debug_str += "========================================\n"
 	var modules_root = get_node_or_null(modules_root_path)
 	if modules_root:
 		for child in modules_root.get_children():
 			if child.has_method("get_debug_info"):
-				print(child.get_debug_info())
-	print("========================================")
+				debug_str += child.get_debug_info() + "\n"
+	debug_str += "========================================"
+	print(debug_str)
+	debug_info = debug_str
+	return debug_str
 
 func _on_module_struck(module: BaseModule) -> void:
 	if game_ended: return
@@ -143,7 +165,8 @@ func _trigger_game_over(is_win: bool) -> void:
 			strikes = _timer_module.strike_count
 			
 	var result_scene = RESULT_SCREEN_SCENE.instantiate()
-	result_scene.setup(is_win, time_str, strikes)
+	var debug_str = debug_info
+	result_scene.setup(is_win, time_str, strikes, debug_str)
 	
 	# Show result screen on the highest layer
 	var canvaslayer = CanvasLayer.new()

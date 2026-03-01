@@ -27,8 +27,6 @@ func generate_puzzle(wire_count: int):
 		var color = get_random_color()
 		wire.setup(color)
 		wires.append(wire)
-	
-	setup_rules()
 
 func get_random_color() -> Color:
 	var colors = [
@@ -41,13 +39,10 @@ func get_random_color() -> Color:
 	]
 	return colors.pick_random()
 
-func get_serial_number() -> String:
-	var parent = get_parent()
-	if parent:
-		for child in parent.get_children():
-			if child is SerialNumberModule:
-				return child.get_serial_number()
-	return "000000"
+func set_serial_number(serial: String) -> void:
+	# Called by BombManager AFTER modules are instantiated
+	print("WireModule: Serial Number: ", serial)
+	setup_rules(serial)
 
 func is_last_digit_odd(serial: String) -> bool:
 	if serial.length() == 0: return false
@@ -56,8 +51,7 @@ func is_last_digit_odd(serial: String) -> bool:
 		return last_char.to_int() % 2 != 0
 	return false
 
-func setup_rules():
-	var serial = get_serial_number()
+func setup_rules(serial: String):
 	var last_digit_odd = is_last_digit_odd(serial)
 	
 	var count_red = 0

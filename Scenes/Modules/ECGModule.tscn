@@ -1,28 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://b-ecg-module"]
+[gd_scene format=3 uid="uid://banbhpdjplpxu"]
 
-[ext_resource type="Script" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
+[ext_resource type="Script" uid="uid://ds8dd8jcsg2fg" path="res://Scripts/Modules/ECGModule.gd" id="1_ecg_script"]
 [ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="2_metal_style"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
-[ext_resource type="Material" uid="uid://crt_shader_material" path="res://Shaders/CRT_Material.tres" id="3_crt_material"]
+[ext_resource type="Material" uid="uid://m8o3ex1ucye7" path="res://Shaders/CRT_Material.tres" id="3_crt_material"]
 
-[node name="ECGModule" type="PanelContainer"]
+[node name="ECGModule" type="PanelContainer" unique_id=1826077570]
 offset_right = 280.0
 offset_bottom = 200.0
 theme_override_styles/panel = ExtResource("2_metal_style")
 script = ExtResource("1_ecg_script")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1266456707]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=643010375]
 layout_mode = 2
 
-[node name="ECGDisplayRect" type="ColorRect" parent="PanelContainer/VBoxContainer"]
+[node name="ECGDisplayRect" type="ColorRect" parent="PanelContainer/VBoxContainer" unique_id=2121982936]
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
 
-[node name="CRTOverlay" type="ColorRect" parent="PanelContainer/VBoxContainer/ECGDisplayRect"]
+[node name="CRTOverlay" type="ColorRect" parent="PanelContainer/VBoxContainer/ECGDisplayRect" unique_id=1615491065]
+z_index = 2
 material = ExtResource("3_crt_material")
 layout_mode = 1
 anchors_preset = 15
@@ -30,66 +31,64 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 2
 mouse_filter = 2
 
-[node name="ECGLine" type="Line2D" parent="PanelContainer/VBoxContainer/ECGDisplayRect"]
-position = Vector2(10, 10)
+[node name="ECGLine" type="Line2D" parent="PanelContainer/VBoxContainer/ECGDisplayRect" unique_id=1440036958]
 z_index = 1
+position = Vector2(10, 10)
 points = PackedVector2Array(0, 0, 10, 0)
 width = 2.0
 default_color = Color(0, 1, 0, 1)
-antialiased = true
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
+antialiased = true
 
-[node name="HBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=551137868]
 layout_mode = 2
 
-[node name="HeartRateLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="HeartRateLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=729951599]
 layout_mode = 2
 text = "HR: --"
 horizontal_alignment = 2
 
-[node name="EnergyContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="EnergyContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1408525459]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EnergyContainer"]
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EnergyContainer" unique_id=1135691701]
 layout_mode = 2
 text = "Energy:"
 
-[node name="EnergySlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="EnergySlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1955539384]
 layout_mode = 2
 max_value = 360.0
 step = 10.0
 
-[node name="EnergyLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="EnergyLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=325406169]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 text = "0 J"
 horizontal_alignment = 1
 
-[node name="DosageContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="DosageContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=947358507]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/DosageContainer"]
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/DosageContainer" unique_id=1315967423]
 layout_mode = 2
 text = "Dosage:"
 
-[node name="DosageSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="DosageSlider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=218586500]
 layout_mode = 2
-max_value = 100.0
-step = 1.0
 
-[node name="DosageLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="DosageLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=181969904]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.183745, 0.70933, 0.947515, 1)
 text = "0 mg"
 horizontal_alignment = 1
 
-[node name="AdministerButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="AdministerButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1619809630]
 layout_mode = 2
 text = "ADMINISTER"
 
-[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
+[node name="ModuleLED" parent="." unique_id=1887980526 instance=ExtResource("2_module_led")]
+layout_mode = 2

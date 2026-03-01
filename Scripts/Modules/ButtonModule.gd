@@ -10,9 +10,9 @@ var buttons: Array[Button] = []
 # Symbol Lists (Based on Keep Talking and Nobody Explodes Keypad)
 # Using some Unicode characters as requested in AGENTS.md
 const LISTS = [
-	["Ϙ", "Ѧ", "ƛ", "Ϟ", "Ѭ", "ϗ", "Ͽ", ], # List 1
+	["Ϙ", "Ѧ", "ƛ", "Ѣ", "Ѭ", "ϗ", "Ͽ", ], # List 1
 	["Ӭ", "Ϙ", "Ͽ", "Ҩ", "☆", "ϗ", "¿"], # List 2
-	["©", "Ѽ", "Ҩ", "Ж", "ƛ", "Λ", "☆"], # List 3
+	["©", "Ͼ", "Ҩ", "Ж", "ƛ", "Λ", "☆"], # List 3
 	["б", "¶", "Ѣ", "Ѭ", "Ж", "¿", "Δ"], # List 4
 	["Ψ", "Δ", "Ѣ", "Ͼ", "¶", "Ѯ", "★"], # List 5
 	["б", "Ӭ", "҂", "æ", "Ψ", "Ҋ", "Ω"] # List 6
