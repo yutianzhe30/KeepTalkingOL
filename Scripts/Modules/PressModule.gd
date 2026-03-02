@@ -151,7 +151,6 @@ func _on_button_up():
 	if not is_holding:
 		# It was a TAP
 		if required_action == "TAP":
-			print("PressModule: Correct Tap")
 			solve()
 		else:
 			print("PressModule: Strike! Expected Hold, got Tap")
@@ -170,7 +169,6 @@ func _on_button_up():
 			return
 			
 		if _check_timer_digit(release_digit):
-			print("PressModule: Correct Release")
 			solve()
 		else:
 			print("PressModule: Strike! Released at wrong time. Needed: ", release_digit)

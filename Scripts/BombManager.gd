@@ -120,7 +120,6 @@ func _get_all_debug_info() -> String:
 
 func _on_module_struck(module: BaseModule) -> void:
 	if game_ended: return
-	print("BombManager strike from: ", module.name)
 	
 	if AudioManager:
 		AudioManager.play_strike()
@@ -141,7 +140,6 @@ func _on_module_solved(module: BaseModule) -> void:
 		AudioManager.play_solve()
 		
 	current_solved += 1
-	print("BombManager solved: ", module.name, " (", current_solved, "/", total_solvable, ")")
 	
 	if current_solved >= total_solvable:
 		_trigger_game_over(true)

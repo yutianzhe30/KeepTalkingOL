@@ -53,9 +53,8 @@ func _start_sequence():
 	if rot != Vector3.ZERO:
 		base_accelerometer = rot
 		is_accelerometer_available = true
-		print("BalanceModule: Rotation calibrated to: ", rot)
 	else:
-		print("BalanceModule: Rotation not detected or zero.")
+		pass
 
 	prompt_label.visible = true
 	boundary.border_color = Color(1, 0, 0, 1)

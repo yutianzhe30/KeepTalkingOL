@@ -221,7 +221,6 @@ func _on_transmit_pressed():
 	var amp_ok = amp_dist <= TOLERANCE_AMP
 	
 	if freq_ok and amp_ok:
-		print("RadioModule: Transmission Verified!")
 		solve()
 	else:
 		print("RadioModule: Invalid Transmission! FreqErr=", freq_dist, " AmpErr=", amp_dist)
