@@ -21,11 +21,11 @@ func _load_symbols():
 	for s in all_symbols:
 		text_to_append += s
 	rich_text_label.text += text_to_append
-	
+
 func _load_credits():
 	var file = FileAccess.open("res://Credit.txt", FileAccess.READ)
 	if TARGET_FONT:
-		rich_text_label.add_theme_font_override("font", TARGET_FONT)
+		rich_text_label.add_theme_font_override("normal_font", TARGET_FONT)
 	if file:
 		rich_text_label.text = file.get_as_text()
 	else:
