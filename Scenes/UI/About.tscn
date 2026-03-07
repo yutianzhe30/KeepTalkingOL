@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://vnribkg04i1t"]
 
-[ext_resource type="Script" path="res://Scripts/UI/FontDebug.gd" id="1_script"]
+[ext_resource type="Script" path="res://Scripts/UI/About.gd" id="1_script"]
 
-[node name="FontDebug" type="Control"]
+[node name="About" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,19 +37,13 @@ theme_override_constants/separation = 20
 [node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = "Font Rendering Debug"
+text = "About"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 7
+theme_override_font_sizes/normal_font_size = 24
 
 [node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 60)

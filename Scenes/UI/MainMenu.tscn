@@ -62,11 +62,11 @@ theme_override_font_sizes/font_size = 24
 text = "Start as Specialist"
 
 [node name="DebugButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(250, 40)
+custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 16
-text = "Font Rendering Debug"
+theme_override_font_sizes/font_size = 24
+text = "About"
 
 [node name="WarningPanel" type="PanelContainer" parent="."]
 visible = false

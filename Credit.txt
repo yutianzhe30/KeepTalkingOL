@@ -1,0 +1,13 @@
+This is a fan-made game based on the game Keep Talking and Nobody Explodes.
+中文测试
+Credit:
+CRT-Shader
+https://github.com/Lord0Sanz/CRT-VISUAL-SHADER-GODOT-4.0-/
+
+7SEG Font:
+https://github.com/keshikan/DSEG
+
+Sound:
+https://ci.itch.io/400-sounds-pack
+https://filmcow.itch.io/filmcow-sfx
+https://nathangibson.myportfolio.com
