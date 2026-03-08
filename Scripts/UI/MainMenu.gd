@@ -32,3 +32,6 @@ func _on_start_as_specialist_pressed() -> void:
 
 func _on_debug_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/UI/About.tscn")
+
+func _on_github_button_pressed() -> void:
+	OS.shell_open("https://github.com/yutianzhe30/KeepTalkingOL")

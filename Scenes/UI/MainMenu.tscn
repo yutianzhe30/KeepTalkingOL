@@ -68,6 +68,13 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "About"
 
+[node name="GithubButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Go to GithubRepo"
+
 [node name="WarningPanel" type="PanelContainer" parent="."]
 visible = false
 layout_mode = 1
@@ -113,3 +120,4 @@ text = "Continue"
 [connection signal="pressed" from="CenterContainer/VBoxContainer/SpecialistButton" to="." method="_on_start_as_specialist_pressed"]
 [connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DebugButton" to="." method="_on_debug_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/GithubButton" to="." method="_on_github_button_pressed"]
