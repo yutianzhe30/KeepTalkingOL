@@ -1,13 +1,17 @@
 extends Control
 
-@onready var simple_mode_check: CheckBox = $CenterContainer/VBoxContainer/SimpleModeCheck
+
 @onready var warning_panel: PanelContainer = $WarningPanel
 
 func _ready() -> void:
 	warning_panel.hide()
 
+func _on_tutorial_button_pressed() -> void:
+	GameState.simple_mode = true
+	get_tree().change_scene_to_file("res://main.tscn")
+
 func _on_start_as_defuser_pressed() -> void:
-	GameState.simple_mode = simple_mode_check.button_pressed
+	GameState.simple_mode = false
 	warning_panel.show()
 
 func _on_continue_button_pressed() -> void:

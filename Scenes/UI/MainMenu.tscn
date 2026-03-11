@@ -38,11 +38,12 @@ theme_override_font_sizes/font_size = 64
 text = "KEEP TALKING OL"
 horizontal_alignment = 1
 
-[node name="SimpleModeCheck" type="CheckBox" parent="CenterContainer/VBoxContainer"]
+[node name="TutorialButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 20
-text = "Simple Mode"
+theme_override_font_sizes/font_size = 24
+text = "Tutorial"
 
 
 [node name="DefuserButton" type="Button" parent="CenterContainer/VBoxContainer"]
@@ -116,6 +117,7 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Continue"
 
+[connection signal="pressed" from="CenterContainer/VBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DefuserButton" to="." method="_on_start_as_defuser_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/SpecialistButton" to="." method="_on_start_as_specialist_pressed"]
 [connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
