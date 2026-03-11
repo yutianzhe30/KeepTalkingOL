@@ -1,0 +1,7 @@
+[gd_resource type="FontFile" load_steps=2 format=3]
+
+[ext_resource type="FontFile" path="res://Assets/Font/NotoSansSC-Regular.ttf" id="1_notosans"]
+
+[resource]
+font_path = "res://Assets/Font/DejaVuSans.ttf"
+fallbacks = [ExtResource("1_notosans")]

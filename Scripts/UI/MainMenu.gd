@@ -2,9 +2,18 @@ extends Control
 
 
 @onready var warning_panel: PanelContainer = $WarningPanel
+@onready var lang_button: Button = $LangButton
 
 func _ready() -> void:
 	warning_panel.hide()
+	_update_lang_button()
+
+func _update_lang_button() -> void:
+	lang_button.text = "EN" if Localization.get_locale().begins_with("zh") else "中文"
+
+func _on_lang_button_pressed() -> void:
+	Localization.toggle_locale()
+	_update_lang_button()
 
 func _on_tutorial_button_pressed() -> void:
 	GameState.simple_mode = true

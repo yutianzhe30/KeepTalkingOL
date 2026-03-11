@@ -76,6 +76,22 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Go to GithubRepo"
 
+[node name="LangButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -120.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 50.0
+grow_horizontal = 0
+auto_translate_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "中文"
+
 [node name="WarningPanel" type="PanelContainer" parent="."]
 visible = false
 layout_mode = 1
@@ -123,3 +139,4 @@ text = "Continue"
 [connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DebugButton" to="." method="_on_debug_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/GithubButton" to="." method="_on_github_button_pressed"]
+[connection signal="pressed" from="LangButton" to="." method="_on_lang_button_pressed"]
