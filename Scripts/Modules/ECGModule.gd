@@ -65,7 +65,7 @@ func _start_new_patient():
 	
 	# Update Label Hint (for debug or until user learns)
 	# heart_rate_label.text = "Patient: " + RhythmType.keys()[current_rhythm]
-	print("New Patient Rhythm: ", RhythmType.keys()[current_rhythm])
+
 	
 	# Reset Sliders? No, keeps previous setting maybe? Or reset for fairness.
 	# energy_slider.value = 0
@@ -119,13 +119,13 @@ func _on_administer_pressed():
 	var energy = energy_slider.value
 	var dosage = dosage_slider.value
 	
-	print("Administering: Energy=", energy, " Dosage=", dosage, " for ", RhythmType.keys()[current_rhythm])
+
 
 	if _check_treatment(energy, dosage):
-		print("Treatment Effective!")
+
 		solve()
 	else:
-		print("Treatment Failed! Malpractice!")
+
 		strike()
 		_start_new_patient()
 

@@ -116,7 +116,7 @@ func _on_button_pressed(btn_index: int):
 		return
 		
 	if btn_index == correct_sequence[current_step]:
-		print("Button Module: Correct press ", current_step + 1, "/", 4)
+
 
 		# Visual Logic: Show clicked (Green + Disabled)
 		# We need to find the button object that corresponds to this index
@@ -130,7 +130,7 @@ func _on_button_pressed(btn_index: int):
 		if current_step >= 4:
 			solve()
 	else:
-		print("Button Module: Wrong press! Expected button ", correct_sequence[current_step], " but got ", btn_index)
+
 		strike()
 		current_step = 0 # Reset progress on strike
 		

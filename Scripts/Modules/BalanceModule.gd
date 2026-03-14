@@ -53,9 +53,9 @@ func _start_sequence():
 	if rot != Vector3.ZERO:
 		base_accelerometer = rot
 		is_accelerometer_available = true
-		print("BalanceModule: Rotation calibrated to: ", rot)
+
 	else:
-		print("BalanceModule: Rotation not detected or zero.")
+
 
 	prompt_label.visible = true
 	boundary.border_color = Color(1, 0, 0, 1)
@@ -158,7 +158,7 @@ func _process(delta):
 		if position_offset.length() < TARGET_RADIUS:
 			balance_time += delta
 			if balance_time >= 1.0:
-				print("Balance Module Balanced! Solving.")
+
 				is_active = false
 				velocity = Vector2.ZERO
 				position_offset = Vector2.ZERO
@@ -180,7 +180,7 @@ func get_debug_info() -> String:
 
 func strike_module():
 	if !is_active: return
-	print("Balance Module Failed!")
+
 	strike()
 	has_started = false
 	time_to_start = 3.0

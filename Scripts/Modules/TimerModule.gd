@@ -106,7 +106,7 @@ func explode():
 	if not is_running: return
 	stop_timer()
 	emit_signal("timer_exploded")
-	print("BOOM: Bomb Exploded!")
+
 
 func get_debug_info() -> String:
 	var time_text = "00:00"

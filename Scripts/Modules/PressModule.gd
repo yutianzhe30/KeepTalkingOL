@@ -95,28 +95,29 @@ func _determine_rules():
 	else:
 		required_action = "HOLD"
 		
+	if required_action == "HOLD":
+		_precalculate_hold_logic()
+
 	print("PressModule: ", button_color_name, " ", button_text, " -> ", required_action)
+
+func _precalculate_hold_logic():
+	strip_color_name = COLORS.keys().pick_random()
+
+	match strip_color_name:
+		"Blue": release_digit = 4
+		"Yellow": release_digit = 5
+		_: release_digit = 1
 
 func get_debug_info() -> String:
 	if required_action == "TAP":
 		return "Press Module: TAP the %s button." % button_text
 	else:
-		return "Press Module: HOLD the %s button. (Release depends on strip color)" % button_text
+		return "Press Module: HOLD the %s button. (Strip: %s, Release on: %d)" % [button_text, strip_color_name, release_digit]
 
 func _start_hold_phase():
 	# Show Strip Logic
-	# Random strip color
-	strip_color_name = COLORS.keys().pick_random()
 	strip_color_rect.color = COLORS[strip_color_name]
 	strip_color_rect.visible = true
-	
-	# Determine Release Digit based on Strip Color
-	match strip_color_name:
-		"Blue": release_digit = 4
-		"Yellow": release_digit = 5
-		_: release_digit = 1
-	
-	print("PressModule Strip: ", strip_color_name, " Release on: ", release_digit)
 
 func _process(delta):
 	if state == ModuleState.SOLVED:
@@ -151,29 +152,29 @@ func _on_button_up():
 	if not is_holding:
 		# It was a TAP
 		if required_action == "TAP":
-			print("PressModule: Correct Tap")
+
 			solve()
 		else:
-			print("PressModule: Strike! Expected Hold, got Tap")
+
 			strike()
 	else:
 		# It was a HOLD release
 		if required_action == "TAP":
 			# If we held effectively (strip appeared) but rule was TAP
-			print("PressModule: Strike! Expected Tap, but held")
+
 			strike()
 			return
 			
 		# Rule was HOLD. Check Release Time.
 		if not timer_module:
-			print("PressModule Error: No Timer Found")
+
 			return
 			
 		if _check_timer_digit(release_digit):
-			print("PressModule: Correct Release")
+
 			solve()
 		else:
-			print("PressModule: Strike! Released at wrong time. Needed: ", release_digit)
+
 			strike()
 
 func _animate_button_press(is_pressed: bool):

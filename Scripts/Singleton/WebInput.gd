@@ -98,7 +98,7 @@ static var _js_callback: JavaScriptObject
 static func _init_sensors() -> Error:
 	if !OS.has_feature("web"): return ERR_UNAVAILABLE
 
-	print("Initializing sensors")
+
 	JavaScriptBridge.eval(_js_code, true)
 
 	_cached_orientation = JavaScriptBridge.eval("screen_orientation", true)

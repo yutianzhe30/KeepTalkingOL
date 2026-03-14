@@ -111,7 +111,7 @@ func _determine_target(serial: String):
 	else:
 		target_amplitude = 50.0
 		
-	print("RadioModule Target: Freq=", target_frequency, " Amp=", target_amplitude, "Serial=", serial)
+
 
 func get_debug_info() -> String:
 	return "Radio Module: Tune to Freq %.1f MHz, Amp %.0f" % [target_frequency, target_amplitude]
@@ -221,8 +221,8 @@ func _on_transmit_pressed():
 	var amp_ok = amp_dist <= TOLERANCE_AMP
 	
 	if freq_ok and amp_ok:
-		print("RadioModule: Transmission Verified!")
+
 		solve()
 	else:
-		print("RadioModule: Invalid Transmission! FreqErr=", freq_dist, " AmpErr=", amp_dist)
+
 		strike()

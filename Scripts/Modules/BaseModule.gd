@@ -48,7 +48,7 @@ func mark_solved() -> void:
 	_set_state(ModuleState.SOLVED)
 	_update_led_for_state()
 
-	print("Module Solved!")
+
 	module_solved.emit()
 
 func mark_failed() -> void:
@@ -59,7 +59,7 @@ func mark_failed() -> void:
 	if _module_led != null:
 		_module_led.flash_failed()
 
-	print("Module Strike!")
+
 	module_struck.emit()
 
 func _ensure_module_led() -> void:

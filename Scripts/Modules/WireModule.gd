@@ -41,7 +41,7 @@ func get_random_color() -> Color:
 
 func set_serial_number(serial: String) -> void:
 	# Called by BombManager AFTER modules are instantiated
-	print("WireModule: Serial Number: ", serial)
+
 	setup_rules(serial)
 
 func is_last_digit_odd(serial: String) -> bool:
@@ -145,11 +145,11 @@ func _on_wire_cut(wire_instance):
 		return # Should not happen
 		
 	if index == solution_index:
-		print("Correct wire cut!")
+
 		solve()
 		_disable_all_wires()
 	else:
-		print("Wrong wire! Strike!")
+
 		strike()
 
 func _disable_all_wires():
