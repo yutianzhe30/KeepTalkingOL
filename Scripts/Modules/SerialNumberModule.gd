@@ -4,7 +4,10 @@ class_name SerialNumberModule
 var serial_number: String = ""
 
 func _ready() -> void:
-	_generate_serial_number()
+	if GameState.simple_mode:
+		serial_number = GameState.TUTORIAL_SERIAL
+	else:
+		_generate_serial_number()
 	var label = get_node_or_null("CenterContainer/VBoxContainer/SerialLabel")
 	if label:
 		label.text = serial_number

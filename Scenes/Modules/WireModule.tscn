@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://eak3l4m5n6o7"]
 
-[ext_resource type="Script" path="res://Scripts/Modules/WireModule.gd" id="1_wiremodule_script"]
+[ext_resource type="Script" uid="uid://xmy6gjip6gyb" path="res://Scripts/Modules/WireModule.gd" id="1_wiremodule_script"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 
-[node name="WireModule" type="PanelContainer"]
+[node name="WireModule" type="PanelContainer" unique_id=241277011]
 offset_right = 200.0
 offset_bottom = 200.0
 script = ExtResource("1_wiremodule_script")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=317197480]
 layout_mode = 2
 alignment = 1
 
-[node name="ModuleLED" parent="." instance=ExtResource("2_module_led")]
+[node name="ModuleLED" parent="." unique_id=888790564 instance=ExtResource("2_module_led")]
+layout_mode = 2

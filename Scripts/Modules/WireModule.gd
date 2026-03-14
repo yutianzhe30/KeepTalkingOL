@@ -8,8 +8,11 @@ var wires = []
 var solution_index: int = -1
 
 func _ready():
-	# Generate a random puzzle on start
-	generate_puzzle(randi_range(3, 6))
+	if GameState.simple_mode:
+		generate_fixed_puzzle()
+	else:
+		# Generate a random puzzle on start
+		generate_puzzle(randi_range(3, 6))
 
 func generate_puzzle(wire_count: int):
 	# Clear existing
@@ -27,6 +30,31 @@ func generate_puzzle(wire_count: int):
 		var color = get_random_color()
 		wire.setup(color)
 		wires.append(wire)
+
+# Tutorial mode: fixed puzzle with 4 wires [Red, Blue, Yellow, White]
+# Serial: A1B2C4 (last digit 4 = even).
+# 4-wire rules: exactly 1 blue wire -> cut FIRST wire (index 0, Red).
+func generate_fixed_puzzle() -> void:
+	# Clear existing
+	for child in container.get_children():
+		child.queue_free()
+	wires.clear()
+
+	var fixed_colors: Array[Color] = [
+		GlobalColors.COLOR_RED,
+		GlobalColors.COLOR_BLUE,
+		GlobalColors.COLOR_YELLOW,
+		GlobalColors.COLOR_WHITE,
+	]
+	for color in fixed_colors:
+		var wire = WireScene.instantiate()
+		container.add_child(wire)
+		wire.wire_cut.connect(_on_wire_cut)
+		wire.setup(color)
+		wires.append(wire)
+
+	# Hardcoded solution: cut the 1st wire (Red, index 0) - matches the manual rule
+	solution_index = 0
 
 func get_random_color() -> Color:
 	var colors = [

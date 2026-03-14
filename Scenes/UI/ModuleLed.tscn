@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bd17jsfx3mvqd"]
 
-[ext_resource type="Script" path="res://Scripts/UI/ModuleLed.gd" id="1_module_led_script"]
+[ext_resource type="Script" uid="uid://c5fce6886r7nx" path="res://Scripts/UI/ModuleLed.gd" id="1_module_led_script"]
 
-[node name="ModuleLED" type="ColorRect"]
+[node name="ModuleLED" type="ColorRect" unique_id=975342611]
 script = ExtResource("1_module_led_script")

@@ -47,7 +47,10 @@ func _setup_buttons():
 
 func start_game():
 	current_step = 0
-	_pick_puzzle()
+	if GameState.simple_mode:
+		_pick_fixed_puzzle()
+	else:
+		_pick_puzzle()
 	_update_button_visuals()
 
 func _pick_puzzle():
@@ -95,6 +98,22 @@ func _pick_puzzle():
 		
 	for sym in temp_symbols:
 		correct_sequence.append(symbol_to_button_map[sym])
+
+# Tutorial mode: fixed symbols from List 1 in display order 0-1-2-3
+func _pick_fixed_puzzle() -> void:
+	active_symbols.clear()
+	correct_sequence.clear()
+	button_configs.clear()
+
+	# Use first 4 symbols of List 1: Ϙ Ѧ ƛ Ѣ
+	var fixed_symbols: Array[String] = ["Ϙ", "Ѧ", "ƛ", "Ѣ"]
+	for i in range(4):
+		button_configs.append({"button_index": i, "symbol": fixed_symbols[i]})
+		active_symbols.append(fixed_symbols[i])
+
+	# Correct press order: 0 -> 1 -> 2 -> 3  (left-to-right, top-to-bottom)
+	correct_sequence = [0, 1, 2, 3]
+	print("ButtonModule [Tutorial]: Fixed puzzle loaded. Press order: ", correct_sequence)
 
 func get_debug_info() -> String:
 	var sequence_symbols = []

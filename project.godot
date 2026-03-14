@@ -31,7 +31,7 @@ window/handheld/orientation=6
 
 [gui]
 
-theme/custom="res://Assets/Styles/GlobalTheme.theme"
+theme/custom="res://Assets/Styles/GlobalTheme.tres"
 
 [input]
 

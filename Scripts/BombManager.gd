@@ -14,12 +14,17 @@ extends Node
 @export var placeholder_scene: PackedScene
 
 const RESULT_SCREEN_SCENE = preload("res://Scenes/UI/ResultScreen.tscn")
+const TUTORIAL_HINT_SCENE = preload("res://Scenes/UI/TutorialHint.tscn")
+
 
 var _timer_module: Node
 var total_solvable: int = 0
 var current_solved: int = 0
 var game_ended: bool = false
 var debug_info: String = ""
+var _hint_modules_solved: int = 0 # Tracks how many solvable modules done (tutorial only)
+var _hint_layer: CanvasLayer = null # Reference to tutorial hint layer so we can close it on exit
+
 
 func _ready() -> void:
 	var modules_root = get_node_or_null(modules_root_path)
@@ -59,7 +64,20 @@ func _ready() -> void:
 	_set_serial(modules_root)
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
-	
+
+	# Tutorial mode: spawn hint panel and emit the initial welcome hint
+	if GameState.simple_mode:
+		_hint_layer = CanvasLayer.new()
+		_hint_layer.layer = 90
+		var hint_instance = TUTORIAL_HINT_SCENE.instantiate()
+		_hint_layer.add_child(hint_instance)
+		get_tree().root.add_child(_hint_layer)
+		# The hint panel's _ready() already emits the welcome hint, so just emit wire hint now
+		# after a brief delay so the welcome text is visible first
+		get_tree().create_timer(5.0).timeout.connect(
+			func(): GameState.hint_updated.emit(TutorialHint.get_wire_hint())
+		)
+
 func _set_serial(modules_root: Node) -> void:
 	# Inject serial number to all modules that need it
 	var serial_string = "000000"
@@ -142,9 +160,21 @@ func _on_module_solved(module: BaseModule) -> void:
 		
 	current_solved += 1
 	print("BombManager solved: ", module.name, " (", current_solved, "/", total_solvable, ")")
-	
+
+	# Tutorial hint progression
+	if GameState.simple_mode:
+		_advance_tutorial_hint()
+
 	if current_solved >= total_solvable:
 		_trigger_game_over(true)
+
+func _advance_tutorial_hint() -> void:
+	_hint_modules_solved += 1
+	match _hint_modules_solved:
+		1: # First module solved (Wire) -> show Button hint
+			GameState.hint_updated.emit(TutorialHint.get_button_hint())
+		2: # Second module solved (Button) -> show complete message
+			GameState.hint_updated.emit(TutorialHint.get_complete_hint())
 
 func _on_timer_exploded() -> void:
 	if game_ended: return
@@ -152,6 +182,10 @@ func _on_timer_exploded() -> void:
 
 func _trigger_game_over(is_win: bool) -> void:
 	game_ended = true
+	# Close the tutorial hint panel when the game ends
+	if _hint_layer != null:
+		_hint_layer.queue_free()
+		_hint_layer = null
 	
 	if _timer_module and _timer_module.has_method("stop_timer"):
 		_timer_module.stop_timer()

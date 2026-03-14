@@ -1,25 +1,25 @@
 [gd_scene format=3 uid="uid://bumy8q4j2k5m"]
 
-[ext_resource type="Script" path="res://Scripts/Modules/TimerModule.gd" id="1_timer_module"]
-[ext_resource type="FontFile" path="res://Assets/Font/DSEG7Modern-Bold.ttf" id="2_timer_font"]
+[ext_resource type="Script" uid="uid://35bfys70v34h" path="res://Scripts/Modules/TimerModule.gd" id="1_timer_module"]
+[ext_resource type="FontFile" uid="uid://8ueulxwah6h6" path="res://Assets/Font/DSEG7Modern-Bold.ttf" id="2_timer_font"]
 [ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="3_metal_style"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="4_module_led"]
 
-[node name="TimerModule" type="PanelContainer"]
+[node name="TimerModule" type="PanelContainer" unique_id=870433761]
 offset_right = 200.0
 offset_bottom = 200.0
 theme_override_styles/panel = ExtResource("3_metal_style")
 script = ExtResource("1_timer_module")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=949450689]
 layout_mode = 2
 alignment = 1
 
-[node name="TimerContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="TimerContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1220287915]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BackgroundLabel" type="Label" parent="VBoxContainer/TimerContainer"]
+[node name="BackgroundLabel" type="Label" parent="VBoxContainer/TimerContainer" unique_id=1953118727]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0, 0, 0.2)
 theme_override_fonts/font = ExtResource("2_timer_font")
@@ -28,7 +28,7 @@ text = "88:88"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/TimerContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TimerContainer" unique_id=2001253643]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_timer_font")
@@ -37,12 +37,12 @@ text = "05:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StrikeContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="StrikeContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1465761646]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="BackgroundLabel" type="Label" parent="VBoxContainer/StrikeContainer"]
+[node name="BackgroundLabel" type="Label" parent="VBoxContainer/StrikeContainer" unique_id=1513336800]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0, 0, 0.2)
 theme_override_fonts/font = ExtResource("2_timer_font")
@@ -50,14 +50,15 @@ theme_override_font_sizes/font_size = 32
 text = "---"
 vertical_alignment = 1
 
-[node name="StrikeLabel" type="Label" parent="VBoxContainer/StrikeContainer"]
+[node name="StrikeLabel" type="Label" parent="VBoxContainer/StrikeContainer" unique_id=1336960318]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_timer_font")
 theme_override_font_sizes/font_size = 32
 vertical_alignment = 1
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1573678214]
 
-[node name="ModuleLED" parent="." instance=ExtResource("4_module_led")]
+[node name="ModuleLED" parent="." unique_id=16415704 instance=ExtResource("4_module_led")]
 visible = false
+layout_mode = 2

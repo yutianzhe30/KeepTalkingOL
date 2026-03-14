@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cxw4m5n6o7qa8"]
 
-[ext_resource type="Script" path="res://Scripts/UI/MainMenu.gd" id="1_main_menu"]
+[ext_resource type="Script" uid="uid://bmjvidjmda8eh" path="res://Scripts/UI/MainMenu.gd" id="1_main_menu"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1035790527]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main_menu")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1080063467]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.180392, 0.203922, 0.25098, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2069339525]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,25 +28,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1838454319]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=379860063]
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "KEEP TALKING OL"
 horizontal_alignment = 1
 
-[node name="TutorialButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="TutorialButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=739690682]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Tutorial"
 
-
-[node name="DefuserButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="DefuserButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2022753575]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -54,7 +53,7 @@ tooltip_text = "you are the defuser and will defuse the bomb with the help of Bo
 theme_override_font_sizes/font_size = 24
 text = "Start as Defuser"
 
-[node name="SpecialistButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="SpecialistButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1636572873]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -62,37 +61,36 @@ tooltip_text = "you are bomb specialist and will handle a defuse_manual"
 theme_override_font_sizes/font_size = 24
 text = "Start as Specialist"
 
-[node name="DebugButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="DebugButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=483687522]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "About"
 
-[node name="GithubButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="GithubButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=523461642]
 custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Go to GithubRepo"
 
-[node name="LangButton" type="Button" parent="."]
+[node name="LangButton" type="Button" parent="." unique_id=508600866]
+auto_translate_mode = 2
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
 offset_left = -120.0
 offset_top = 10.0
 offset_right = -10.0
 offset_bottom = 50.0
 grow_horizontal = 0
-auto_translate_mode = 2
+grow_vertical = 0
 theme_override_font_sizes/font_size = 18
 text = "中文"
 
-[node name="WarningPanel" type="PanelContainer" parent="."]
+[node name="WarningPanel" type="PanelContainer" parent="." unique_id=518898413]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -107,26 +105,26 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="WarningPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="WarningPanel" unique_id=681949518]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="WarningPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="WarningPanel/MarginContainer" unique_id=1545474187]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Label" type="Label" parent="WarningPanel/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="WarningPanel/MarginContainer/VBoxContainer" unique_id=815413095]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "For best game experience, do not show your monitor to the specialist"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="ContinueButton" type="Button" parent="WarningPanel/MarginContainer/VBoxContainer"]
+[node name="ContinueButton" type="Button" parent="WarningPanel/MarginContainer/VBoxContainer" unique_id=1952291422]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -136,7 +134,7 @@ text = "Continue"
 [connection signal="pressed" from="CenterContainer/VBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DefuserButton" to="." method="_on_start_as_defuser_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/SpecialistButton" to="." method="_on_start_as_specialist_pressed"]
-[connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/DebugButton" to="." method="_on_debug_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/GithubButton" to="." method="_on_github_button_pressed"]
 [connection signal="pressed" from="LangButton" to="." method="_on_lang_button_pressed"]
+[connection signal="pressed" from="WarningPanel/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]

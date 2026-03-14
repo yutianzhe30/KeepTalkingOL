@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b8m3y6k2x0oap"]
 
-[ext_resource type="Script" path="res://Scripts/UI/TitleScreen.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b3leqmay0t0n5" path="res://Scripts/UI/TitleScreen.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cqjx41b506mq0" path="res://Assets/Pic/Titel.png" id="2_texture"]
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="Control" unique_id=840843457]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=246221162]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=815489861]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
