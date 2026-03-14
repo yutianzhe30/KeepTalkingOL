@@ -35,3 +35,31 @@ We can cache the node reference and move constant assignments to initialization,
 ## Verification
 
 Since we cannot run a Godot runtime benchmark in this environment (no Godot binary), this optimization relies on standard game development patterns for object caching and avoiding redundant property updates in hot loops.
+
+## Color Instantiation Optimization
+
+### Issue
+The `_process(delta)` loop in `BalanceModule.gd` was instantiating new `Color` objects every frame to handle border flashing.
+
+```gdscript
+		if sin(time_msec / 100.0) > 0:
+			boundary.border_color = Color(1, 0, 0, 1)
+		else:
+			boundary.border_color = Color(0.3, 0, 0, 1)
+```
+
+### Performance Cost
+1. **Object Allocation**: Although `Color` is a built-in type in GDScript (a Variant-backed struct in C++), calling `Color(...)` still involves constructor overhead and potential temporary allocations.
+2. **Frequency**: At 60 FPS, this results in at least 60 `Color` instantiations per second just for the flash effect, and more when the module starts or is solved.
+
+### Optimization Strategy
+Moved these colors to class-level constants:
+```gdscript
+const COLOR_RED_FLASH = Color(1, 0, 0, 1)
+const COLOR_RED_DIM = Color(0.3, 0, 0, 1)
+const COLOR_GREEN_SOLVED = Color(0, 1, 0, 1)
+```
+
+### Expected Impact
+- **Zero Allocation in Loop**: Reuses the same memory-resident `Color` values.
+- **Improved CPU Efficiency**: Eliminates constructor calls in the `_process` loop.
