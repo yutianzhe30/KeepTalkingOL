@@ -11,8 +11,7 @@ var is_running: bool = false
 var last_tick_second: int = -1
 var strike_count: int = 0
 
-var last_display_minutes: int = -1
-var last_display_seconds: int = -1
+var last_display_total_seconds: int = -1
 const TICK_SOUND = preload("res://Assets/Sound/tick.wav")
 
 func _init() -> void:
@@ -38,11 +37,13 @@ func _ready():
 
 	update_display()
 	update_strike_display()
+
+	set_process(is_running)
 	# Optional: Start automatically for testing
 	start_timer()
 
 func _process(delta):
-	if is_running and time_remaining > 0:
+	if time_remaining > 0:
 		time_remaining -= delta
 		if time_remaining <= 0:
 			time_remaining = 0
@@ -52,18 +53,16 @@ func _process(delta):
 		check_sound_tick()
 
 func update_display():
-	# Format: MM:SS
-	var minutes = floor(time_remaining / 60)
-	var seconds = floor(fmod(time_remaining, 60))
-
-	if minutes == last_display_minutes and seconds == last_display_seconds:
+	var total_seconds = int(time_remaining)
+	if total_seconds == last_display_total_seconds:
 		return
 
-	last_display_minutes = minutes
-	last_display_seconds = seconds
+	last_display_total_seconds = total_seconds
 
-	# var millis = floor(fmod(time_remaining, 1) * 100) # Removed millis for 7-segment look if preferred, or keep
-	
+	# Format: MM:SS using integer math
+	var minutes = total_seconds / 60
+	var seconds = total_seconds % 60
+
 	# %02d used for padding with zeros
 	label.text = "%02d:%02d" % [minutes, seconds]
 
@@ -75,10 +74,12 @@ func update_strike_display():
 
 func check_sound_tick():
 	# Trigger sound every second
-	var current_second = ceil(time_remaining)
-	if current_second != last_tick_second:
-		last_tick_second = current_second
-		play_tick_sound()
+	var current_second = int(ceil(time_remaining))
+	if current_second == last_tick_second:
+		return
+
+	last_tick_second = current_second
+	play_tick_sound()
 
 func play_tick_sound():
 	if tick_audio_player and tick_audio_player.stream:
@@ -86,9 +87,11 @@ func play_tick_sound():
 
 func start_timer():
 	is_running = true
+	set_process(true)
 
 func stop_timer():
 	is_running = false
+	set_process(false)
 
 func add_time_penalty(seconds: float) -> void:
 	time_remaining = max(0.0, time_remaining - seconds)
