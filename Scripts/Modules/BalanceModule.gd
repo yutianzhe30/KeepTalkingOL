@@ -114,7 +114,6 @@ func _process(delta):
 		force += position_offset.normalized() * (position_offset.length() * 2.0)
 		
 	# Input (Counter-force)
-	# Input (Counter-force)
 	var input = Input.get_vector("left", "right", "up", "down")
 
 	if is_accelerometer_available:
@@ -127,11 +126,6 @@ func _process(delta):
 		# Multiplication factors might need tweaking based on how sensitive you want it
 		var accel_input = Vector2(rot_diff.y, rot_diff.x) * 4.0
 		
-		# if debug_label:
-		# 	var debug_text = "Base Y: %.3f, X: %.3f\n" % [base_accelerometer.y, base_accelerometer.x]
-		# 	debug_text += "Cur Y: %.3f, X: %.3f\n" % [current_rot.y, current_rot.x]
-		# 	debug_text += "Diff Y: %.3f, X: %.3f" % [rot_diff.y, rot_diff.x]
-		# 	debug_label.text = debug_text
 		# Combine keyboard and accelerometer
 		input += accel_input
 
