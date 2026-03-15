@@ -17,9 +17,6 @@ var exit_pos: Vector2i = Vector2i(0, 0)
 var start_pos: Vector2i = Vector2i(0, 0)
 var current_maze_id: int = 0
 
-# 玩家当前朝向（0=北, 1=东, 2=南, 3=西）
-var player_facing: int = 1
-
 # 统计数据
 var steps_taken: int = 0
 var wall_hits: int = 0
@@ -28,10 +25,10 @@ var wall_hits: int = 0
 var _wall_flash_alpha: float = 0.0
 var _flash_tween: Tween
 
-# 颜色
-const COLOR_PLAYER     = Color(0.2, 1.0, 0.2)
-const COLOR_EXIT       = Color(1.0, 0.15, 0.15)
-const COLOR_EXIT_NEAR  = Color(1.0, 0.55, 0.1)
+# 颜色（玩家=红点，出口=绿点）
+const COLOR_PLAYER     = Color(1.0, 0.15, 0.15)
+const COLOR_EXIT       = Color(0.2, 1.0, 0.2)
+const COLOR_EXIT_NEAR  = Color(0.6, 1.0, 0.3)
 const COLOR_GRID       = Color(0.28, 0.28, 0.28)     # 浅灰格线（始终显示）
 const COLOR_WALL       = Color(0.55, 0.55, 0.55)     # debug墙体填充
 const COLOR_WALL_EDGE  = Color(0.35, 0.35, 0.35)     # debug墙体描边
@@ -74,7 +71,6 @@ func _load_maze_by_index(index: int):
 	exit_pos    = maze_data["exit"]
 	current_maze_id = maze_data["id"]
 	player_pos  = start_pos
-	player_facing = randi_range(0, 3)
 
 	if OS.is_debug_build():
 		if not MazeData.verify_maze_solvable(maze_data):
@@ -85,46 +81,10 @@ func _load_maze_by_index(index: int):
 
 
 func _setup_ui():
-	# 节点已在 .tscn 中预定义，此处只做连线 + 动态创建按钮
-
-	# 连接迷宫绘制信号
 	var maze_panel = get_node("MainContainer/MazePanel") as Panel
 	_connect_draw(maze_panel)
-
-	# 方向按钮（场景中 ButtonGrid 为空，需动态添加）
-	var btn_grid = get_node("MainContainer/Controls/ButtonGrid") as GridContainer
-	var spacer1 = Control.new()
-	spacer1.custom_minimum_size = Vector2(40, 40)
-	var spacer2 = Control.new()
-	spacer2.custom_minimum_size = Vector2(40, 40)
-	btn_grid.add_child(spacer1)
-	btn_grid.add_child(_create_dir_button("↑", 0))
-	btn_grid.add_child(spacer2)
-	btn_grid.add_child(_create_dir_button("←", 3))
-	btn_grid.add_child(_create_dir_button("↓", 2))
-	btn_grid.add_child(_create_dir_button("→", 1))
-
-	# 连接确认按钮信号
 	var confirm_btn = get_node("MainContainer/ConfirmButton") as Button
 	confirm_btn.pressed.connect(_on_confirm_pressed)
-
-	# 迷宫ID标签（仅 debug 模式，动态插入到容器顶部）
-	if OS.is_debug_build():
-		var id_label = Label.new()
-		id_label.name = "MazeIdLabel"
-		id_label.text = "迷宫 #%d" % current_maze_id
-		id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		var container = get_node("MainContainer") as VBoxContainer
-		container.add_child(id_label)
-		container.move_child(id_label, 0)
-
-
-func _create_dir_button(text: String, direction: int) -> Button:
-	var btn = Button.new()
-	btn.text = text
-	btn.custom_minimum_size = Vector2(40, 40)
-	btn.pressed.connect(_on_dir_pressed.bind(direction))
-	return btn
 
 
 # ─────────────────────────────────────────────
@@ -135,14 +95,7 @@ func _on_dir_pressed(direction: int):
 	if state != ModuleState.ACTIVE:
 		return
 
-	var abs_direction: int = player_facing  # default: forward
-	match direction:
-		0: abs_direction = player_facing
-		1: abs_direction = (player_facing + 1) % 4
-		2: abs_direction = (player_facing + 2) % 4
-		3: abs_direction = (player_facing + 3) % 4
-
-	var new_pos = player_pos + _dir_to_vector(abs_direction)
+	var new_pos = player_pos + _dir_to_vector(direction)
 
 	if _is_valid_move(new_pos):
 		player_pos = new_pos
@@ -152,7 +105,7 @@ func _on_dir_pressed(direction: int):
 	else:
 		wall_hits += 1
 		_trigger_wall_flash()
-		_play_wall_hit_sound(abs_direction)
+		_play_wall_hit_sound()
 
 	_update_display()
 
@@ -170,6 +123,20 @@ func _is_valid_move(pos: Vector2i) -> bool:
 	if pos.x < 0 or pos.x >= maze_width or pos.y < 0 or pos.y >= maze_height:
 		return false
 	return maze[pos.y][pos.x] == 0
+
+
+func _unhandled_input(event: InputEvent):
+	## 键盘方向键 / WASD；D-pad 通过 BombManager 直接调用 _on_dir_pressed
+	if state != ModuleState.ACTIVE:
+		return
+	var dir := -1
+	if   event.is_action_pressed("up"):    dir = 0
+	elif event.is_action_pressed("right"): dir = 1
+	elif event.is_action_pressed("down"):  dir = 2
+	elif event.is_action_pressed("left"):  dir = 3
+	if dir != -1:
+		_on_dir_pressed(dir)
+		get_viewport().set_input_as_handled()
 
 
 # ─────────────────────────────────────────────
@@ -199,7 +166,7 @@ func _play_move_sound():
 	pass
 
 
-func _play_wall_hit_sound(_direction: int):
+func _play_wall_hit_sound():
 	pass
 
 
@@ -228,10 +195,6 @@ func _update_display():
 	var maze_panel = get_node_or_null("MainContainer/MazePanel") as Panel
 	if maze_panel:
 		maze_panel.queue_redraw()
-
-	var status_label = get_node_or_null("MainContainer/StatusLabel") as Label
-	if status_label:
-		status_label.text = "步数: %d | 撞墙: %d" % [steps_taken, wall_hits]
 
 
 func _connect_draw(maze_panel: Panel):
@@ -273,13 +236,9 @@ func _draw_maze():
 		var exit_alpha  = 1.0 if dist <= 2.0 or OS.is_debug_build() else 0.5
 		panel.draw_circle(exit_center, cell_size * 0.30, Color(exit_color, exit_alpha))
 
-	# 5. 玩家绿点 + 朝向箭头
+	# 5. 玩家绿点
 	var player_center = _cell_center(player_pos, offset)
 	panel.draw_circle(player_center, cell_size * 0.35, COLOR_PLAYER)
-
-	var arrow_dirs := [Vector2(0, -1), Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0)]
-	var arrow_end  = player_center + arrow_dirs[player_facing] * (cell_size * 0.25)
-	panel.draw_line(player_center, arrow_end, Color(0, 0, 0, 0.85), 2.5)
 
 	# 6. 撞墙闪烁边框（最顶层）
 	if _wall_flash_alpha > 0.01:
@@ -345,5 +304,4 @@ func get_maze_data() -> Dictionary:
 		"height": maze_height,
 		"player_start": start_pos,
 		"exit": exit_pos,
-		"player_facing": player_facing
 	}

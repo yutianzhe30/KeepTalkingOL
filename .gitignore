@@ -2,3 +2,5 @@
 .godot/
 /android/
 *.zip
+*.html
+*.htm

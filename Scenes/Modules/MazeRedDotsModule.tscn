@@ -2,45 +2,19 @@
 
 [ext_resource type="Script" uid="uid://mazeredots_script" path="res://Scripts/Modules/MazeRedDotsModule.gd" id="1_script"]
 
-[node name="MazeRedDotsModule" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MazeRedDotsModule" type="PanelContainer"]
+offset_right = 200.0
+offset_bottom = 200.0
 script = ExtResource("1_script")
-maze_width = 6
-maze_height = 6
-cell_size = 40
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 alignment = 1
 
 [node name="MazePanel" type="Panel" parent="MainContainer"]
-custom_minimum_size = Vector2(240, 240)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="Controls" type="HBoxContainer" parent="MainContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonGrid" type="GridContainer" parent="MainContainer/Controls"]
-layout_mode = 2
-columns = 3
-
-[node name="StatusLabel" type="Label" parent="MainContainer"]
-layout_mode = 2
-text = "步数: 0 | 撞墙: 0"
-horizontal_alignment = 1
 
 [node name="ConfirmButton" type="Button" parent="MainContainer"]
 layout_mode = 2

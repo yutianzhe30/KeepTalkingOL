@@ -11,10 +11,12 @@ extends Node
 @export var balance_scene: PackedScene
 @export var radio_scene: PackedScene
 @export var press_scene: PackedScene
+@export var maze_scene: PackedScene
 @export var placeholder_scene: PackedScene
 
 const RESULT_SCREEN_SCENE = preload("res://Scenes/UI/ResultScreen.tscn")
 const TUTORIAL_HINT_SCENE = preload("res://Scenes/UI/TutorialHint.tscn")
+const TOUCH_DPAD          = preload("res://Scripts/UI/TouchDPad.gd")
 
 
 var _timer_module: Node
@@ -24,6 +26,7 @@ var game_ended: bool = false
 var debug_info: String = ""
 var _hint_modules_solved: int = 0 # Tracks how many solvable modules done (tutorial only)
 var _hint_layer: CanvasLayer = null # Reference to tutorial hint layer so we can close it on exit
+var _dpad_layer: CanvasLayer = null # Reference to touch D-pad overlay
 
 
 func _ready() -> void:
@@ -65,6 +68,14 @@ func _ready() -> void:
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
+	# 全局触控 D-pad，连接到迷宫模块
+	_dpad_layer = TOUCH_DPAD.new()
+	get_tree().root.add_child(_dpad_layer)
+	for child in modules_root.get_children():
+		if child is MazeRedDotsModule:
+			_dpad_layer.dpad_pressed.connect(child._on_dir_pressed)
+			break
+
 	# Tutorial mode: spawn hint panel and emit the initial welcome hint
 	if GameState.simple_mode:
 		_hint_layer = CanvasLayer.new()
@@ -104,7 +115,7 @@ func _generate_modules(root: Node) -> void:
 		press_scene,
 		radio_scene,
 		serial_scene,
-		placeholder_scene
+		maze_scene,
 	]
 	
 	if GameState.simple_mode:
@@ -182,10 +193,12 @@ func _on_timer_exploded() -> void:
 
 func _trigger_game_over(is_win: bool) -> void:
 	game_ended = true
-	# Close the tutorial hint panel when the game ends
 	if _hint_layer != null:
 		_hint_layer.queue_free()
 		_hint_layer = null
+	if _dpad_layer != null:
+		_dpad_layer.queue_free()
+		_dpad_layer = null
 	
 	if _timer_module and _timer_module.has_method("stop_timer"):
 		_timer_module.stop_timer()
