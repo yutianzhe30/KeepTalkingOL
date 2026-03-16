@@ -69,7 +69,7 @@ func _ready() -> void:
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
 	# 全局触控 D-pad，在移动设备上存在平衡仪或迷宫模块时创建
-	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or DisplayServer.is_touchscreen_available():
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
 		var needs_dpad = false
 		for child in modules_root.get_children():
 			if child is MazeRedDotsModule or child.name.begins_with("BalanceModule"):
@@ -109,56 +109,100 @@ func _set_serial(modules_root: Node) -> void:
 		if child.has_method("set_serial_number"):
 			child.set_serial_number(serial_string)
 			
+const GRID_SIZE := 9
+const GRID_COLS := 3
+
+# Fixed positions in 3x3 grid (0-indexed):
+#  0  1  2
+#  3  4  5
+#  6  7  8
+enum GridPos {
+	TOP_LEFT = 0, TOP_MID = 1, TOP_RIGHT = 2,
+	MID_LEFT = 3, CENTER = 4, MID_RIGHT = 5,
+	BOT_LEFT = 6, BOT_MID = 7, BOT_RIGHT = 8
+}
+
+## Generates all modules and places them in the grid.
+## Fixed positions: Timer (center), Serial (bottom-right), Balance (top-right), Maze (bottom-middle in Hard)
 func _generate_modules(root: Node) -> void:
-	# Grid layout (3x3, 0-indexed):
-	#  0  1  2
-	#  3  4  5
-	#  6  7  8
-	# Timer fixed at center (4), Serial fixed at bottom-middle (7)
-	# Maze fixed at bottom-right (8) when present
-
-	var sequence: Array = []
-	sequence.resize(9)
-	sequence.fill(placeholder_scene)
-	sequence[4] = timer_scene
-	sequence[7] = serial_scene
-
-	# Determine which puzzle modules to place
-	var modules_to_place: Array = []
-
-	if GameState.simple_mode:
-		# Tutorial: wire + button only
-		modules_to_place = [wire_scene, button_scene]
-	else:
-		var basic_pool: Array = [wire_scene, button_scene, press_scene, radio_scene, ecg_scene]
-		basic_pool.shuffle()
-		match GameState.difficulty:
-			GameState.Difficulty.EASY:
-				modules_to_place = [basic_pool[0], basic_pool[1]]
-			GameState.Difficulty.MEDIUM:
-				modules_to_place = [balance_scene, basic_pool[0], basic_pool[1], basic_pool[2], basic_pool[3]]
-			GameState.Difficulty.HARD:
-				# Maze fixed at slot 8 (bottom-right); place balance + basic in remaining slots
-				sequence[8] = maze_scene
-				modules_to_place = [balance_scene] + basic_pool
-
-	# Available slots: everything except Timer (4), Serial (7), and Maze (8 in Hard)
-	var available: Array = [0, 1, 2, 3, 5, 6, 8]
-	if not GameState.simple_mode and GameState.difficulty == GameState.Difficulty.HARD:
-		available.erase(8)
-	available.shuffle()
-	for i in range(modules_to_place.size()):
-		sequence[available[i]] = modules_to_place[i]
-
-	for scene in sequence:
-		if scene:
-			var instance = scene.instantiate()
-			instance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			instance.size_flags_vertical = Control.SIZE_EXPAND_FILL
-			root.add_child(instance)
-
-	# Print all debug information
+	var sequence := _create_empty_sequence()
+	
+	# Step 1: Place fixed-position modules
+	sequence[GridPos.CENTER] = timer_scene
+	sequence[GridPos.BOT_RIGHT] = serial_scene
+	
+	# Step 2: Get puzzle modules for current difficulty
+	var puzzle_modules := _get_puzzle_modules_for_difficulty()
+	
+	# Step 3: Place conditional fixed-position modules
+	var occupied_slots := [GridPos.CENTER, GridPos.BOT_RIGHT]
+	
+	# Balance -> top-right (slot 2)
+	if balance_scene in puzzle_modules:
+		puzzle_modules.erase(balance_scene)
+		sequence[GridPos.TOP_MID] = balance_scene
+		occupied_slots.append(GridPos.TOP_MID)
+	
+	# Maze -> bottom-middle (slot 7) in Hard mode
+	if GameState.difficulty == GameState.Difficulty.HARD:
+		sequence[GridPos.BOT_MID] = maze_scene
+		occupied_slots.append(GridPos.BOT_MID)
+	
+	# Step 4: Fill remaining slots randomly
+	var available_slots := _get_available_slots(occupied_slots)
+	available_slots.shuffle()
+	
+	for i in range(min(puzzle_modules.size(), available_slots.size())):
+		sequence[available_slots[i]] = puzzle_modules[i]
+	
+	# Step 5: Instantiate all modules
+	_instantiate_modules(sequence, root)
+	
 	call_deferred("_get_all_debug_info")
+
+
+func _create_empty_sequence() -> Array:
+	var sequence: Array = []
+	sequence.resize(GRID_SIZE)
+	sequence.fill(placeholder_scene)
+	return sequence
+
+
+func _get_puzzle_modules_for_difficulty() -> Array:
+	if GameState.simple_mode:
+		return [wire_scene, button_scene]
+	
+	var basic_pool: Array = [wire_scene, button_scene, press_scene, radio_scene, ecg_scene]
+	basic_pool.shuffle()
+	
+	match GameState.difficulty:
+		GameState.Difficulty.EASY:
+			return [basic_pool[0], basic_pool[1]]
+		GameState.Difficulty.MEDIUM:
+			return [balance_scene] + basic_pool.slice(0, 4)
+		GameState.Difficulty.HARD:
+			return [balance_scene] + basic_pool
+		_:
+			return []
+
+
+func _get_available_slots(occupied: Array) -> Array:
+	var all_slots := range(GRID_SIZE)
+	var available: Array = []
+	for slot in all_slots:
+		if slot not in occupied:
+			available.append(slot)
+	return available
+
+
+func _instantiate_modules(sequence: Array, root: Node) -> void:
+	for scene in sequence:
+		if not scene:
+			continue
+		var instance = scene.instantiate()
+		instance.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		instance.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		root.add_child(instance)
 
 func _get_all_debug_info() -> String:
 	var debug_str = "========================================\n"

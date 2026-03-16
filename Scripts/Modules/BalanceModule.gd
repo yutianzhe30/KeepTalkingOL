@@ -15,9 +15,6 @@ var has_started: bool = false
 var time_to_start: float = 3.0
 var balance_time: float = 0.0
 
-# Mobile controls
-var base_accelerometer: Vector3 = Vector3.ZERO
-var is_accelerometer_available: bool = false
 
 # Physics Constants
 const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
@@ -52,20 +49,13 @@ func _start_sequence():
 	velocity = Vector2.ZERO
 	position_offset = Vector2.ZERO
 	
-	# Calibrate the accelerometer when the module starts
-	# Use WebInput to support mobile browsers alongside native platforms
-	var rot = WebInput.get_rotation() if WebInput else Vector3.ZERO
-	if rot != Vector3.ZERO:
-		base_accelerometer = rot
-		is_accelerometer_available = true
-		print("BalanceModule: Rotation calibrated to: ", rot)
-	else:
-		print("BalanceModule: Rotation not detected or zero.")
 
 	prompt_label.visible = true
 	boundary.border_color = COLOR_RED_FLASH
 
 func _on_other_module_solved():
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
+		return
 	if state == ModuleState.SOLVED and false == is_active:
 		if randf() <= 0.33:
 			_set_state(ModuleState.IDLE)
@@ -94,8 +84,6 @@ func _process(delta):
 			
 			if AudioManager:
 				AudioManager.play_strike()
-			if is_accelerometer_available:
-				base_accelerometer = WebInput.get_rotation()
 			var random_angle = randf() * TAU
 			velocity = Vector2.from_angle(random_angle) * 50.0
 			is_active = true
@@ -121,24 +109,6 @@ func _process(delta):
 	# Input (Counter-force)
 	# Input (Counter-force)
 	var input = Input.get_vector("left", "right", "up", "down")
-
-	if is_accelerometer_available:
-		var current_rot = WebInput.get_rotation() if WebInput else Vector3.ZERO
-		var rot_diff = current_rot - base_accelerometer
-
-		# Rotation (alpha, beta, gamma converted from 0-360 degrees to radians).
-		# By testing, beta maps to pitching forward/back, gamma maps to rolling left/right.
-		# WebInput already did deg_to_rad()
-		# Multiplication factors might need tweaking based on how sensitive you want it
-		var accel_input = Vector2(rot_diff.y, rot_diff.x) * 4.0
-		
-		# if debug_label:
-		# 	var debug_text = "Base Y: %.3f, X: %.3f\n" % [base_accelerometer.y, base_accelerometer.x]
-		# 	debug_text += "Cur Y: %.3f, X: %.3f\n" % [current_rot.y, current_rot.x]
-		# 	debug_text += "Diff Y: %.3f, X: %.3f" % [rot_diff.y, rot_diff.x]
-		# 	debug_label.text = debug_text
-		# Combine keyboard and accelerometer
-		input += accel_input
 
 	# Clamp input length so we don't go super fast
 	if input.length() > 1.0:
