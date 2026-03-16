@@ -30,11 +30,11 @@ jobs:
       - name: Install dependencies for PDF conversion
         run: |
           apt-get update
-          apt-get install -y pandoc wkhtmltopdf fonts-wqy-microhei
+          apt-get install -y pandoc wkhtmltopdf fonts-wqy-microhei fonts-noto-color-emoji
 
       - name: Generate Manual PDF
         run: |
-          pandoc Export/MANUAL_CN.md -o Export/MANUAL_CN.pdf --pdf-engine=wkhtmltopdf
+          pandoc -f markdown-yaml_metadata_block Export/MANUAL_CN.md -o Export/MANUAL_CN.pdf --pdf-engine=wkhtmltopdf
 
       - name: Commit and Push Export Folder
         if: github.event_name == 'push'
