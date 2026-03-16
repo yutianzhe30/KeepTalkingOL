@@ -27,6 +27,11 @@ const RADIUS: float = 10.0 # Ball radius (half size)
 const MAX_SPEED: float = 140.0 # Cap speed to give user a chance
 const TARGET_RADIUS: float = 20.0 # Size of the balance target area
 
+# Color Constants
+const COLOR_RED_FLASH = Color(1, 0, 0, 1)
+const COLOR_RED_DIM = Color(0.3, 0, 0, 1)
+const COLOR_GREEN_SOLVED = Color(0, 1, 0, 1)
+
 func _ready():
 	if target_area:
 		target_area.custom_minimum_size = Vector2(TARGET_RADIUS * 2, TARGET_RADIUS * 2)
@@ -58,7 +63,7 @@ func _start_sequence():
 		print("BalanceModule: Rotation not detected or zero.")
 
 	prompt_label.visible = true
-	boundary.border_color = Color(1, 0, 0, 1)
+	boundary.border_color = COLOR_RED_FLASH
 
 func _on_other_module_solved():
 	if state == ModuleState.SOLVED and false == is_active:
@@ -79,13 +84,13 @@ func _process(delta):
 		# Flash border
 		var time_msec = Time.get_ticks_msec()
 		if sin(time_msec / 100.0) > 0:
-			boundary.border_color = Color(1, 0, 0, 1)
+			boundary.border_color = COLOR_RED_FLASH
 		else:
-			boundary.border_color = Color(0.3, 0, 0, 1)
+			boundary.border_color = COLOR_RED_DIM
 			
 		if time_to_start <= 0:
 			prompt_label.visible = false
-			boundary.border_color = Color(0.3, 0, 0, 1)
+			boundary.border_color = COLOR_RED_DIM
 			
 			if AudioManager:
 				AudioManager.play_strike()
@@ -163,7 +168,7 @@ func _process(delta):
 				velocity = Vector2.ZERO
 				position_offset = Vector2.ZERO
 				prompt_label.visible = false
-				boundary.border_color = Color(0, 1, 0, 1) # Green border
+				boundary.border_color = COLOR_GREEN_SOLVED # Green border
 				solve()
 		else:
 			balance_time = 0.0
