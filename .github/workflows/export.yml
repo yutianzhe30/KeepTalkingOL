@@ -27,6 +27,25 @@ jobs:
           mkdir -p Export
           godot --headless --export-release "Web" Export/index.html
 
+      - name: Install dependencies for PDF conversion
+        run: |
+          apt-get update
+          apt-get install -y pandoc wkhtmltopdf fonts-wqy-microhei
+
+      - name: Generate Manual PDF
+        run: |
+          pandoc Export/MANUAL_CN.md -o Export/MANUAL_CN.pdf --pdf-engine=wkhtmltopdf
+
+      - name: Commit and Push Export Folder
+        if: github.event_name == 'push'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git add Export/
+          git commit -m "Auto-generate Web Build and Manual PDF" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref }}
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
