@@ -1,6 +1,9 @@
 extends Node
 
-var simple_mode: bool = false
+enum Difficulty { EASY, MEDIUM, HARD }
+
+var simple_mode: bool = false       # tutorial mode (hints, fixed modules)
+var difficulty: Difficulty = Difficulty.MEDIUM  # only used when simple_mode = false
 
 # Fixed serial number used in tutorial mode (last digit 4 = even, compatible with 4-wire rules)
 const TUTORIAL_SERIAL: String = "A1B2C4"

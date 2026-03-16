@@ -68,11 +68,11 @@ func _ready() -> void:
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
-	# 全局触控 D-pad，连接到迷宫模块
-	_dpad_layer = TOUCH_DPAD.new()
-	get_tree().root.add_child(_dpad_layer)
+	# 全局触控 D-pad，仅在有迷宫模块时创建
 	for child in modules_root.get_children():
 		if child is MazeRedDotsModule:
+			_dpad_layer = TOUCH_DPAD.new()
+			get_tree().root.add_child(_dpad_layer)
 			_dpad_layer.dpad_pressed.connect(child._on_dir_pressed)
 			break
 
@@ -106,23 +106,41 @@ func _set_serial(modules_root: Node) -> void:
 			child.set_serial_number(serial_string)
 			
 func _generate_modules(root: Node) -> void:
-	var sequence: Array[PackedScene] = [
-		wire_scene,
-		balance_scene,
-		ecg_scene,
-		button_scene,
-		timer_scene,
-		press_scene,
-		radio_scene,
-		serial_scene,
-		maze_scene,
-	]
-	
+	# Grid layout (3x3, 0-indexed):
+	#  0  1  2
+	#  3  4  5
+	#  6  7  8
+	# Timer fixed at center (4), Serial fixed at bottom-middle (7)
+
+	var sequence: Array = []
+	sequence.resize(9)
+	sequence.fill(placeholder_scene)
+	sequence[4] = timer_scene
+	sequence[7] = serial_scene
+
+	# Determine which puzzle modules to place
+	var modules_to_place: Array = []
+
 	if GameState.simple_mode:
-		for i in range(sequence.size()):
-			if sequence[i] not in [wire_scene, timer_scene, button_scene, serial_scene]:
-				sequence[i] = placeholder_scene
-			
+		# Tutorial: wire + button only
+		modules_to_place = [wire_scene, button_scene]
+	else:
+		var basic_pool: Array = [wire_scene, button_scene, press_scene, radio_scene, ecg_scene]
+		basic_pool.shuffle()
+		match GameState.difficulty:
+			GameState.Difficulty.EASY:
+				modules_to_place = [basic_pool[0], basic_pool[1]]
+			GameState.Difficulty.MEDIUM:
+				modules_to_place = [balance_scene, basic_pool[0], basic_pool[1], basic_pool[2], basic_pool[3]]
+			GameState.Difficulty.HARD:
+				modules_to_place = [balance_scene, maze_scene] + basic_pool
+
+	# Available slots: everything except Timer (4) and Serial (7)
+	var available: Array = [0, 1, 2, 3, 5, 6, 8]
+	available.shuffle()
+	for i in range(modules_to_place.size()):
+		sequence[available[i]] = modules_to_place[i]
+
 	for scene in sequence:
 		if scene:
 			var instance = scene.instantiate()

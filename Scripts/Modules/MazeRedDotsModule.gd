@@ -28,7 +28,7 @@ var _wall_flash_alpha: float = 0.0
 var _flash_tween: Tween
 
 # Debug 模式（按 F2 切换）：显示墙体
-var _debug_mode: bool = OS.is_debug_build()
+var _debug_mode: bool = false
 
 # 颜色（玩家=红点，出口=绿点）
 const COLOR_PLAYER     = Color(1.0, 0.15, 0.15)
@@ -38,7 +38,6 @@ const COLOR_GRID       = Color(0.28, 0.28, 0.28)
 const COLOR_WALL       = Color(0.55, 0.55, 0.55)
 const COLOR_WALL_EDGE  = Color(0.35, 0.35, 0.35)
 const COLOR_FLASH      = Color(1.0, 0.12, 0.12)
-const COLOR_DEBUG_LABEL = Color(1.0, 0.8, 0.2, 0.9)
 
 # 声音
 var audio_player: AudioStreamPlayer
@@ -66,11 +65,7 @@ func _setup_audio():
 
 
 func _generate_maze():
-	if GameState.simple_mode:
-		_load_maze_by_index(0)
-	else:
-		var maze_index = MazeData.get_random_maze_index()
-		_load_maze_by_index(maze_index)
+	_load_maze_by_index(MazeData.get_random_maze_index())
 
 
 func _load_maze_by_index(index: int):
@@ -295,14 +290,6 @@ func _draw_maze():
 		panel.draw_string(font, Vector2(text_x, text_y), text,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1, 1, 1, 0.9))
 
-	# 8. Debug 标签
-	if _debug_mode:
-		var font := ThemeDB.fallback_font
-		var label := "DEBUG [F2]"
-		panel.draw_string(font, Vector2(4, 14), label,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0, 0, 0, 0.7))
-		panel.draw_string(font, Vector2(3, 13), label,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, 11, COLOR_DEBUG_LABEL)
 
 
 func _draw_grid(panel: Panel, offset: Vector2, cs: float):
