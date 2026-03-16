@@ -27,14 +27,20 @@ jobs:
           mkdir -p Export
           godot --headless --export-release "Web" Export/index.html
 
-      - name: Install dependencies for PDF conversion
+      - name: Inject Chinese Fonts for PDF
         run: |
-          apt-get update
-          apt-get install -y pandoc wkhtmltopdf fonts-wqy-microhei fonts-noto-color-emoji
+          sed -i '1s|^|<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC\&display=swap"); body { font-family: "Noto Sans SC", sans-serif; }</style>\n|' Export/MANUAL_CN.md
 
       - name: Generate Manual PDF
-        run: |
-          cd Export && pandoc -f markdown-yaml_metadata_block MANUAL_CN.md -o MANUAL_CN.pdf --pdf-engine=wkhtmltopdf --pdf-engine-opt=--enable-local-file-access
+        uses: BaileyJM02/markdown-to-pdf@v1
+        with:
+          input_dir: Export
+          output_dir: Export
+          images_dir: Assets/Pic
+          image_import: ../Assets/Pic
+
+      - name: Revert Manual File
+        run: git checkout -- Export/MANUAL_CN.md || true
 
       - name: Commit and Push Export Folder
         if: github.event_name == 'push'
