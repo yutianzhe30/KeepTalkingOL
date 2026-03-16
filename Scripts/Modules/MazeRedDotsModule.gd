@@ -115,7 +115,7 @@ func _on_maze_panel_input(event: InputEvent) -> void:
 			maze_panel.queue_redraw()
 
 
-func _on_dir_pressed(direction: int):
+func _move_player(direction: int):
 	if state != ModuleState.ACTIVE or not _input_focused:
 		return
 
@@ -158,7 +158,7 @@ func _unhandled_input(event: InputEvent):
 			get_viewport().set_input_as_handled()
 			return
 
-	## 键盘方向键 / WASD；D-pad 通过 BombManager 直接调用 _on_dir_pressed
+	## 键盘方向键 / WASD / 屏幕D-pad
 	if state != ModuleState.ACTIVE or not _input_focused:
 		return
 	var dir := -1
@@ -167,7 +167,7 @@ func _unhandled_input(event: InputEvent):
 	elif event.is_action_pressed("down"):  dir = 2
 	elif event.is_action_pressed("left"):  dir = 3
 	if dir != -1:
-		_on_dir_pressed(dir)
+		_move_player(dir)
 		get_viewport().set_input_as_handled()
 
 

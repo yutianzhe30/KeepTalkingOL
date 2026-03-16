@@ -68,13 +68,17 @@ func _ready() -> void:
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
-	# 全局触控 D-pad，仅在有迷宫模块时创建
-	for child in modules_root.get_children():
-		if child is MazeRedDotsModule:
+	# 全局触控 D-pad，在移动设备上存在平衡仪或迷宫模块时创建
+	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or DisplayServer.is_touchscreen_available():
+		var needs_dpad = false
+		for child in modules_root.get_children():
+			if child is MazeRedDotsModule or child.name.begins_with("BalanceModule"):
+				needs_dpad = true
+				break
+
+		if needs_dpad:
 			_dpad_layer = TOUCH_DPAD.new()
 			get_tree().root.add_child(_dpad_layer)
-			_dpad_layer.dpad_pressed.connect(child._on_dir_pressed)
-			break
 
 	# Tutorial mode: spawn hint panel and emit the initial welcome hint
 	if GameState.simple_mode:
