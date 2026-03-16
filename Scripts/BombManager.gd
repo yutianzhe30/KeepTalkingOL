@@ -111,6 +111,7 @@ func _generate_modules(root: Node) -> void:
 	#  3  4  5
 	#  6  7  8
 	# Timer fixed at center (4), Serial fixed at bottom-middle (7)
+	# Maze fixed at bottom-right (8) when present
 
 	var sequence: Array = []
 	sequence.resize(9)
@@ -133,10 +134,14 @@ func _generate_modules(root: Node) -> void:
 			GameState.Difficulty.MEDIUM:
 				modules_to_place = [balance_scene, basic_pool[0], basic_pool[1], basic_pool[2], basic_pool[3]]
 			GameState.Difficulty.HARD:
-				modules_to_place = [balance_scene, maze_scene] + basic_pool
+				# Maze fixed at slot 8 (bottom-right); place balance + basic in remaining slots
+				sequence[8] = maze_scene
+				modules_to_place = [balance_scene] + basic_pool
 
-	# Available slots: everything except Timer (4) and Serial (7)
+	# Available slots: everything except Timer (4), Serial (7), and Maze (8 in Hard)
 	var available: Array = [0, 1, 2, 3, 5, 6, 8]
+	if not GameState.simple_mode and GameState.difficulty == GameState.Difficulty.HARD:
+		available.erase(8)
 	available.shuffle()
 	for i in range(modules_to_place.size()):
 		sequence[available[i]] = modules_to_place[i]
