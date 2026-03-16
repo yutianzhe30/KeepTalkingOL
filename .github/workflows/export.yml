@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Manual PDF
         run: |
-          pandoc -f markdown-yaml_metadata_block Export/MANUAL_CN.md -o Export/MANUAL_CN.pdf --pdf-engine=wkhtmltopdf
+          cd Export && pandoc -f markdown-yaml_metadata_block MANUAL_CN.md -o MANUAL_CN.pdf --pdf-engine=wkhtmltopdf --pdf-engine-opt=--enable-local-file-access
 
       - name: Commit and Push Export Folder
         if: github.event_name == 'push'
