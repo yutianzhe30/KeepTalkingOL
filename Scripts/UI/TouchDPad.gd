@@ -1,11 +1,8 @@
 extends CanvasLayer
 
 ## 全局触控十字摇杆
-## BombManager 负责将 dpad_pressed 信号连接到对应模块的方法上，
-## 无需 InputMap 注册，也不干扰其他模块的轮询输入。
-
-signal dpad_pressed(direction: int)
-## direction: 0=上, 1=右, 2=下, 3=左
+## 将 UI 按钮按下/松开事件映射为全局 Input 动作
+## 这样所有模块（包括平衡仪和迷宫）均可无缝使用
 
 const BTN_SIZE  := Vector2(50, 50)
 const BTN_ALPHA := 0.65
@@ -30,13 +27,13 @@ func _ready() -> void:
 	anchor.add_child(grid)
 
 	grid.add_child(_spacer())
-	grid.add_child(_btn("↑", 0))
+	grid.add_child(_btn("↑", "up"))
 	grid.add_child(_spacer())
-	grid.add_child(_btn("←", 3))
+	grid.add_child(_btn("←", "left"))
 	grid.add_child(_spacer())
-	grid.add_child(_btn("→", 1))
+	grid.add_child(_btn("→", "right"))
 	grid.add_child(_spacer())
-	grid.add_child(_btn("↓", 2))
+	grid.add_child(_btn("↓", "down"))
 	grid.add_child(_spacer())
 
 
@@ -46,10 +43,32 @@ func _spacer() -> Control:
 	return s
 
 
-func _btn(label: String, dir: int) -> Button:
+func _btn(label: String, action: String) -> Button:
 	var btn := Button.new()
 	btn.text = label
 	btn.custom_minimum_size = BTN_SIZE
 	btn.modulate = Color(1, 1, 1, BTN_ALPHA)
-	btn.button_down.connect(func() -> void: dpad_pressed.emit(dir))
+
+	btn.button_down.connect(func() -> void:
+		var ev = InputEventAction.new()
+		ev.action = action
+		ev.pressed = true
+		Input.parse_input_event(ev)
+	)
+
+	btn.button_up.connect(func() -> void:
+		var ev = InputEventAction.new()
+		ev.action = action
+		ev.pressed = false
+		Input.parse_input_event(ev)
+	)
+
+	# Fallback in case the user slides off the button
+	btn.mouse_exited.connect(func() -> void:
+		var ev = InputEventAction.new()
+		ev.action = action
+		ev.pressed = false
+		Input.parse_input_event(ev)
+	)
+
 	return btn
