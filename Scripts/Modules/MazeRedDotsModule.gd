@@ -115,7 +115,7 @@ func _on_maze_panel_input(event: InputEvent) -> void:
 			maze_panel.queue_redraw()
 
 
-func _on_dir_pressed(direction: int):
+func _move_player(direction: int):
 	if state != ModuleState.ACTIVE or not _input_focused:
 		return
 
@@ -158,7 +158,7 @@ func _unhandled_input(event: InputEvent):
 			get_viewport().set_input_as_handled()
 			return
 
-	## 键盘方向键 / WASD；D-pad 通过 BombManager 直接调用 _on_dir_pressed
+	## 键盘方向键 / WASD / 屏幕D-pad
 	if state != ModuleState.ACTIVE or not _input_focused:
 		return
 	var dir := -1
@@ -167,7 +167,7 @@ func _unhandled_input(event: InputEvent):
 	elif event.is_action_pressed("down"):  dir = 2
 	elif event.is_action_pressed("left"):  dir = 3
 	if dir != -1:
-		_on_dir_pressed(dir)
+		_move_player(dir)
 		get_viewport().set_input_as_handled()
 
 
@@ -296,20 +296,21 @@ func _draw_grid(panel: Panel, offset: Vector2, cs: float):
 	var w = maze_width  * cs
 	var h = maze_height * cs
 	for x in range(maze_width + 1):
-		var xp = offset.x + x * cs
-		panel.draw_line(Vector2(xp, offset.y), Vector2(xp, offset.y + h), COLOR_GRID, 1.0)
+		var xp = round(offset.x + x * cs)
+		panel.draw_line(Vector2(xp, round(offset.y)), Vector2(xp, round(offset.y + h)), COLOR_GRID, 2.0)
 	for y in range(maze_height + 1):
-		var yp = offset.y + y * cs
-		panel.draw_line(Vector2(offset.x, yp), Vector2(offset.x + w, yp), COLOR_GRID, 1.0)
+		var yp = round(offset.y + y * cs)
+		panel.draw_line(Vector2(round(offset.x), yp), Vector2(round(offset.x + w), yp), COLOR_GRID, 2.0)
 
 
 func _draw_walls(panel: Panel, offset: Vector2, cs: float):
 	for y in range(maze_height):
 		for x in range(maze_width):
 			if maze[y][x] == 1:
-				var pos = Vector2(x * cs, y * cs) + offset
-				panel.draw_rect(Rect2(pos, Vector2(cs, cs)), COLOR_WALL)
-				panel.draw_rect(Rect2(pos, Vector2(cs, cs)), COLOR_WALL_EDGE, false, 1.0)
+				var pos = Vector2(round(x * cs + offset.x), round(y * cs + offset.y))
+				var size = Vector2(round(cs), round(cs))
+				panel.draw_rect(Rect2(pos, size), COLOR_WALL)
+				panel.draw_rect(Rect2(pos, size), COLOR_WALL_EDGE, false, 2.0)
 
 
 # ─────────────────────────────────────────────
