@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://orry7lw47eqq"]
 
 [ext_resource type="Script" uid="uid://mazeredots_script" path="res://Scripts/Modules/MazeRedDotsModule.gd" id="1_script"]
+[ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="2_metal_style"]
 
 [node name="MazeRedDotsModule" type="PanelContainer"]
 offset_right = 200.0
 offset_bottom = 200.0
 script = ExtResource("1_script")
+theme_override_styles/panel = ExtResource("2_metal_style")
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

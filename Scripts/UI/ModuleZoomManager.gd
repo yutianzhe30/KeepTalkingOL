@@ -11,6 +11,7 @@ var _original_index: int = 0
 var _registered_modules: Array[BaseModule] = []
 var _placeholder: Control = null
 var _is_restoring: bool = false
+var _restored_module: BaseModule = null
 
 
 func _ready() -> void:
@@ -94,14 +95,18 @@ func _restore_module() -> void:
 		_placeholder.queue_free()
 		_placeholder = null
 	_zoom_layer.hide()
-	m.on_zoom_restored()
 
-	# Defer re-enabling so the current event can't immediately trigger another zoom_to
+	# Defer re-enabling so the current event can't immediately trigger another zoom_to.
+	# on_zoom_restored() is also deferred so layout recalculates size first.
 	_is_restoring = true
+	_restored_module = m
 	_finish_restore.call_deferred()
 
 
 func _finish_restore() -> void:
+	if _restored_module != null:
+		_restored_module.on_zoom_restored()
+		_restored_module = null
 	for mod in _registered_modules:
 		mod.process_mode = Node.PROCESS_MODE_INHERIT
 		mod.set_tappable(true)

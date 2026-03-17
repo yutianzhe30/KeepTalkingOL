@@ -64,7 +64,9 @@ func _on_other_module_solved():
 			_start_sequence()
 
 func _process(delta):
+	# Always keep ball centered when solved (boundary size can change e.g. after zoom)
 	if state == ModuleState.SOLVED:
+		ball.position = boundary.size / 2.0 - ball.size / 2.0
 		return
 	var center = boundary.size / 2.0
 	if not has_started:

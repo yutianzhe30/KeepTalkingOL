@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cokc77m3u24r" path="res://Scripts/Modules/BalanceModule.gd" id="1_balance_script"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+[ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="3_metal_style"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ball"]
 bg_color = Color(1, 0.4, 0.4, 1)
@@ -16,6 +17,7 @@ custom_minimum_size = Vector2(200, 200)
 offset_right = 200.0
 offset_bottom = 200.0
 script = ExtResource("1_balance_script")
+theme_override_styles/panel = ExtResource("3_metal_style")
 
 [node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=307731450]
 layout_mode = 2
