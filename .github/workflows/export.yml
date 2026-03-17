@@ -27,6 +27,31 @@ jobs:
           mkdir -p Export
           godot --headless --export-release "Web" Export/index.html
 
+      - name: Inject Chinese Fonts for PDF
+        run: |
+          sed -i '1s|^|<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC\&display=swap"); body { font-family: "Noto Sans SC", sans-serif; }</style>\n|' Export/MANUAL_CN.md
+
+      - name: Generate Manual PDF
+        uses: BaileyJM02/markdown-to-pdf@v1
+        with:
+          input_dir: Export
+          output_dir: Export
+          images_dir: Assets/Pic
+          image_import: ../Assets/Pic
+
+      - name: Revert Manual File
+        run: git checkout -- Export/MANUAL_CN.md || true
+
+      - name: Commit and Push Export Folder
+        if: github.event_name == 'push'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git add Export/
+          git commit -m "Auto-generate Web Build and Manual PDF" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref }}
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
