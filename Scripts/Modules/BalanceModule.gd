@@ -1,3 +1,4 @@
+class_name BalanceModule
 extends "res://Scripts/Modules/BaseModule.gd"
 
 @onready var ball = $ReferenceRect/Ball

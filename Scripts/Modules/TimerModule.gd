@@ -1,3 +1,4 @@
+class_name TimerModule
 extends "res://Scripts/Modules/BaseModule.gd"
 
 signal timer_exploded

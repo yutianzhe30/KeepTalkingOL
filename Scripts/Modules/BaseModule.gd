@@ -5,6 +5,7 @@ extends Control
 
 signal module_solved
 signal module_struck
+signal module_tapped(module: BaseModule)
 signal state_changed(new_state: int)
 
 enum ModuleState {
@@ -90,6 +91,15 @@ func _update_led_position() -> void:
 		return
 
 	_module_led.place_top_right(get_global_rect())
+
+func _gui_input(event: InputEvent) -> void:
+	if state == ModuleState.SOLVED:
+		return
+	var is_tap := (event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed) \
+		or (event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
+			and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT)
+	if is_tap:
+		module_tapped.emit(self)
 
 func _set_state(new_state: ModuleState) -> void:
 	if state == new_state:

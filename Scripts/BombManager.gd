@@ -14,9 +14,10 @@ extends Node
 @export var maze_scene: PackedScene
 @export var placeholder_scene: PackedScene
 
-const RESULT_SCREEN_SCENE = preload("res://Scenes/UI/ResultScreen.tscn")
-const TUTORIAL_HINT_SCENE = preload("res://Scenes/UI/TutorialHint.tscn")
-const TOUCH_DPAD          = preload("res://Scripts/UI/TouchDPad.gd")
+const RESULT_SCREEN_SCENE   = preload("res://Scenes/UI/ResultScreen.tscn")
+const TUTORIAL_HINT_SCENE   = preload("res://Scenes/UI/TutorialHint.tscn")
+const TOUCH_DPAD            = preload("res://Scripts/UI/TouchDPad.gd")
+const MODULE_ZOOM_MANAGER   = preload("res://Scripts/UI/ModuleZoomManager.gd")
 
 
 var _timer_module: Node
@@ -27,6 +28,7 @@ var debug_info: String = ""
 var _hint_modules_solved: int = 0 # Tracks how many solvable modules done (tutorial only)
 var _hint_layer: CanvasLayer = null # Reference to tutorial hint layer so we can close it on exit
 var _dpad_layer: CanvasLayer = null # Reference to touch D-pad overlay
+var _zoom_manager = null            # ModuleZoomManager (mobile only)
 
 
 func _ready() -> void:
@@ -68,17 +70,26 @@ func _ready() -> void:
 
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
-	# 全局触控 D-pad，在移动设备上存在平衡仪或迷宫模块时创建
+	# Mobile: zoom-on-tap + conditional D-pad (shown only when balance/maze is zoomed)
 	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
-		var needs_dpad = false
+		_zoom_manager = MODULE_ZOOM_MANAGER.new()
+		add_child(_zoom_manager)
+
+		var needs_dpad := false
 		for child in modules_root.get_children():
-			if child is MazeRedDotsModule or child.name.begins_with("BalanceModule"):
+			if child is MazeRedDotsModule or child is BalanceModule:
 				needs_dpad = true
-				break
+			# Connect tap-to-zoom for all modules except Timer and Serial
+			if child is BaseModule and not (child is TimerModule) and not (child is SerialNumberModule):
+				child.module_tapped.connect(_zoom_manager.zoom_to)
+				child.module_solved.connect(_zoom_manager.zoom_out)
 
 		if needs_dpad:
 			_dpad_layer = TOUCH_DPAD.new()
+			_dpad_layer.hide()
 			get_tree().root.add_child(_dpad_layer)
+			_zoom_manager.zoomed_in.connect(_on_zoom_in)
+			_zoom_manager.zoomed_out.connect(_on_zoom_out)
 
 	# Tutorial mode: spawn hint panel and emit the initial welcome hint
 	if GameState.simple_mode:
@@ -218,6 +229,14 @@ func _get_all_debug_info() -> String:
 	debug_info = debug_str
 	return debug_str
 
+func _on_zoom_in(module: BaseModule) -> void:
+	if _dpad_layer != null and (module is BalanceModule or module is MazeRedDotsModule):
+		_dpad_layer.show()
+
+func _on_zoom_out() -> void:
+	if _dpad_layer != null:
+		_dpad_layer.hide()
+
 func _on_module_struck(module: BaseModule) -> void:
 	if game_ended: return
 	print("BombManager strike from: ", module.name)
@@ -267,6 +286,9 @@ func _trigger_game_over(is_win: bool) -> void:
 	if _hint_layer != null:
 		_hint_layer.queue_free()
 		_hint_layer = null
+	if _zoom_manager != null:
+		_zoom_manager.queue_free()
+		_zoom_manager = null
 	if _dpad_layer != null:
 		_dpad_layer.queue_free()
 		_dpad_layer = null
