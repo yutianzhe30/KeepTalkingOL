@@ -151,6 +151,16 @@ func check_boundary():
 	
 	if abs(position_offset.x) > bounds_x or abs(position_offset.y) > bounds_y:
 		strike_module()
+func on_zoom_restored() -> void:
+	# Clamp position_offset so the ball doesn't instantly go out-of-bounds
+	# after the boundary shrinks back to its original size
+	var half_size = boundary.size / 2.0
+	position_offset.x = clamp(position_offset.x, -(half_size.x - RADIUS), half_size.x - RADIUS)
+	position_offset.y = clamp(position_offset.y, -(half_size.y - RADIUS), half_size.y - RADIUS)
+	# Force-update ball position now — _process returns early when SOLVED so it won't run
+	var center = boundary.size / 2.0
+	ball.position = center + position_offset - (ball.size / 2.0)
+
 func get_debug_info() -> String:
 	return "Balance Module: Keep the ball centered!"
 

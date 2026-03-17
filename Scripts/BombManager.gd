@@ -71,7 +71,8 @@ func _ready() -> void:
 	print("BombManager: Registered ", total_solvable, " solvable modules.")
 
 	# Mobile: zoom-on-tap + conditional D-pad (shown only when balance/maze is zoomed)
-	if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
+	# TODO: remove desktop from this condition after debugging
+	if true or OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
 		_zoom_manager = MODULE_ZOOM_MANAGER.new()
 		add_child(_zoom_manager)
 
@@ -81,15 +82,17 @@ func _ready() -> void:
 				needs_dpad = true
 			# Connect tap-to-zoom for all modules except Timer and Serial
 			if child is BaseModule and not (child is TimerModule) and not (child is SerialNumberModule):
+				_zoom_manager.register(child)
 				child.module_tapped.connect(_zoom_manager.zoom_to)
 				child.module_solved.connect(_zoom_manager.zoom_out)
+
+		_zoom_manager.zoomed_in.connect(_on_zoom_in)
+		_zoom_manager.zoomed_out.connect(_on_zoom_out)
 
 		if needs_dpad:
 			_dpad_layer = TOUCH_DPAD.new()
 			_dpad_layer.hide()
 			get_tree().root.add_child(_dpad_layer)
-			_zoom_manager.zoomed_in.connect(_on_zoom_in)
-			_zoom_manager.zoomed_out.connect(_on_zoom_out)
 
 	# Tutorial mode: spawn hint panel and emit the initial welcome hint
 	if GameState.simple_mode:
@@ -287,6 +290,7 @@ func _trigger_game_over(is_win: bool) -> void:
 		_hint_layer.queue_free()
 		_hint_layer = null
 	if _zoom_manager != null:
+		_zoom_manager.zoom_out()
 		_zoom_manager.queue_free()
 		_zoom_manager = null
 	if _dpad_layer != null:

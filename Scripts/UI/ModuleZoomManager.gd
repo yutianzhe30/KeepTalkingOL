@@ -5,10 +5,11 @@ signal zoomed_out
 
 var _zoom_layer: CanvasLayer
 var _backdrop: ColorRect
-var _display: Control
 var _active_module: BaseModule = null
 var _original_parent: Node = null
 var _original_index: int = 0
+var _registered_modules: Array[BaseModule] = []
+var _placeholder: Control = null
 
 
 func _ready() -> void:
@@ -23,12 +24,13 @@ func _ready() -> void:
 	_backdrop.gui_input.connect(_on_backdrop_input)
 	_zoom_layer.add_child(_backdrop)
 
-	_display = Control.new()
-	_display.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_zoom_layer.add_child(_display)
-
 	get_tree().root.add_child(_zoom_layer)
 	_zoom_layer.hide()
+
+
+func register(module: BaseModule) -> void:
+	if not _registered_modules.has(module):
+		_registered_modules.append(module)
 
 
 func zoom_to(module: BaseModule) -> void:
@@ -41,11 +43,26 @@ func zoom_to(module: BaseModule) -> void:
 	_original_parent = module.get_parent()
 	_original_index = module.get_index()
 
-	module.reparent(_display)
-	module.set_anchors_preset(Control.PRESET_FULL_RECT)
-	module.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	module.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# Insert placeholder to hold the grid slot while the module is reparented
+	_placeholder = Control.new()
+	_placeholder.custom_minimum_size = module.size
+	_placeholder.size_flags_horizontal = module.size_flags_horizontal
+	_placeholder.size_flags_vertical = module.size_flags_vertical
+	_original_parent.add_child(_placeholder)
+	_original_parent.move_child(_placeholder, _original_index)
 
+	module.reparent(_zoom_layer)
+	module.anchor_left   = 0.05
+	module.anchor_right  = 0.95
+	module.anchor_top    = 0.05
+	module.anchor_bottom = 0.95
+	module.offset_left   = 0
+	module.offset_right  = 0
+	module.offset_top    = 0
+	module.offset_bottom = 0
+	module.set_tappable(false)
+
+	BaseModule.zoom_active = true
 	_zoom_layer.show()
 	zoomed_in.emit(module)
 
@@ -67,6 +84,11 @@ func _restore_module() -> void:
 	m.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	m.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	m.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	if _placeholder != null:
+		_placeholder.queue_free()
+		_placeholder = null
+	BaseModule.zoom_active = false
+	m.on_zoom_restored()
 	_zoom_layer.hide()
 
 
