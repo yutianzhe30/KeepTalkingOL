@@ -10,6 +10,7 @@ var _original_parent: Node = null
 var _original_index: int = 0
 var _registered_modules: Array[BaseModule] = []
 var _placeholder: Control = null
+var _is_restoring: bool = false
 
 
 func _ready() -> void:
@@ -19,6 +20,7 @@ func _ready() -> void:
 
 	_backdrop = ColorRect.new()
 	_backdrop.color = Color(0, 0, 0, 0.6)
+	#_backdrop.color = Color(0.05, 0.1, 0.25, 1.0)  # solid dark blue, hides grid reflow
 	_backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	_backdrop.gui_input.connect(_on_backdrop_input)
@@ -34,7 +36,7 @@ func register(module: BaseModule) -> void:
 
 
 func zoom_to(module: BaseModule) -> void:
-	if _active_module == module:
+	if _is_restoring or _active_module == module:
 		return
 	if _active_module != null:
 		_restore_module()
@@ -62,6 +64,10 @@ func zoom_to(module: BaseModule) -> void:
 	module.offset_bottom = 0
 	module.set_tappable(false)
 
+	for m in _registered_modules:
+		if m != module:
+			m.process_mode = Node.PROCESS_MODE_DISABLED
+
 	BaseModule.zoom_active = true
 	_zoom_layer.show()
 	zoomed_in.emit(module)
@@ -87,9 +93,20 @@ func _restore_module() -> void:
 	if _placeholder != null:
 		_placeholder.queue_free()
 		_placeholder = null
-	BaseModule.zoom_active = false
-	m.on_zoom_restored()
 	_zoom_layer.hide()
+	m.on_zoom_restored()
+
+	# Defer re-enabling so the current event can't immediately trigger another zoom_to
+	_is_restoring = true
+	_finish_restore.call_deferred()
+
+
+func _finish_restore() -> void:
+	for mod in _registered_modules:
+		mod.process_mode = Node.PROCESS_MODE_INHERIT
+		mod.set_tappable(true)
+	BaseModule.zoom_active = false
+	_is_restoring = false
 
 
 func _on_backdrop_input(event: InputEvent) -> void:
