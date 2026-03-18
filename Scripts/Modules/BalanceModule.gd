@@ -6,9 +6,6 @@ extends "res://Scripts/Modules/BaseModule.gd"
 @onready var prompt_label = $ReferenceRect/PromptLabel
 @onready var target_area = $ReferenceRect/TargetArea
 
-func _init() -> void:
-	is_solvable = false
-
 var velocity: Vector2 = Vector2.ZERO
 var position_offset: Vector2 = Vector2.ZERO # Position relative to center
 var is_active: bool = true
@@ -18,11 +15,11 @@ var balance_time: float = 0.0
 
 
 # Physics Constants
-const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
+const REPULSION_FORCE: float = 350.0 # Pushes ball away from center
 const INPUT_FORCE: float = 400.0 # Player control strength
 const DRAG: float = 1.0 # Air resistance
 const RADIUS: float = 10.0 # Ball radius (half size)
-const MAX_SPEED: float = 140.0 # Cap speed to give user a chance
+const MAX_SPEED: float = 120.0 # Cap speed to give user a chance
 const TARGET_RADIUS: float = 20.0 # Size of the balance target area
 
 # Color Constants
@@ -105,9 +102,11 @@ func _process(delta):
 	var force = Vector2.ZERO
 	
 	# Repulsion (Unstable Equilibrium): Pushes away from center
-	# The further out you are, the stronger the pull
+	# Normalized to boundary size so difficulty is the same regardless of module scale
 	if position_offset.length() > 0:
-		force += position_offset.normalized() * (position_offset.length() * 2.0)
+		var half_bounds = min(boundary.size.x, boundary.size.y) / 2.0 - RADIUS
+		var normalized_dist = position_offset.length() / max(half_bounds, 1.0)
+		force += position_offset.normalized() * normalized_dist * REPULSION_FORCE
 		
 	# Input (Counter-force)
 	# Input (Counter-force)

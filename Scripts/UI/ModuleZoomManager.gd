@@ -55,10 +55,10 @@ func zoom_to(module: BaseModule) -> void:
 	_original_parent.move_child(_placeholder, _original_index)
 
 	module.reparent(_zoom_layer)
-	module.anchor_left   = 0.05
-	module.anchor_right  = 0.95
-	module.anchor_top    = 0.05
-	module.anchor_bottom = 0.95
+	module.anchor_left   = 0.07
+	module.anchor_right  = 0.93
+	module.anchor_top    = 0.07
+	module.anchor_bottom = 0.93
 	module.offset_left   = 0
 	module.offset_right  = 0
 	module.offset_top    = 0

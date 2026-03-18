@@ -26,7 +26,7 @@ var button_configs: Array[Dictionary] = [] # Stores {index: int, symbol: String}
 
 # Visual Configuration
 const BUTTON_MIN_SIZE = Vector2(85, 100)
-const BUTTON_FONT_SIZE = 40
+const BUTTON_FONT_SIZE = 50
 
 const BUTTON_FONT = preload("res://Assets/Font/DejaVuSans.ttf")
 
