@@ -19,18 +19,11 @@ func set_interactable(enabled: bool):
 
 func setup(color: Color):
 	wire_color = color
-	
 	wire_visual.texture = tex_wire
-	
-	# Make the wire thinner via scale instead, while maintaining the same width
-	wire_visual.pivot_offset = Vector2(0, 25.0)
-	wire_visual.scale = Vector2(1.0, 0.75)
-	
 	var mat = ShaderMaterial.new()
 	mat.shader = shader
 	mat.set_shader_parameter("paint_color", color)
 	mat.set_shader_parameter("grayscale_threshold", 0.15)
-	
 	wire_visual.material = mat
 
 func _on_button_pressed():
@@ -39,13 +32,5 @@ func _on_button_pressed():
 
 func cut_wire():
 	is_cut = true
-	
-	# The cut image is slightly taller (169px) than the uncut image (147px), although both have the same width (1181px).
-	# To ensure the wire doesn't appear to shrink horizontally, we slightly expand the TextureRect height.
-	var scale_factor = 169.0 / 147.0
-	wire_visual.offset_top = -25.0 * scale_factor
-	wire_visual.offset_bottom = 25.0 * scale_factor
-	wire_visual.pivot_offset = Vector2(0, 25.0 * scale_factor)
-	
 	wire_visual.texture = tex_wire_cut
-	emit_signal("wire_cut", self )
+	emit_signal("wire_cut", self)

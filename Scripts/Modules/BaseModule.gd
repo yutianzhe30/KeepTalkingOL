@@ -20,6 +20,7 @@ const MODULE_LED_SCENE = preload("res://Scenes/UI/ModuleLed.tscn")
 static var zoom_active: bool = false  # true while any module is zoomed in
 
 var state: ModuleState = ModuleState.IDLE
+var is_zoomed: bool = false  # true when this specific module is the zoomed one
 var _module_led: ModuleLed
 var _tap_overlay: Control = null
 

@@ -25,6 +25,7 @@ func generate_puzzle(wire_count: int):
 		var wire = WireScene.instantiate()
 		container.add_child(wire)
 		wire.wire_cut.connect(_on_wire_cut)
+		wire.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		wire.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		wire.custom_minimum_size = Vector2(0, 0)
 
@@ -52,6 +53,7 @@ func generate_fixed_puzzle() -> void:
 		var wire = WireScene.instantiate()
 		container.add_child(wire)
 		wire.wire_cut.connect(_on_wire_cut)
+		wire.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		wire.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		wire.custom_minimum_size = Vector2(0, 0)
 		wire.setup(color)

@@ -70,6 +70,7 @@ func zoom_to(module: BaseModule) -> void:
 			m.process_mode = Node.PROCESS_MODE_DISABLED
 
 	BaseModule.zoom_active = true
+	module.is_zoomed = true
 	_zoom_layer.show()
 	zoomed_in.emit(module)
 
@@ -110,6 +111,7 @@ func _finish_restore() -> void:
 	for mod in _registered_modules:
 		mod.process_mode = Node.PROCESS_MODE_INHERIT
 		mod.set_tappable(true)
+		mod.is_zoomed = false
 	BaseModule.zoom_active = false
 	_is_restoring = false
 
