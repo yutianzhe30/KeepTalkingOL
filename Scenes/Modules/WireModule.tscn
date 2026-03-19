@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://eak3l4m5n6o7"]
 
 [ext_resource type="Script" uid="uid://xmy6gjip6gyb" path="res://Scripts/Modules/WireModule.gd" id="1_wiremodule_script"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
+[ext_resource type="PackedScene" uid="uid://bd17jsfx3mvqd" path="res://Scenes/UI/ModuleLed.tscn" id="2_module_led"]
 [ext_resource type="StyleBox" uid="uid://dpsk0h3s01qn2" path="res://Assets/Styles/ModuleMetalStyle.tres" id="3_metal_style"]
 
 [node name="WireModule" type="PanelContainer" unique_id=241277011]
 offset_right = 200.0
 offset_bottom = 200.0
-script = ExtResource("1_wiremodule_script")
 theme_override_styles/panel = ExtResource("3_metal_style")
+script = ExtResource("1_wiremodule_script")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=317197480]
 layout_mode = 2
