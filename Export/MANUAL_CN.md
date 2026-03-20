@@ -1,3 +1,4 @@
+<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap"); body { font-family: "Noto Sans SC", sans-serif; }</style>
 # 拆弹手册 (Defusal Manual)
 
 > [!IMPORTANT]
