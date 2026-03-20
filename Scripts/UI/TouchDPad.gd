@@ -4,14 +4,14 @@ extends CanvasLayer
 ## - Input.action_press() 连续更新模拟强度（BalanceModule 用 Input.get_vector() 读取）
 ## - 阈值穿越时才用 parse_input_event() 发送离散事件（MazeRedDotsModule 用 is_action_pressed()）
 
-const OUTER_RADIUS    := 68.0
-const KNOB_RADIUS     := 28.0
-const MARGIN          := Vector2(24, 24)
-const PRESS_THRESHOLD := 0.30   # 超过此归一化距离才算"按下"
+const OUTER_RADIUS    := 90.0
+const KNOB_RADIUS     := 38.0
+const MARGIN          := Vector2(60, 80)
+const PRESS_THRESHOLD := 0.25   # 超过此归一化距离才算"按下"
 
 
 func _ready() -> void:
-	layer = 5
+	layer = 55
 	name  = "TouchDPad"
 
 	var ctrl := _JoystickControl.new()
@@ -28,9 +28,6 @@ func _ready() -> void:
 # ─────────────────────────────────────────────────────────────────────────────
 class _JoystickControl extends Control:
 
-	const OUTER_RADIUS    := 68.0
-	const KNOB_RADIUS     := 28.0
-	const PRESS_THRESHOLD := 0.30
 
 	const COLOR_BG   := Color(0.12, 0.12, 0.12, 0.55)
 	const COLOR_RING := Color(1.0,  1.0,  1.0,  0.60)
@@ -118,7 +115,8 @@ class _JoystickControl extends Control:
 				delta = delta.normalized() * OUTER_RADIUS
 			_knob_offset = delta
 
-		var norm := _knob_offset / OUTER_RADIUS   # [-1, 1]
+		var norm := (_knob_offset / OUTER_RADIUS) * 1.3   # amplify so ~2/3 push = full strength
+		norm = norm.clamp(Vector2(-1, -1), Vector2(1, 1))
 
 		_apply_axis("right", max(0.0,  norm.x))
 		_apply_axis("left",  max(0.0, -norm.x))

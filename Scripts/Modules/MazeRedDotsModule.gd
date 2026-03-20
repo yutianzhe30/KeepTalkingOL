@@ -19,9 +19,7 @@ var current_maze_id: int = 0
 var steps_taken: int = 0
 var wall_hits: int = 0
 
-# 激活状态（点击后才接受方向输入）
-var _input_focused: bool = false
-var _pulse_time: float = 0.0
+# (zoom 状态由父类 BaseModule.is_zoomed 提供，无需局部变量)
 
 # 撞墙闪烁
 var _wall_flash_alpha: float = 0.0
@@ -50,13 +48,8 @@ func _ready():
 	_update_display()
 
 
-func _process(delta: float) -> void:
-	if _input_focused or state != ModuleState.ACTIVE:
-		return
-	_pulse_time += delta
-	var maze_panel = get_node_or_null("MainContainer/MazePanel") as Panel
-	if maze_panel:
-		maze_panel.queue_redraw()
+func _process(_delta: float) -> void:
+	pass
 
 
 func _setup_audio():
@@ -100,23 +93,12 @@ func _setup_ui():
 #  输入处理
 # ─────────────────────────────────────────────
 
-func _on_maze_panel_input(event: InputEvent) -> void:
-	if state != ModuleState.ACTIVE:
-		return
-	var clicked := false
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		clicked = true
-	elif event is InputEventScreenTouch and event.pressed:
-		clicked = true
-	if clicked and not _input_focused:
-		_input_focused = true
-		var maze_panel = get_node_or_null("MainContainer/MazePanel") as Panel
-		if maze_panel:
-			maze_panel.queue_redraw()
+func _on_maze_panel_input(_event: InputEvent) -> void:
+	pass  # 输入控制由 zoom 状态决定
 
 
 func _move_player(direction: int):
-	if state != ModuleState.ACTIVE or not _input_focused:
+	if state != ModuleState.ACTIVE or not is_zoomed:
 		return
 
 	var new_pos = player_pos + _dir_to_vector(direction)
@@ -159,7 +141,7 @@ func _unhandled_input(event: InputEvent):
 			return
 
 	## 键盘方向键 / WASD / 屏幕D-pad
-	if state != ModuleState.ACTIVE or not _input_focused:
+	if state != ModuleState.ACTIVE or not is_zoomed:
 		return
 	var dir := -1
 	if   event.is_action_pressed("up"):    dir = 0
@@ -275,20 +257,7 @@ func _draw_maze():
 		var maze_rect = Rect2(offset, Vector2(maze_width * cs, maze_height * cs))
 		panel.draw_rect(maze_rect, Color(COLOR_FLASH, _wall_flash_alpha), false, 4.0)
 
-	# 7. 未激活遮罩
-	if not _input_focused and state == ModuleState.ACTIVE:
-		var pulse = sin(_pulse_time * 2.8) * 0.18 + 0.45
-		panel.draw_rect(Rect2(Vector2.ZERO, panel.size), Color(0.0, 0.0, 0.0, pulse))
-		var font := ThemeDB.fallback_font
-		var font_size := 14
-		var text := "TAP TO MOVE"
-		var text_w: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-		var text_x: float = (panel.size.x - text_w) / 2.0
-		var text_y: float = panel.size.y / 2.0 + font_size * 0.4
-		panel.draw_string(font, Vector2(text_x + 1, text_y + 1), text,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.6))
-		panel.draw_string(font, Vector2(text_x, text_y), text,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1, 1, 1, 0.9))
+
 
 
 

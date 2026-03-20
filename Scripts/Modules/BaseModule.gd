@@ -5,6 +5,7 @@ extends Control
 
 signal module_solved
 signal module_struck
+signal module_tapped(module: BaseModule)
 signal state_changed(new_state: int)
 
 enum ModuleState {
@@ -16,11 +17,40 @@ enum ModuleState {
 
 const MODULE_LED_SCENE = preload("res://Scenes/UI/ModuleLed.tscn")
 
+static var zoom_active: bool = false  # true while any module is zoomed in
+
 var state: ModuleState = ModuleState.IDLE
+var is_zoomed: bool = false  # true when this specific module is the zoomed one
 var _module_led: ModuleLed
+var _tap_overlay: Control = null
+
+func set_tappable(value: bool) -> void:
+	if _tap_overlay != null:
+		_tap_overlay.mouse_filter = Control.MOUSE_FILTER_STOP if value else Control.MOUSE_FILTER_IGNORE
+
+func on_zoom_restored() -> void:
+	pass  # Override in subclasses if needed
+
+func _on_tap_overlay_input(event: InputEvent) -> void:
+	if state == ModuleState.SOLVED or BaseModule.zoom_active:
+		return
+	var is_tap := (event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed) \
+		or (event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
+			and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT)
+	if is_tap:
+		module_tapped.emit(self)
+		_tap_overlay.accept_event()  # 吃掉事件，防止穿透到模块内部（如导线按钮）
 
 func _notification(what: int) -> void:
 	match what:
+		NOTIFICATION_READY:
+			_tap_overlay = Control.new()
+			_tap_overlay.name = "TapOverlay"
+			_tap_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+			_tap_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+			_tap_overlay.z_index = 100
+			_tap_overlay.gui_input.connect(_on_tap_overlay_input)
+			add_child(_tap_overlay)
 		NOTIFICATION_POST_ENTER_TREE:
 			_ensure_module_led()
 			if state == ModuleState.IDLE:
@@ -90,6 +120,7 @@ func _update_led_position() -> void:
 		return
 
 	_module_led.place_top_right(get_global_rect())
+
 
 func _set_state(new_state: ModuleState) -> void:
 	if state == new_state:

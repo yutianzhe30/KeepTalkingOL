@@ -1,12 +1,10 @@
+class_name BalanceModule
 extends "res://Scripts/Modules/BaseModule.gd"
 
 @onready var ball = $ReferenceRect/Ball
 @onready var boundary = $ReferenceRect
 @onready var prompt_label = $ReferenceRect/PromptLabel
 @onready var target_area = $ReferenceRect/TargetArea
-
-func _init() -> void:
-	is_solvable = false
 
 var velocity: Vector2 = Vector2.ZERO
 var position_offset: Vector2 = Vector2.ZERO # Position relative to center
@@ -17,11 +15,11 @@ var balance_time: float = 0.0
 
 
 # Physics Constants
-const REPULSION_FORCE: float = 100.0 # Pushes ball away from center
+const REPULSION_FORCE: float = 350.0 # Pushes ball away from center
 const INPUT_FORCE: float = 400.0 # Player control strength
 const DRAG: float = 1.0 # Air resistance
 const RADIUS: float = 10.0 # Ball radius (half size)
-const MAX_SPEED: float = 140.0 # Cap speed to give user a chance
+const MAX_SPEED: float = 120.0 # Cap speed to give user a chance
 const TARGET_RADIUS: float = 20.0 # Size of the balance target area
 
 # Color Constants
@@ -63,7 +61,9 @@ func _on_other_module_solved():
 			_start_sequence()
 
 func _process(delta):
+	# Always keep ball centered when solved (boundary size can change e.g. after zoom)
 	if state == ModuleState.SOLVED:
+		ball.position = boundary.size / 2.0 - ball.size / 2.0
 		return
 	var center = boundary.size / 2.0
 	if not has_started:
@@ -102,9 +102,11 @@ func _process(delta):
 	var force = Vector2.ZERO
 	
 	# Repulsion (Unstable Equilibrium): Pushes away from center
-	# The further out you are, the stronger the pull
+	# Normalized to boundary size so difficulty is the same regardless of module scale
 	if position_offset.length() > 0:
-		force += position_offset.normalized() * (position_offset.length() * 2.0)
+		var half_bounds = min(boundary.size.x, boundary.size.y) / 2.0 - RADIUS
+		var normalized_dist = position_offset.length() / max(half_bounds, 1.0)
+		force += position_offset.normalized() * normalized_dist * REPULSION_FORCE
 		
 	# Input (Counter-force)
 	# Input (Counter-force)
@@ -150,6 +152,16 @@ func check_boundary():
 	
 	if abs(position_offset.x) > bounds_x or abs(position_offset.y) > bounds_y:
 		strike_module()
+func on_zoom_restored() -> void:
+	# Clamp position_offset so the ball doesn't instantly go out-of-bounds
+	# after the boundary shrinks back to its original size
+	var half_size = boundary.size / 2.0
+	position_offset.x = clamp(position_offset.x, -(half_size.x - RADIUS), half_size.x - RADIUS)
+	position_offset.y = clamp(position_offset.y, -(half_size.y - RADIUS), half_size.y - RADIUS)
+	# Force-update ball position now — _process returns early when SOLVED so it won't run
+	var center = boundary.size / 2.0
+	ball.position = center + position_offset - (ball.size / 2.0)
+
 func get_debug_info() -> String:
 	return "Balance Module: Keep the ball centered!"
 
