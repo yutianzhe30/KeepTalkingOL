@@ -14,10 +14,10 @@ extends Node
 @export var maze_scene: PackedScene
 @export var placeholder_scene: PackedScene
 
-const RESULT_SCREEN_SCENE   = preload("res://Scenes/UI/ResultScreen.tscn")
-const TUTORIAL_HINT_SCENE   = preload("res://Scenes/UI/TutorialHint.tscn")
-const TOUCH_DPAD            = preload("res://Scripts/UI/TouchDPad.gd")
-const MODULE_ZOOM_MANAGER   = preload("res://Scripts/UI/ModuleZoomManager.gd")
+const RESULT_SCREEN_SCENE = preload("res://Scenes/UI/ResultScreen.tscn")
+const TUTORIAL_HINT_SCENE = preload("res://Scenes/UI/TutorialHint.tscn")
+const TOUCH_DPAD = preload("res://Scripts/UI/TouchDPad.gd")
+const MODULE_ZOOM_MANAGER = preload("res://Scripts/UI/ModuleZoomManager.gd")
 
 
 var _timer_module: Node
@@ -28,7 +28,7 @@ var debug_info: String = ""
 var _hint_modules_solved: int = 0 # Tracks how many solvable modules done (tutorial only)
 var _hint_layer: CanvasLayer = null # Reference to tutorial hint layer so we can close it on exit
 var _dpad_layer: CanvasLayer = null # Reference to touch D-pad overlay
-var _zoom_manager = null            # ModuleZoomManager (mobile only)
+var _zoom_manager = null # ModuleZoomManager (mobile only)
 
 
 func _ready() -> void:
@@ -85,6 +85,12 @@ func _ready() -> void:
 				_zoom_manager.register(child)
 				child.module_tapped.connect(_zoom_manager.zoom_to)
 				child.module_solved.connect(_zoom_manager.zoom_out)
+				# Tutorial: show relevant hint when module is tapped
+				if GameState.simple_mode:
+					if child is WireModule:
+						child.module_tapped.connect(func(_m): GameState.hint_updated.emit(TutorialHint.get_wire_hint()))
+					elif child is ButtonModule:
+						child.module_tapped.connect(func(_m): GameState.hint_updated.emit(TutorialHint.get_button_hint()))
 
 		_zoom_manager.zoomed_in.connect(_on_zoom_in)
 		_zoom_manager.zoomed_out.connect(_on_zoom_out)
@@ -103,9 +109,6 @@ func _ready() -> void:
 		get_tree().root.add_child(_hint_layer)
 		# The hint panel's _ready() already emits the welcome hint, so just emit wire hint now
 		# after a brief delay so the welcome text is visible first
-		get_tree().create_timer(5.0).timeout.connect(
-			func(): GameState.hint_updated.emit(TutorialHint.get_wire_hint())
-		)
 
 func _set_serial(modules_root: Node) -> void:
 	# Inject serial number to all modules that need it
@@ -273,12 +276,7 @@ func _on_module_solved(module: BaseModule) -> void:
 		_trigger_game_over(true)
 
 func _advance_tutorial_hint() -> void:
-	_hint_modules_solved += 1
-	match _hint_modules_solved:
-		1: # First module solved (Wire) -> show Button hint
-			GameState.hint_updated.emit(TutorialHint.get_button_hint())
-		2: # Second module solved (Button) -> show complete message
-			GameState.hint_updated.emit(TutorialHint.get_complete_hint())
+	pass  # complete hint is now shown in _trigger_game_over
 
 func _on_timer_exploded() -> void:
 	if game_ended: return
@@ -286,9 +284,6 @@ func _on_timer_exploded() -> void:
 
 func _trigger_game_over(is_win: bool) -> void:
 	game_ended = true
-	if _hint_layer != null:
-		_hint_layer.queue_free()
-		_hint_layer = null
 	if _zoom_manager != null:
 		_zoom_manager.zoom_out()
 		_zoom_manager.queue_free()
@@ -296,10 +291,25 @@ func _trigger_game_over(is_win: bool) -> void:
 	if _dpad_layer != null:
 		_dpad_layer.queue_free()
 		_dpad_layer = null
-	
+
 	if _timer_module and _timer_module.has_method("stop_timer"):
 		_timer_module.stop_timer()
-		
+
+	# Tutorial win: show complete hint then return to main menu
+	if is_win and GameState.simple_mode:
+		GameState.hint_updated.emit(TutorialHint.get_complete_hint())
+		get_tree().create_timer(5.0).timeout.connect(func():
+			if _hint_layer != null:
+				_hint_layer.queue_free()
+				_hint_layer = null
+			get_tree().change_scene_to_file("res://Scenes/UI/MainMenu.tscn")
+		)
+		return
+
+	if _hint_layer != null:
+		_hint_layer.queue_free()
+		_hint_layer = null
+
 	var time_str = "00:00"
 	var strikes = 0
 	if _timer_module:
@@ -307,11 +317,11 @@ func _trigger_game_over(is_win: bool) -> void:
 			time_str = _timer_module.label.text
 		if _timer_module.get("strike_count") != null:
 			strikes = _timer_module.strike_count
-			
+
 	var result_scene = RESULT_SCREEN_SCENE.instantiate()
 	var debug_str = debug_info
 	result_scene.setup(is_win, time_str, strikes, debug_str)
-	
+
 	# Show result screen on the highest layer
 	var canvaslayer = CanvasLayer.new()
 	canvaslayer.layer = 100

@@ -2,88 +2,100 @@ extends Control
 class_name TutorialHint
 
 # TutorialHint.gd
-# A floating panel that displays manual-based hints to guide tutorial players.
-# Driven by GameState.hint_updated signal emitted by BombManager.
+# 全屏半透明教程覆盖层。
+# - 展开：显示 PanelContainer（遮住炸弹），右下角 FloatButton 隐藏
+# - 收起：隐藏 PanelContainer，右下角显示 FloatButton，玩家可正常操作炸弹
+# - hint_updated 信号触发时自动展开
 
 @onready var hint_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/HintLabel
-@onready var toggle_button: Button = $PanelContainer/MarginContainer/VBoxContainer/ToggleButton
+@onready var title_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HeaderRow/TitleLabel
 @onready var panel: PanelContainer = $PanelContainer
-
-var _collapsed: bool = false
+@onready var float_button: Button = $FloatButton
+@onready var dismiss_area: Button = $DismissArea
 
 func _ready() -> void:
 	GameState.hint_updated.connect(_on_hint_updated)
-	# Note: toggle_button.pressed is already connected in the scene file (.tscn)
-	# Show the welcome hint immediately
 	_on_hint_updated(_get_welcome_hint())
 
 func _on_hint_updated(hint_text: String) -> void:
-	hint_label.text = hint_text
+	# 从首行 [b]...[/b] 提取标题显示到 header，正文去掉首行
+	var lines := hint_text.split("\n", false, 2)
+	if lines.size() >= 1:
+		var raw_title := lines[0].strip_edges()
+		title_label.text = raw_title.trim_prefix("[b]").trim_suffix("[/b]")
+		var body := hint_text.substr(hint_text.find("\n") + 1).strip_edges()
+		hint_label.parse_bbcode(body)
+	else:
+		title_label.text = "提示"
+		hint_label.parse_bbcode(hint_text)
+	_set_expanded(true) # 新提示出现时强制展开
 
 func _on_toggle_pressed() -> void:
-	_collapsed = not _collapsed
-	hint_label.visible = not _collapsed
-	toggle_button.text = "展开 ▲" if _collapsed else "收起 ▼"
+	_set_expanded(false)
+
+func _on_float_pressed() -> void:
+	_set_expanded(true)
+
+func _set_expanded(expanded: bool) -> void:
+	panel.visible = expanded
+	dismiss_area.visible = expanded
+	float_button.visible = not expanded
 
 # ------------------------------------------------------------------
-# Hint content strings (drawn from MANUAL_CN.md)
+# 提示内容
 # ------------------------------------------------------------------
 
 static func _get_welcome_hint() -> String:
-	return """[b]💡 新手教程[/b]
+	return """[b]新手教程[/b]
 
-[color=yellow]第一步：找到序列号模块[/color]
-炸弹外壳上会贴有一张 [b]6 位序列号贴纸[/b]。
-本教程固定序列号为：[b]A1B2C4[/b]
-（最后一位 [b]4[/b] = 偶数，在解题中很重要）
+你应该让你的同伴点击 [b]"我是拆弹专家"[/b] 来获得拆弹说明书。
 
-接下来请解决 [b]接线模块[/b] ✂️"""
+这是一份危险的工作，多数情况下，你都应该在拆弹专家的指导下完成工作。
+
+但在教程模式中，我会为你提供帮助。
+
+[color=gray]——[/color]
+
+接下来，请先点击 [b]接线模块[/b]，再解决 [b]按钮模块[/b]。"""
 
 static func get_wire_hint() -> String:
-	return """[b]✂️ 接线模块[/b]（手册第1节）
+	return """[b]接线模块[/b]
 
 炸弹上有 [b]4 根[/b] 电线（红、蓝、黄、白）。
 
-[b]4根电线规则（按顺序判断第一条匹配项）：[/b]
-1. 红线 > 1 根 [b]且[/b] 序列号末位是奇数 → 剪[b]最后一根红线[/b]
-2. 最后一根是黄线 [b]且[/b] 没有红线 → 剪[b]第一根[/b]
-3. 恰好 1 根蓝线 → 剪[b]第一根[/b]
-4. 黄线 > 1 根 → 剪[b]最后一根[/b]
-5. 否则 → 剪[b]第二根[/b]
+[b]4 根电线规则（按顺序判断）：[/b]
+1. 红线多于 1 根，且序列号末位是奇数 → 剪最后一根红线
+2. 最后一根是黄线，且没有红线 → 剪第一根
+3. 恰好 1 根蓝线 → 剪第一根
+4. 黄线多于 1 根 → 剪最后一根
+5. 否则 → 剪第二根
 
-[color=yellow]本谜题提示：[/color]
-序列号末位 = 4（偶数）
-红线 = 1 根（不满足规则 1）
-最后一根是白线（不满足规则 2）
-→ 蓝线恰好 1 根 [b]→ 规则 3：剪第 1 根（红色）[/b]
+[color=yellow]本关答案：[/color]
+末位 4（偶数）→ 规则1不满足；最后是白线 → 规则2不满足
+蓝线恰好 1 根 → [b]规则3：剪第 1 根（红色）[/b]
 
-接下来请解决 [b]符号键盘模块[/b] 🔘"""
+解决后请进行 [b]符号键盘模块[/b]"""
 
 static func get_button_hint() -> String:
-	return """[b]🔘 符号键盘模块[/b]（手册第4节）
+	return """[b]符号键盘模块[/b]
 
 [b]解题步骤：[/b]
-1. 查看所有 4 个符号
-2. 找到[b]唯一[/b]包含这 4 个符号的列
-3. 按照该列[b]从上到下[/b]的顺序依次点击
+1. 查看 4 个按钮上的符号
+2. 找到唯一包含这 4 个符号的列
+3. 按该列从上到下的顺序依次点击
 
-符号列表（列 1）：
-  Ϙ → Ѧ → ƛ → Ѣ
+[color=yellow]本关答案：[/color]
+4 个符号均来自列 1，点击顺序：Ϙ → Ѧ → ƛ → Ѣ
 
-[color=yellow]本谜题提示：[/color]
-4 个符号均来自 [b]列 1[/b]
-→ 按从左到右、从上到下的顺序点击：Ϙ → Ѧ → ƛ → Ѣ
-
-注意：点错后模块会重置，需重新开始。"""
+点错后模块重置，需重新开始。"""
 
 static func get_complete_hint() -> String:
-	return """[b]🎉 恭喜你完成新手教程！[/b]
+	return """[b]教程完成[/b]
 
 你已成功解除了所有模块。
+在实战中，你会遇到很多没见过的模块，请咨询你的拆弹专家
+[color=green]总结：[/color]
+· 序列号影响接线规则
+· 符号键盘需找唯一包含所有符号的列
 
-[color=green]学到了什么？[/color]
-• 序列号影响接线模块的解题规则
-• 符号键盘需要找唯一包含所有符号的列
-
-现在可以挑战[b]完整模式[/b]了！
-返回主菜单点击"开始游戏"即可。"""
+返回主菜单，点击 [b]开始游戏[/b] 可进入完整模式。"""

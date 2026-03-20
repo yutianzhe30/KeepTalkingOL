@@ -1,4 +1,5 @@
-extends "res://Scripts/Modules/BaseModule.gd"
+class_name ButtonModule
+extends BaseModule
 
 # Button Module (Keypad Style)
 # The user sees 4 buttons with symbols.

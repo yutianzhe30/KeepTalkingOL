@@ -39,6 +39,7 @@ func _on_tap_overlay_input(event: InputEvent) -> void:
 			and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT)
 	if is_tap:
 		module_tapped.emit(self)
+		_tap_overlay.accept_event()  # 吃掉事件，防止穿透到模块内部（如导线按钮）
 
 func _notification(what: int) -> void:
 	match what:

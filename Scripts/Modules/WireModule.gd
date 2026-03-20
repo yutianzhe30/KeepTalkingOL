@@ -1,4 +1,5 @@
-extends "res://Scripts/Modules/BaseModule.gd"
+class_name WireModule
+extends BaseModule
 
 const WireScene = preload("res://Scenes/Modules/Wire.tscn")
 
@@ -12,7 +13,7 @@ func _ready():
 		generate_fixed_puzzle()
 	else:
 		# Generate a random puzzle on start
-		generate_puzzle(randi_range(6, 6))
+		generate_puzzle(randi_range(3, 6))
 
 func generate_puzzle(wire_count: int):
 	# Clear existing
