@@ -4,9 +4,25 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Scripts/**'
+      - 'Scenes/**'
+      - 'Assets/**'
+      - 'Shaders/**'
+      - 'project.godot'
+      - 'Export/MANUAL_CN.md'
+      - '.github/workflows/export.yml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'Scripts/**'
+      - 'Scenes/**'
+      - 'Assets/**'
+      - 'Shaders/**'
+      - 'project.godot'
+      - 'Export/MANUAL_CN.md'
+      - '.github/workflows/export.yml'
 
 permissions:
   contents: write
@@ -32,18 +48,17 @@ jobs:
 
       - name: Inject Chinese Fonts for PDF
         run: |
-          sed -i '1s|^|<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC\&display=swap"); body { font-family: "Noto Sans SC", sans-serif; }</style>\n|' Export/MANUAL_CN.md
+          mkdir -p .pdf_temp
+          cp Export/MANUAL_CN.md .pdf_temp/
+          sed -i '1s|^|<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC\&display=swap"); body { font-family: "Noto Sans SC", sans-serif; }</style>\n|' .pdf_temp/MANUAL_CN.md
 
       - name: Generate Manual PDF
         uses: BaileyJM02/markdown-to-pdf@v1
         with:
-          input_dir: Export
+          input_dir: .pdf_temp
           output_dir: Export
           images_dir: Assets/Pic
           image_import: ../Assets/Pic
-
-      - name: Revert Manual File
-        run: git checkout -- Export/MANUAL_CN.md || true
 
       - name: Commit and Push Export Folder
         if: github.event_name == 'push'
